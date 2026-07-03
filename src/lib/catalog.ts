@@ -5,7 +5,7 @@ import type { CatalogBundle, CatalogProduct } from "@/types";
 
 /**
  * Acceso al catálogo público. Si Supabase está configurado consulta la BD
- * (anon key + RLS: solo filas activas); si no, usa el catálogo placeholder
+ * (publishable key + RLS: solo filas activas); si no, usa el catálogo placeholder
  * para que la web sea navegable durante el desarrollo.
  *
  * Se usa un cliente sin cookies a propósito: el catálogo es público y así
@@ -14,7 +14,7 @@ import type { CatalogBundle, CatalogProduct } from "@/types";
 function createPublicClient() {
   const env = getSupabasePublicEnv();
   if (!env) throw new Error("Supabase no está configurado.");
-  return createClient(env.url, env.anonKey, {
+  return createClient(env.url, env.publishableKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }

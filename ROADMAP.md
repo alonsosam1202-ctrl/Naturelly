@@ -22,7 +22,7 @@
 8. Auth (registro, login, recuperar) + `/cuenta` + historial de pedidos.
 9. Admin: CRUD productos/variantes/imágenes, bundles, gestión de pedidos.
 10. Páginas estáticas mínimas: nosotros, FAQ (contenido fijo), contacto.
-11. Deploy en Vercel + dominio.
+11. Deploy en Render (provisional: https://naturelly.onrender.com) + dominio propio.
 
 **Criterio de salida:** Nelly gestiona el catálogo sola y procesa pedidos reales de punta a punta.
 
@@ -34,7 +34,7 @@
 - FAQ y mensajes de contacto gestionables desde el admin.
 - SEO fino: metadata por página, sitemap, Open Graph, datos estructurados de producto.
 - Testimonios reales de clientes.
-- Métricas básicas (Vercel Analytics) y dashboard admin con resumen de ventas.
+- Métricas básicas (herramienta por definir, compatible con Render; p. ej. Plausible o Umami) y dashboard admin con resumen de ventas.
 
 ## Fase 3 — Pagos online
 **Objetivo:** cobrar sin salir de la web (WhatsApp pasa a ser opcional).

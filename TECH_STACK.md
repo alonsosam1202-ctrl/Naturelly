@@ -13,14 +13,14 @@
 | Formularios | React Hook Form + resolver de Zod | 7.x |
 | Iconos | Lucide React | latest |
 | Fuentes | `next/font` con Fraunces (display) y Karla (texto) | — |
-| Deploy | Vercel | — |
+| Deploy | Render (URL provisional: https://naturelly.onrender.com) | — |
 | Gestor de paquetes | npm | — |
 
 ## Justificación de cada elección
 
 ### Next.js 15 con App Router
 - Server Components para el catálogo → SEO real (Google indexa productos y recetas), crítico para una marca que quiere crecer.
-- Route Handlers (`app/api/`) para lógica sensible (creación de pedidos con service role).
+- Route Handlers (`app/api/`) para lógica sensible (creación de pedidos con la secret key del servidor).
 - `next/image` para optimizar fotos de producto (formato WebP, lazy loading) → clave en 4G.
 - Middleware para proteger rutas `/cuenta` y `/admin`.
 
@@ -50,15 +50,15 @@
 ## Variables de entorno
 
 ```bash
-# .env.example
+# .env.example — sistema moderno de claves de Supabase
 NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=        # SOLO en servidor. Nunca exponer al cliente.
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=   # sb_publishable_... (clientes públicos, siempre bajo RLS)
+SUPABASE_SECRET_KEY=                    # sb_secret_... SOLO en servidor. Nunca exponer.
 NEXT_PUBLIC_WHATSAPP_NUMBER=51XXXXXXXXX
-NEXT_PUBLIC_SITE_URL=https://naturelly.com    # TODO: confirmar con Nelly el dominio final
+NEXT_PUBLIC_SITE_URL=https://naturelly.onrender.com   # provisional en Render; TODO: confirmar con Nelly el dominio final
 ```
 
-**Regla:** `SUPABASE_SERVICE_ROLE_KEY` solo se usa en Route Handlers / Server Actions. Cualquier código que corra en el navegador usa exclusivamente la `anon key` + RLS.
+**Regla:** `SUPABASE_SECRET_KEY` (equivale al rol `service_role`, salta RLS) solo se usa en Route Handlers / Server Actions; jamás con prefijo `NEXT_PUBLIC_`, jamás en componentes cliente, logs o respuestas de API. Cualquier código que corra en el navegador usa exclusivamente la `publishable key` + RLS. Las mismas variables deben configurarse en el dashboard de Render para el deploy.
 
 ## Integraciones futuras (preparadas, no implementadas)
 
@@ -73,5 +73,5 @@ NEXT_PUBLIC_SITE_URL=https://naturelly.com    # TODO: confirmar con Nelly el dom
 ## Herramientas de desarrollo
 
 - ESLint + Prettier con configuración estándar de Next.js.
-- Supabase CLI para migraciones versionadas en `supabase/migrations/`.
+- Supabase CLI para migraciones versionadas en `supabase/migrations/` (formato oficial `<YYYYMMDDHHMMSS>_<nombre>.sql`).
 - Convención de commits: `feat:`, `fix:`, `docs:`, `refactor:`, `style:`, `chore:`.

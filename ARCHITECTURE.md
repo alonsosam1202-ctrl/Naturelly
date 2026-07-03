@@ -51,7 +51,7 @@ naturelly/
 │   │   │   ├── recetas/...        # Fase 2
 │   │   │   └── faq/...            # Fase 2
 │   │   └── api/
-│   │       ├── pedidos/route.ts   # POST: crear pedido (valida + service role)
+│   │       ├── pedidos/route.ts   # POST: crear pedido (valida + secret key)
 │   │       └── contacto/route.ts  # POST: guardar mensaje
 │   ├── components/
 │   │   ├── ui/                    # Primitivos: Button, Input, Badge, Card, Modal...
@@ -67,9 +67,9 @@ naturelly/
 │   │                              # RecipeCard, FaqAccordion, TestimonialCard
 │   ├── lib/
 │   │   ├── supabase/
-│   │   │   ├── client.ts          # Cliente browser (anon key)
+│   │   │   ├── client.ts          # Cliente browser (publishable key)
 │   │   │   ├── server.ts          # Cliente server (cookies de sesión)
-│   │   │   └── admin.ts           # Cliente service role (solo server)
+│   │   │   └── admin.ts           # Cliente privilegiado (secret key, solo server)
 │   │   ├── validations/           # Esquemas Zod (pedido, producto, contacto...)
 │   │   ├── whatsapp.ts            # Construcción del mensaje wa.me del pedido
 │   │   ├── utils.ts               # Formato de precios (S/), slugs, códigos NAT-XXXX

@@ -1,4 +1,4 @@
--- 006_storage.sql — Buckets de Storage con políticas según DATABASE_SCHEMA.md
+-- 20260703100500_storage.sql — Buckets de Storage con políticas según DATABASE_SCHEMA.md
 -- product-images y recipe-images: lectura pública, escritura solo admin
 
 insert into storage.buckets (id, name, public)

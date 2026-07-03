@@ -3,7 +3,8 @@
     "allow": [
       "PowerShell(npm install)",
       "PowerShell(npx tsc --noEmit)",
-      "PowerShell(npm run build)"
+      "PowerShell(npm run build)",
+      "PowerShell($map = @{ '20260703100000_catalog.sql' = '001_catalog.sql'; '20260703100100_profiles.sql' = '002_profiles.sql'; '20260703100200_orders.sql' = '003_orders.sql'; '20260703100300_rls.sql' = '004_rls.sql'; '20260703100400_content.sql' = '005_content.sql'; '20260703100500_storage.sql' = '006_storage.sql' }; foreach \\($new in $map.Keys\\) { $path = \"supabase/migrations/$new\"; $c = [System.IO.File]::ReadAllText\\($path\\); $c = $c.Replace\\(\"-- $\\($map[$new]\\) —\", \"-- $new —\"\\); [System.IO.File]::WriteAllText\\($path, $c\\) }; Get-Content supabase/migrations/20260703100200_orders.sql -TotalCount 1)"
     ]
   }
 }

@@ -1,4 +1,4 @@
--- 001_catalog.sql — Tablas de catálogo según DATABASE_SCHEMA.md
+-- 20260703100000_catalog.sql — Tablas de catálogo según DATABASE_SCHEMA.md
 -- products, product_variants, product_images, bundles, bundle_items
 
 -- Trigger genérico para updated_at

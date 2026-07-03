@@ -22,7 +22,7 @@ Ecommerce artesanal premium para **Naturelly**, marca de granolas hechas a mano 
 2. **NO inventar datos del negocio.** Precios, nombres de producto, testimonios, cifras de ventas, direcciones y teléfonos reales vienen del desarrollador o de Nelly. Si falta un dato, usa un placeholder marcado (`TODO: confirmar con Nelly`) y repórtalo; no lo rellenes con inventos plausibles.
 3. **NO saltarte fases.** No implementes pagos, suscripciones ni features de fases futuras "de paso". Las ideas nuevas van a `TODO.md` → backlog.
 4. **NO confiar en el cliente.** Precios y totales se recalculan siempre en el servidor desde la BD. El carrito solo envía `variant_id` + `quantity`. Todo input externo se valida con Zod en el servidor aunque ya se haya validado en el cliente.
-5. **NO exponer secretos.** `SUPABASE_SERVICE_ROLE_KEY` solo en código de servidor. Nunca en componentes cliente, nunca hardcodeado, nunca en logs.
+5. **NO exponer secretos.** `SUPABASE_SECRET_KEY` (sistema moderno de claves; equivale al rol `service_role`) solo en código de servidor. Nunca con prefijo `NEXT_PUBLIC_`, nunca en componentes cliente, nunca hardcodeada, nunca en logs ni respuestas de API.
 6. **NO crear tablas ni columnas fuera de `DATABASE_SCHEMA.md`.** Si el esquema necesita cambiar, primero se actualiza el documento, luego la migración.
 7. **NO desactivar RLS** ni crear políticas permisivas "temporales" para destrabar un bug.
 8. **NO borrar datos de pedidos.** Los pedidos se cancelan (cambio de estado), jamás se eliminan.
@@ -49,7 +49,7 @@ Las reglas duras de arriba (seguridad, Supabase, RLS, datos reales, precios en s
 - Precios: siempre `numeric` en BD y formateo con helper `formatPrice()` (`S/ 18.00`); nunca aritmética de flotantes para dinero en lógica crítica (trabajar en céntimos si hay que operar).
 - Fechas en `timestamptz`; mostrar en zona `America/Lima`.
 - Commits: convención `feat: | fix: | docs: | refactor: | style: | chore:` con mensajes en inglés.
-- Migraciones SQL numeradas y descriptivas en `supabase/migrations/`; nunca editar una migración ya aplicada.
+- Migraciones SQL en `supabase/migrations/` con el formato oficial de Supabase `<YYYYMMDDHHMMSS>_<nombre>.sql`, descriptivas y en orden; nunca editar una migración ya aplicada.
 
 ## Flujo de trabajo esperado
 

@@ -2,21 +2,23 @@ import { createClient } from "@supabase/supabase-js";
 import { getSupabasePublicEnv } from "./config";
 
 /**
- * Cliente con service role. SOLO para Route Handlers / Server Actions.
- * La service role key salta RLS: jamás importar desde un componente cliente.
+ * Cliente privilegiado con la SECRET KEY. SOLO para Route Handlers /
+ * Server Actions. La secret key salta RLS (equivale al rol service_role):
+ * jamás importar desde un componente cliente, jamás loguearla ni
+ * devolverla en una respuesta de API.
  */
 export function createAdminClient() {
   if (typeof window !== "undefined") {
     throw new Error("createAdminClient() no puede usarse en el navegador.");
   }
   const env = getSupabasePublicEnv();
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!env || !serviceRoleKey) {
+  const secretKey = process.env.SUPABASE_SECRET_KEY;
+  if (!env || !secretKey) {
     throw new Error(
-      "Supabase (service role) no está configurado. Completa SUPABASE_SERVICE_ROLE_KEY en .env.local."
+      "Supabase (secret key) no está configurado. Completa SUPABASE_SECRET_KEY en .env.local."
     );
   }
-  return createClient(env.url, serviceRoleKey, {
+  return createClient(env.url, secretKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }

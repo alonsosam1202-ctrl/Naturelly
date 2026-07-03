@@ -1,4 +1,4 @@
--- 003_orders.sql — orders + order_items + RPC create_order según DATABASE_SCHEMA.md
+-- 20260703100200_orders.sql — orders + order_items + RPC create_order según DATABASE_SCHEMA.md
 
 create table public.orders (
   id uuid primary key default gen_random_uuid(),

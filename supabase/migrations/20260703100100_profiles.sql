@@ -1,4 +1,4 @@
--- 002_profiles.sql — profiles + trigger handle_new_user según DATABASE_SCHEMA.md
+-- 20260703100100_profiles.sql — profiles + trigger handle_new_user según DATABASE_SCHEMA.md
 
 create table public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,

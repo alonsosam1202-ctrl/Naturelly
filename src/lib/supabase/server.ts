@@ -4,18 +4,18 @@ import { getSupabasePublicEnv } from "./config";
 
 /**
  * Cliente para Server Components y Route Handlers con sesión del usuario
- * (cookies). Usa la anon key + RLS; para operaciones privilegiadas ver
- * `admin.ts`.
+ * (cookies). Usa la publishable key + RLS; para operaciones privilegiadas
+ * ver `admin.ts`.
  */
 export async function createSupabaseServerClient() {
   const env = getSupabasePublicEnv();
   if (!env) {
     throw new Error(
-      "Supabase no está configurado. Completa NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY en .env.local."
+      "Supabase no está configurado. Completa NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY en .env.local."
     );
   }
   const cookieStore = await cookies();
-  return createServerClient(env.url, env.anonKey, {
+  return createServerClient(env.url, env.publishableKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();

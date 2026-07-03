@@ -27,7 +27,7 @@ Este proyecto profesionaliza la marca con una experiencia de compra moderna, ord
 | Backend / BD | Supabase (Postgres, Auth, Storage, RLS) |
 | Estado del carrito | Zustand (persistido en localStorage) |
 | Validación | Zod |
-| Deploy | Vercel |
+| Deploy | Render (https://naturelly.onrender.com) |
 
 Detalle completo en [`TECH_STACK.md`](./TECH_STACK.md).
 
@@ -52,8 +52,8 @@ npm install
 
 # 2. Configurar variables de entorno
 cp .env.example .env.local
-# Completar: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY,
-# SUPABASE_SERVICE_ROLE_KEY (solo server), NEXT_PUBLIC_WHATSAPP_NUMBER
+# Completar: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+# SUPABASE_SECRET_KEY (solo server), NEXT_PUBLIC_WHATSAPP_NUMBER
 
 # 3. Correr en desarrollo
 npm run dev

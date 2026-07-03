@@ -21,12 +21,12 @@
 - [x] Clientes Supabase (`client.ts`, `server.ts`, `admin.ts`) + `.env.example`.
 
 ### Base de datos
-- [~] Migración 001: tablas de catálogo (products, variants, images, bundles, bundle_items).
-- [~] Migración 002: profiles + trigger `handle_new_user`.
-- [~] Migración 003: orders + order_items + RPC `create_order`.
-- [~] Migración 004: políticas RLS completas + función `is_admin()`.
-- [~] Migración 005: contenido (faqs, contact_messages, site_settings; recipes queda creada para fase 2).
-- [~] Buckets de Storage con políticas (migración 006).
+- [~] Migración `catalog`: tablas de catálogo (products, variants, images, bundles, bundle_items).
+- [~] Migración `profiles`: profiles + trigger `handle_new_user`.
+- [~] Migración `orders`: orders + order_items + RPC `create_order`.
+- [~] Migración `rls`: políticas RLS completas + función `is_admin()`.
+- [~] Migración `content`: contenido (faqs, contact_messages, site_settings; recipes queda creada para fase 2).
+- [~] Migración `storage`: buckets de Storage con políticas.
 - [~] Seed de desarrollo + generar tipos (`database.ts`).
 
 > Nota: el SQL ya está escrito en `supabase/migrations/` y `supabase/seed.sql`, pero queda `[~]` hasta aplicarse en el proyecto Supabase real (pendiente crearlo, ver Fase 0) y generar `database.ts` con la CLI.
@@ -60,7 +60,7 @@
 - [ ] Revisión responsive completa (360 px como piso).
 - [ ] Accesibilidad: foco visible, labels, contraste, `prefers-reduced-motion`.
 - [ ] Metadata y Open Graph básicos.
-- [ ] Deploy en Vercel + variables de entorno + dominio.
+- [~] Deploy en Render (https://naturelly.onrender.com, funcionando en modo placeholder) + variables de entorno de Supabase + dominio propio.
 - [ ] Prueba de punta a punta con Nelly (crear producto → recibir pedido → cambiar estado).
 
 ## Fase 2 — Contenido (resumen; detallar al iniciar)

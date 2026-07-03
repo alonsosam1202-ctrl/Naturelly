@@ -1,4 +1,4 @@
--- 004_rls.sql — Políticas RLS completas + función is_admin() según DATABASE_SCHEMA.md
+-- 20260703100300_rls.sql — Políticas RLS completas + función is_admin() según DATABASE_SCHEMA.md
 -- RLS activado en TODAS las tablas. Nunca desactivarlo ni crear políticas
 -- permisivas "temporales".
 

@@ -5,7 +5,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /**
  * POST /api/contacto — guarda un mensaje de contacto.
- * Usa la anon key: la política RLS permite INSERT público en
+ * Usa la publishable key: la política RLS permite INSERT público en
  * `contact_messages` y nada más.
  */
 export async function POST(request: Request) {

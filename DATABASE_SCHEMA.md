@@ -164,7 +164,7 @@ $$;
 ## Funciones y triggers
 
 1. `handle_new_user()` — trigger sobre `auth.users` que crea el `profile`.
-2. `create_order(payload jsonb)` — función RPC transaccional: valida stock, recalcula precios desde BD, inserta `orders` + `order_items`, descuenta stock y devuelve el código. Se invoca solo desde `/api/pedidos` con service role.
+2. `create_order(payload jsonb)` — función RPC transaccional: valida stock, recalcula precios desde BD, inserta `orders` + `order_items`, descuenta stock y devuelve el código. Se invoca solo desde `/api/pedidos` con la `SUPABASE_SECRET_KEY` (rol `service_role`).
 3. `set_updated_at()` — trigger genérico para `updated_at`.
 
 ## Storage

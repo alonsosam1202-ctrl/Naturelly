@@ -1,4 +1,4 @@
--- 005_content.sql — Contenido según DATABASE_SCHEMA.md
+-- 20260703100400_content.sql — Contenido según DATABASE_SCHEMA.md
 -- faqs, contact_messages, site_settings; recipes queda creada para Fase 2
 
 create table public.recipes (
