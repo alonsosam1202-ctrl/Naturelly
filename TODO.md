@@ -47,18 +47,20 @@
 - [x] Páginas `/nosotros`, `/faq`, `/contacto` (+ `/api/contacto`). `/recetas` quedó como teaser (el blog es fase 2).
 
 ### Cuentas
-- [ ] `/registro`, `/login`, `/recuperar` con Supabase Auth.
-- [ ] Middleware de protección de rutas.
+- [~] `/registro`, `/login`, `/recuperar` con Supabase Auth (`/login` hecho para el admin; `/registro` y `/recuperar` pendientes para el bloque Cuentas).
+- [~] Middleware de protección de rutas (protege `/admin/**`; falta `/cuenta/**`).
 - [ ] `/cuenta` (perfil editable) y `/cuenta/pedidos` (historial con estados).
 
 ### Admin
-- [ ] Layout admin con verificación de rol.
-- [ ] Dashboard con resumen (pedidos pendientes, ventas de la semana).
+- [x] Layout admin con verificación de rol (middleware + verificación server-side + RLS/RPC).
+- [x] Dashboard con resumen (pedidos pendientes, en proceso, entregados, ventas de últimos 7 días).
 - [ ] CRUD de productos con variantes.
 - [ ] Subida de imágenes a Storage con preview.
 - [ ] CRUD de bundles.
-- [ ] Tabla de pedidos con filtro por estado y cambio de estado.
-- [ ] Reposición segura de stock al cancelar un pedido (transaccional, idempotente — que cancelar dos veces no reponga doble; hoy cancelar NO repone stock).
+- [x] Tabla de pedidos con filtro por estado y cambio de estado (`/admin/pedidos` + detalle con acciones).
+- [x] Reposición segura de stock al cancelar un pedido (RPC `set_order_status`: transaccional, con lock e idempotente — verificado que cancelar dos veces no repone doble).
+
+> Pruebas del bloque admin (2026-07-03): las 13 verificaciones automatizadas pasaron (login, RLS, transiciones, saltos bloqueados, restock exacto de variantes y bundles, no-op del doble cancelado, redirección del middleware). Pedidos de prueba que quedaron en la BD: `NAT-YQFC` y `NAT-PPJ5` (cancelados), `NAT-GU8G` (entregado) — no se borran. Falta la verificación visual en navegador de la pantalla "Acceso denegado" para un no-admin (la protección de datos ya está probada).
 
 ### Calidad y deploy
 - [ ] Revisión responsive completa (360 px como piso).

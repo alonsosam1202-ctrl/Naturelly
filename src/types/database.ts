@@ -514,6 +514,10 @@ export type Database = {
     Functions: {
       create_order: { Args: { payload: Json }; Returns: Json }
       is_admin: { Args: never; Returns: boolean }
+      set_order_status: {
+        Args: { p_new_status: string; p_order_id: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

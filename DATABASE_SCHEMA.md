@@ -180,9 +180,15 @@ $$;
 ## Funciones y triggers
 
 1. `handle_new_user()` — trigger sobre `auth.users` que crea el `profile`.
+   - `protect_profile_role()` (trigger en `profiles`): impide que una **sesión de usuario** no-admin cambie roles. Las conexiones de servidor (dashboard SQL como `postgres`, o `service_role`) sí pueden — necesario para promover al primer admin (bootstrap); la clave secreta nunca sale del servidor.
 2. `create_order(payload jsonb)` — función RPC transaccional: valida stock, recalcula precios desde BD, inserta `orders` + `order_items`, descuenta stock y devuelve el código. Se invoca solo desde `/api/pedidos` con la `SUPABASE_SECRET_KEY` (rol `service_role`).
-   - ⚠️ **Comportamiento actual:** cancelar un pedido (cambio de `status` a `cancelado`) **no repone el stock automáticamente**. La reposición segura (transaccional e idempotente) está en el backlog del panel admin; mientras tanto, si se cancela un pedido, el stock se ajusta manualmente.
-3. `set_updated_at()` — trigger genérico para `updated_at`.
+3. `set_order_status(p_order_id uuid, p_new_status text)` — función RPC transaccional para el panel admin (migración `20260703120000_order_status.sql`):
+   - **Autorización interna:** exige `is_admin()` para sesiones de usuario; EXECUTE solo para `authenticated` y `service_role`. Ni un cliente logueado no-admin llamándola directo por PostgREST puede usarla.
+   - **Transiciones válidas:** `pendiente→confirmado→en_preparacion→en_camino→entregado`; `cancelado` desde cualquier estado previo a `entregado`. `entregado` y `cancelado` son finales (no se reactiva un cancelado ni se retrocede un entregado).
+   - **Cancelación con reposición de stock:** bloquea la fila del pedido (`FOR UPDATE`), verifica el estado anterior y repone el stock de variantes y de los componentes de bundles **exactamente una vez**. Llamarla de nuevo con `cancelado` es un no-op (idempotente). `updated_at` se actualiza vía trigger.
+   - Nota: la reposición de bundles usa la composición **actual** de `bundle_items`; si un pack cambió después del pedido, revisar el stock manualmente.
+   - Un `UPDATE` directo de `status` (dashboard/SQL) **no** repone stock: el panel siempre usa esta RPC.
+4. `set_updated_at()` — trigger genérico para `updated_at`.
 
 ## Storage
 

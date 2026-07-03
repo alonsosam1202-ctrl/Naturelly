@@ -79,6 +79,45 @@ export const ORDER_STATUS_LABELS: Record<
   },
 };
 
+export const ORDER_STATUSES: OrderStatus[] = [
+  "pendiente",
+  "confirmado",
+  "en_preparacion",
+  "en_camino",
+  "entregado",
+  "cancelado",
+];
+
+/**
+ * Flujo de estados (DATABASE_SCHEMA.md): siguiente paso normal de cada
+ * estado; null = estado final. Las transiciones reales las valida la RPC
+ * `set_order_status` en la BD — esto es solo para pintar los botones.
+ */
+export const ORDER_NEXT_STATUS: Record<OrderStatus, OrderStatus | null> = {
+  pendiente: "confirmado",
+  confirmado: "en_preparacion",
+  en_preparacion: "en_camino",
+  en_camino: "entregado",
+  entregado: null,
+  cancelado: null,
+};
+
+/** Etiqueta del botón que lleva a cada estado destino. */
+export const ORDER_ACTION_LABELS: Partial<Record<OrderStatus, string>> = {
+  confirmado: "Confirmar pedido",
+  en_preparacion: "Empezar preparación",
+  en_camino: "Marcar en camino",
+  entregado: "Marcar como entregado",
+};
+
+/** Estados desde los que se puede cancelar (todo lo previo a entregado). */
+export const CANCELABLE_STATUSES: OrderStatus[] = [
+  "pendiente",
+  "confirmado",
+  "en_preparacion",
+  "en_camino",
+];
+
 export const PRODUCT_BADGE_LABELS: Record<string, string> = {
   nuevo: "Nuevo",
   mas_vendido: "Más vendido",
