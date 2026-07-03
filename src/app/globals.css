@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* Fuentes cargadas con next/font en layout.tsx */
+@theme inline {
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-karla), system-ui, sans-serif;
+}
+
+/* Tokens de BRAND_GUIDE.md — Dirección "Naturelly Bright Wellness".
+   Fondos limpios y luminosos, amarillo Naturelly como color protagonista,
+   negro tinta para el contraste fuerte y pasteles (blush, berry, lavanda)
+   para secciones editoriales. El cacao queda SOLO como detalle/texto
+   secundario, nunca como bloque dominante. */
+@theme {
+  /* Base clara */
+  --color-crema: #fffbf6;
+  --color-blush: #fff1f4;
+  --color-blanco-crema: #fffdf9;
+
+  /* Protagonista */
+  --color-amarillo: #fedb5f;
+  --color-amarillo-suave: #ffe9a8;
+
+  /* Contraste */
+  --color-tinta: #18212a;
+
+  /* Acentos */
+  --color-miel: #e6a12d;
+  --color-miel-oscura: #c9871c;
+  --color-salvia: #7ca66a;
+  --color-berry: #e9b6d0;
+  --color-lavanda: #e8c7f0;
+
+  /* Detalle cálido (nunca bloque dominante) */
+  --color-cacao: #5a3a28;
+
+  /* Solo errores, urgencia y estado cancelado */
+  --color-terracota: #e0654a;
+
+  /* Reservado exclusivamente para acciones de WhatsApp */
+  --color-whatsapp: #3e9b4f;
+
+  --shadow-calida: 0 4px 24px rgba(24, 33, 42, 0.07);
+  --shadow-calida-lg: 0 14px 40px rgba(24, 33, 42, 0.12);
+
+  /* Animaciones livianas (solo transform/opacity, ver BRAND_GUIDE.md) */
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-spin-slow: spin-slow 60s linear infinite;
+  --animate-pop: pop 0.35s ease-out;
+  --animate-drawer: drawer-in 0.28s ease-out;
+  --animate-fade: fade-in 0.25s ease-out;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-9px);
+    }
+  }
+
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes pop {
+    0% {
+      transform: scale(0.4);
+    }
+    70% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes drawer-in {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--color-crema);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-amarillo);
+    color: var(--color-tinta);
+  }
+
+  /* Accesibilidad: foco visible en color de marca */
+  :focus-visible {
+    outline: 2px solid var(--color-miel);
+    outline-offset: 2px;
+  }
+
+  /* Reduced motion apaga TODA la animación decorativa */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee,
+    .animate-float,
+    .animate-spin-slow,
+    .animate-pop,
+    .animate-drawer,
+    .animate-fade {
+      animation: none !important;
+    }
+  }
+}

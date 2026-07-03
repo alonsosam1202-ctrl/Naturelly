@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm install)",
+      "PowerShell(npx tsc --noEmit)",
+      "PowerShell(npm run build)"
+    ]
+  }
+}
