@@ -181,6 +181,7 @@ $$;
 
 1. `handle_new_user()` — trigger sobre `auth.users` que crea el `profile`.
 2. `create_order(payload jsonb)` — función RPC transaccional: valida stock, recalcula precios desde BD, inserta `orders` + `order_items`, descuenta stock y devuelve el código. Se invoca solo desde `/api/pedidos` con la `SUPABASE_SECRET_KEY` (rol `service_role`).
+   - ⚠️ **Comportamiento actual:** cancelar un pedido (cambio de `status` a `cancelado`) **no repone el stock automáticamente**. La reposición segura (transaccional e idempotente) está en el backlog del panel admin; mientras tanto, si se cancela un pedido, el stock se ajusta manualmente.
 3. `set_updated_at()` — trigger genérico para `updated_at`.
 
 ## Storage

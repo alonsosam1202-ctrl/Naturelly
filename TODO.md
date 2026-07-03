@@ -30,7 +30,9 @@
 - [x] Migración `grants`: privilegios de mínimo privilegio por rol (GRANTs + RLS son dos capas; ver `DATABASE_SCHEMA.md`).
 - [x] Seed de desarrollo aplicado + tipos generados (`database.ts`) + clientes tipados.
 
-> Las 7 migraciones están aplicadas en el proyecto remoto y verificadas: flujo de pedido probado de punta a punta (pedido `NAT-5XFK`, cancelado tras la prueba), RLS y grants validados con anon/authenticated/secret. Falta crear el usuario admin de Nelly cuando exista su correo.
+> Las 7 migraciones están aplicadas en el proyecto remoto y verificadas: flujo de pedido probado de punta a punta en local (pedido `NAT-5XFK`, cancelado tras la prueba) y en producción/Render (pedido `NAT-W3KE`), RLS y grants validados con anon/authenticated/secret. Falta crear el usuario admin de Nelly cuando exista su correo.
+>
+> ⚠️ Comportamiento actual documentado: **cancelar un pedido (status → `cancelado`) NO repone el stock automáticamente**. La reposición segura está en el backlog del panel admin.
 
 ### Tienda pública
 - [x] Layout global: Header, Footer, MobileNav, CartDrawer.
@@ -56,12 +58,14 @@
 - [ ] Subida de imágenes a Storage con preview.
 - [ ] CRUD de bundles.
 - [ ] Tabla de pedidos con filtro por estado y cambio de estado.
+- [ ] Reposición segura de stock al cancelar un pedido (transaccional, idempotente — que cancelar dos veces no reponga doble; hoy cancelar NO repone stock).
 
 ### Calidad y deploy
 - [ ] Revisión responsive completa (360 px como piso).
 - [ ] Accesibilidad: foco visible, labels, contraste, `prefers-reduced-motion`.
 - [ ] Metadata y Open Graph básicos.
-- [~] Deploy en Render (https://naturelly.onrender.com, funcionando en modo placeholder) + variables de entorno de Supabase + dominio propio.
+- [x] Deploy en Render (https://naturelly.onrender.com) con variables de Supabase configuradas. **Flujo validado de punta a punta en producción**: pedido `NAT-W3KE` registrado con su order_item y stock descontado 9→8 (quedó como pedido de prueba, no se borra).
+- [ ] Dominio propio (TODO: confirmar con Nelly).
 - [ ] Prueba de punta a punta con Nelly (crear producto → recibir pedido → cambiar estado).
 
 ## Fase 2 — Contenido (resumen; detallar al iniciar)
