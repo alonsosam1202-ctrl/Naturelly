@@ -49,6 +49,7 @@
   --animate-spin-slow: spin-slow 60s linear infinite;
   --animate-pop: pop 0.35s ease-out;
   --animate-drawer: drawer-in 0.28s ease-out;
+  --animate-drawer-left: drawer-in-left 0.28s ease-out;
   --animate-fade: fade-in 0.25s ease-out;
 
   @keyframes marquee {
@@ -97,6 +98,15 @@
     }
   }
 
+  @keyframes drawer-in-left {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -133,6 +143,7 @@
     .animate-spin-slow,
     .animate-pop,
     .animate-drawer,
+    .animate-drawer-left,
     .animate-fade {
       animation: none !important;
     }

@@ -65,9 +65,11 @@ export default async function ProductoPage({ params }: { params: Params }) {
               {PRODUCT_BADGE_LABELS[product.badge] ?? product.badge}
             </Badge>
           )}
+          {/* Visible también en mobile, más pequeño; el SVG escala completo
+              (texto incluido), así que no hace falta reducir el tracking */}
           <RotatingSeal
             pathId="seal-producto"
-            className="absolute bottom-4 right-4 hidden size-24 sm:block"
+            className="absolute bottom-3 right-3 size-[76px] sm:bottom-4 sm:right-4 sm:size-24"
           />
         </div>
 
