@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { getSupabasePublicEnv, isSupabaseConfigured } from "./supabase/config";
+import type { Database } from "@/types/database";
 import { PLACEHOLDER_BUNDLES, PLACEHOLDER_PRODUCTS } from "./placeholder-catalog";
 import type { CatalogBundle, CatalogProduct } from "@/types";
 
@@ -14,7 +15,7 @@ import type { CatalogBundle, CatalogProduct } from "@/types";
 function createPublicClient() {
   const env = getSupabasePublicEnv();
   if (!env) throw new Error("Supabase no está configurado.");
-  return createClient(env.url, env.publishableKey, {
+  return createClient<Database>(env.url, env.publishableKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }

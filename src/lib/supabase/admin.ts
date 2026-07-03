@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { getSupabasePublicEnv } from "./config";
+import type { Database } from "@/types/database";
 
 /**
  * Cliente privilegiado con la SECRET KEY. SOLO para Route Handlers /
@@ -18,7 +19,7 @@ export function createAdminClient() {
       "Supabase (secret key) no está configurado. Completa SUPABASE_SECRET_KEY en .env.local."
     );
   }
-  return createClient(env.url, secretKey, {
+  return createClient<Database>(env.url, secretKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }

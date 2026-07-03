@@ -8,8 +8,8 @@
 - [ ] Confirmar con Nelly: nombres y precios reales de productos, tamaños, stock inicial.
 - [ ] Confirmar número de WhatsApp del negocio y distritos con delivery.
 - [ ] Conseguir fotos reales de productos (o decidir seguir con ilustraciones SVG en el MVP).
-- [ ] Crear proyecto en Supabase (org + proyecto `naturelly`).
-- [ ] Crear repositorio Git y carpeta de trabajo `naturelly`.
+- [x] Crear proyecto en Supabase (org + proyecto `naturelly`).
+- [x] Crear repositorio Git y carpeta de trabajo `naturelly`.
 
 ## Fase 1 — MVP
 
@@ -21,15 +21,16 @@
 - [x] Clientes Supabase (`client.ts`, `server.ts`, `admin.ts`) + `.env.example`.
 
 ### Base de datos
-- [~] Migración `catalog`: tablas de catálogo (products, variants, images, bundles, bundle_items).
-- [~] Migración `profiles`: profiles + trigger `handle_new_user`.
-- [~] Migración `orders`: orders + order_items + RPC `create_order`.
-- [~] Migración `rls`: políticas RLS completas + función `is_admin()`.
-- [~] Migración `content`: contenido (faqs, contact_messages, site_settings; recipes queda creada para fase 2).
-- [~] Migración `storage`: buckets de Storage con políticas.
-- [~] Seed de desarrollo + generar tipos (`database.ts`).
+- [x] Migración `catalog`: tablas de catálogo (products, variants, images, bundles, bundle_items).
+- [x] Migración `profiles`: profiles + trigger `handle_new_user`.
+- [x] Migración `orders`: orders + order_items + RPC `create_order`.
+- [x] Migración `rls`: políticas RLS completas + función `is_admin()`.
+- [x] Migración `content`: contenido (faqs, contact_messages, site_settings; recipes queda creada para fase 2).
+- [x] Migración `storage`: buckets de Storage con políticas.
+- [x] Migración `grants`: privilegios de mínimo privilegio por rol (GRANTs + RLS son dos capas; ver `DATABASE_SCHEMA.md`).
+- [x] Seed de desarrollo aplicado + tipos generados (`database.ts`) + clientes tipados.
 
-> Nota: el SQL ya está escrito en `supabase/migrations/` y `supabase/seed.sql`, pero queda `[~]` hasta aplicarse en el proyecto Supabase real (pendiente crearlo, ver Fase 0) y generar `database.ts` con la CLI.
+> Las 7 migraciones están aplicadas en el proyecto remoto y verificadas: flujo de pedido probado de punta a punta (pedido `NAT-5XFK`, cancelado tras la prueba), RLS y grants validados con anon/authenticated/secret. Falta crear el usuario admin de Nelly cuando exista su correo.
 
 ### Tienda pública
 - [x] Layout global: Header, Footer, MobileNav, CartDrawer.

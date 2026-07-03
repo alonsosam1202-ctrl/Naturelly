@@ -4,7 +4,12 @@
       "PowerShell(npm install)",
       "PowerShell(npx tsc --noEmit)",
       "PowerShell(npm run build)",
-      "PowerShell($map = @{ '20260703100000_catalog.sql' = '001_catalog.sql'; '20260703100100_profiles.sql' = '002_profiles.sql'; '20260703100200_orders.sql' = '003_orders.sql'; '20260703100300_rls.sql' = '004_rls.sql'; '20260703100400_content.sql' = '005_content.sql'; '20260703100500_storage.sql' = '006_storage.sql' }; foreach \\($new in $map.Keys\\) { $path = \"supabase/migrations/$new\"; $c = [System.IO.File]::ReadAllText\\($path\\); $c = $c.Replace\\(\"-- $\\($map[$new]\\) —\", \"-- $new —\"\\); [System.IO.File]::WriteAllText\\($path, $c\\) }; Get-Content supabase/migrations/20260703100200_orders.sql -TotalCount 1)"
+      "PowerShell($map = @{ '20260703100000_catalog.sql' = '001_catalog.sql'; '20260703100100_profiles.sql' = '002_profiles.sql'; '20260703100200_orders.sql' = '003_orders.sql'; '20260703100300_rls.sql' = '004_rls.sql'; '20260703100400_content.sql' = '005_content.sql'; '20260703100500_storage.sql' = '006_storage.sql' }; foreach \\($new in $map.Keys\\) { $path = \"supabase/migrations/$new\"; $c = [System.IO.File]::ReadAllText\\($path\\); $c = $c.Replace\\(\"-- $\\($map[$new]\\) —\", \"-- $new —\"\\); [System.IO.File]::WriteAllText\\($path, $c\\) }; Get-Content supabase/migrations/20260703100200_orders.sql -TotalCount 1)",
+      "PowerShell(Get-ChildItem supabase/migrations | Select-Object -ExpandProperty Name; \"seed.sql existe: $\\(Test-Path supabase/seed.sql\\)\"; \"config.toml existe: $\\(Test-Path supabase/config.toml\\)\")",
+      "PowerShell($out = npx --yes supabase projects list 2>$null; if \\($LASTEXITCODE -eq 0\\) { \"AUTENTICADO: sesion CLI activa \\($\\(\\(@\\($out\\)\\).Count\\) lineas de salida, no mostradas\\)\" } else { \"NO AUTENTICADO: se requiere login\" })",
+      "PowerShell(\"n\",\"n\" | npx --yes supabase init; \"---\"; \"config.toml existe: $\\(Test-Path supabase/config.toml\\)\"; Get-ChildItem supabase/migrations | Select-Object -ExpandProperty Name)",
+      "PowerShell(powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\Admin\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Proyectos-Naturelly\\\\89c78392-71c7-41e6-ab56-e32d4e2714ff\\\\scratchpad\\\\seed-remote.ps1\")",
+      "PowerShell($out = npx --yes supabase gen types typescript --linked 2>$null | Out-String; \"exit: $LASTEXITCODE\"; if \\($LASTEXITCODE -eq 0 -and $out.Trim\\(\\).Length -gt 100\\) { [System.IO.File]::WriteAllText\\('C:\\\\Proyectos\\\\Naturelly\\\\src\\\\types\\\\database.ts', $out.Trim\\(\\) + \"`n\", [System.Text.UTF8Encoding]::new\\($false\\)\\); \"database.ts escrito: $\\(\\(Get-Item src/types/database.ts\\).Length\\) bytes\" } else { \"ERROR generando tipos\" })"
     ]
   }
 }

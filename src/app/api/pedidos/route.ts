@@ -78,6 +78,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const summary = data as OrderSummary;
+  // El RPC devuelve jsonb (tipado como Json); la forma real es OrderSummary
+  const summary = data as unknown as OrderSummary;
   return NextResponse.json({ codigo: summary.code }, { status: 201 });
 }

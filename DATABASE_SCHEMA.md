@@ -135,6 +135,22 @@ site_settings: key text PK, value jsonb
 --     ('delivery_districts', '["Cercado","Hunter","JLByR", ...]')
 ```
 
+## Privilegios (GRANTs) + RLS: dos capas obligatorias
+
+Postgres evalúa el acceso en dos capas independientes y **ambas son necesarias**:
+
+1. **GRANTs**: controlan qué roles (`anon`, `authenticated`, `service_role`) pueden *alcanzar* cada tabla o función (SELECT/INSERT/UPDATE/DELETE/EXECUTE). Sin GRANT, la petición muere con `42501 permission denied` antes de mirar cualquier política.
+2. **RLS**: decide *qué filas* y operaciones se permiten dentro de lo ya alcanzable.
+
+Los proyectos de Supabase no otorgan privilegios implícitos sobre las tablas creadas por migraciones, así que la migración `20260703110000_grants.sql` implementa la matriz de mínimo privilegio:
+
+| Rol | Privilegios |
+|---|---|
+| `anon` | SELECT en catálogo y contenido público; INSERT en `contact_messages`; EXECUTE en `is_admin()` (lo requieren las políticas) |
+| `authenticated` | Lo de `anon` + SELECT/UPDATE en `profiles`, SELECT en `orders`/`order_items`, y escritura en catálogo/contenido/pedidos **gateada por RLS `is_admin()`** (el GRANT solo abre la puerta; la política decide) |
+| `service_role` | ALL en todas las tablas presentes y futuras (`ALTER DEFAULT PRIVILEGES FOR ROLE postgres`), único con EXECUTE en `create_order(jsonb)` |
+| Funciones de trigger (`set_updated_at`, `handle_new_user`, `protect_profile_role`) | Sin EXECUTE para roles de API: solo las dispara el sistema |
+
 ## Row Level Security (RLS)
 
 RLS activado en **todas** las tablas. Función auxiliar:

@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { getSupabasePublicEnv } from "./config";
+import type { Database } from "@/types/database";
 
 /**
  * Cliente para Server Components y Route Handlers con sesión del usuario
@@ -15,7 +16,7 @@ export async function createSupabaseServerClient() {
     );
   }
   const cookieStore = await cookies();
-  return createServerClient(env.url, env.publishableKey, {
+  return createServerClient<Database>(env.url, env.publishableKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
