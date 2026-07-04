@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { homePathForRole, sanitizeNextPath } from "@/lib/auth-redirect";
 
 /**
  * Origen confiable para las redirecciones absolutas del callback.
@@ -21,14 +22,14 @@ function getRedirectBase(requestOrigin: string): string {
 
 /**
  * Callback de autenticación (PKCE): intercambia el `code` de OAuth o de los
- * enlaces de correo por una sesión en cookies. También acepta
- * `token_hash` + `type` para ser robusto ante la plantilla de correo.
+ * enlaces de correo (confirmación de registro y recuperación) por una
+ * sesión en cookies. También acepta `token_hash` + `type`.
  *
  * Destinos:
- * - `next` (solo rutas internas) — la recuperación usa /actualizar-contrasena.
- * - Sin `next` (p. ej. Google) — /admin: el layout del panel decide por rol
- *   (admin → panel; no-admin → "Acceso denegado" con cierre de sesión).
- *   El rol JAMÁS se otorga por proveedor, correo o dominio.
+ * - `next` interno válido (sanitizado) — recuperación usa
+ *   /actualizar-contrasena; la confirmación de registro usa /cuenta.
+ * - Sin `next` — POR ROL: admin → /admin, customer → /cuenta. El rol se lee
+ *   del profile propio (RLS) y JAMÁS se otorga por proveedor/correo/dominio.
  * - Cualquier error → /login?error=enlace, sin exponer detalles internos.
  */
 export async function GET(request: Request) {
@@ -42,11 +43,7 @@ export async function GET(request: Request) {
   const code = searchParams.get("code");
   const tokenHash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
-  const next = searchParams.get("next");
-  // Solo rutas internas: debe empezar con "/", nunca con "//" ni ser un
-  // dominio externo (evita open redirect)
-  const safeNext =
-    next && next.startsWith("/") && !next.startsWith("//") ? next : null;
+  const safeNext = sanitizeNextPath(searchParams.get("next"));
 
   const supabase = await createSupabaseServerClient();
   let authenticated = false;
@@ -66,5 +63,23 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${base}/login?error=enlace`);
   }
 
-  return NextResponse.redirect(`${base}${safeNext ?? "/admin"}`);
+  if (safeNext) {
+    return NextResponse.redirect(`${base}${safeNext}`);
+  }
+
+  // Sin next: destino por rol (verificado en servidor contra la BD)
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  let role: string | null = null;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+    role = profile?.role ?? null;
+  }
+
+  return NextResponse.redirect(`${base}${homePathForRole(role)}`);
 }

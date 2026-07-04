@@ -3,10 +3,10 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { getSupabasePublicEnv } from "@/lib/supabase/config";
 
 /**
- * Protege /admin/**: refresca la sesión (cookies) y redirige a /login si no
- * hay usuario. Es solo la primera barrera: la autorización real (sesión +
- * role = admin) se verifica de nuevo server-side en app/admin/layout.tsx y
- * dentro de la RPC set_order_status.
+ * Protege /admin/** y /cuenta/**: refresca la sesión (cookies) y redirige a
+ * /login?next=<ruta> si no hay usuario. Es solo la primera barrera: la
+ * autorización real se verifica de nuevo server-side (rol admin en
+ * app/admin/layout.tsx + RPC; sesión en app/cuenta/layout.tsx) y en RLS.
  */
 export async function middleware(request: NextRequest) {
   const env = getSupabasePublicEnv();
@@ -41,7 +41,7 @@ export async function middleware(request: NextRequest) {
 
   if (!user) {
     const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirect", request.nextUrl.pathname);
+    loginUrl.searchParams.set("next", request.nextUrl.pathname);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -49,5 +49,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/cuenta/:path*"],
 };

@@ -39,9 +39,10 @@ naturelly/
 │   │   │   ├── registro/page.tsx
 │   │   │   └── recuperar/page.tsx
 │   │   ├── cuenta/
-│   │   │   ├── layout.tsx         # Requiere sesión
-│   │   │   ├── page.tsx           # Perfil
-│   │   │   └── pedidos/page.tsx   # Historial
+│   │   │   ├── layout.tsx         # Requiere sesión (admin → /admin)
+│   │   │   ├── page.tsx           # Perfil (edita solo nombre y celular)
+│   │   │   ├── pedidos/page.tsx   # Historial propio (RLS)
+│   │   │   └── pedidos/[id]/page.tsx  # Detalle con precios snapshot
 │   │   ├── admin/
 │   │   │   ├── layout.tsx         # Requiere rol admin
 │   │   │   ├── page.tsx           # Dashboard
@@ -55,7 +56,7 @@ naturelly/
 │   │       └── contacto/route.ts  # POST: guardar mensaje
 │   ├── components/
 │   │   ├── ui/                    # Primitivos: Button, Input, Badge, Card, Modal...
-│   │   ├── layout/                # Header, Footer, MobileNav, CartDrawer
+│   │   ├── layout/                # Header, Footer, MobileNav, CartDrawer, AuthNav
 │   │   ├── tienda/                # ProductCard, VariantSelector, QuantityStepper,
 │   │   │                          # ProductGallery, BundleCard, PriceTag
 │   │   ├── carrito/               # CartItem, CartSummary, EmptyCart

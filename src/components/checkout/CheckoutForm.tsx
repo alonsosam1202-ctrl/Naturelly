@@ -12,7 +12,16 @@ import { checkoutFormSchema, type CheckoutFormValues } from "@/lib/validations/o
 import { DELIVERY_DISTRICTS } from "@/lib/constants";
 import { useCartStore } from "@/stores/cart";
 
-export default function CheckoutForm() {
+type CheckoutFormProps = {
+  /** Prefill desde el perfil del cliente logueado (editable por pedido). */
+  defaultName?: string;
+  defaultPhone?: string;
+};
+
+export default function CheckoutForm({
+  defaultName = "",
+  defaultPhone = "",
+}: CheckoutFormProps) {
   const router = useRouter();
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
@@ -25,7 +34,11 @@ export default function CheckoutForm() {
     formState: { errors, isSubmitting },
   } = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
-    defaultValues: { deliveryMethod: "delivery" },
+    defaultValues: {
+      deliveryMethod: "delivery",
+      customerName: defaultName,
+      customerPhone: defaultPhone,
+    },
   });
 
   const deliveryMethod = watch("deliveryMethod");

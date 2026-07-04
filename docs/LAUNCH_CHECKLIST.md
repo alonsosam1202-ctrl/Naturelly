@@ -14,7 +14,8 @@ Validado manualmente en producción:
 - Tienda pública completa: catálogo, detalle con variantes, packs, carrito persistente, checkout.
 - Pedidos registrados en Supabase (código `NAT-XXXX`, precios recalculados en servidor, stock transaccional) + mensaje de WhatsApp prellenado.
 - Panel admin: gestión de pedidos con transiciones válidas y **reposición idempotente de stock al cancelar** (variantes y packs), CRUD de productos con imágenes, CRUD de packs, resumen del negocio.
-- Autenticación: correo/contraseña, **Google OAuth activado y validado en producción** (`NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=true` en Render; admin → `/admin`, customer → "Acceso denegado", logout OK), recuperación y cambio de contraseña validados en producción.
+- Autenticación: correo/contraseña, **Google OAuth activado y validado en producción** (`NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=true` en Render), recuperación y cambio de contraseña validados en producción.
+- **Cuentas de clientes** (nuevo en el alcance del MVP): registro con confirmación de correo y Google, login con redirección por rol (admin → `/admin`, cliente → `/cuenta`; "Acceso denegado" solo al forzar `/admin`), perfil editable (nombre y celular), historial y detalle de pedidos propios con RLS, checkout con prefill y asociación segura del pedido — 22/22 pruebas automatizadas en verde; pendiente validación manual.
 - Seguridad: middleware + verificación server-side de rol + RLS y grants de mínimo privilegio + RPCs con autorización interna. 8 migraciones aplicadas y versionadas.
 - Calidad: contraste AA, `h1` y aria correctos, teclado en drawers, `prefers-reduced-motion`, responsive 360/390/430/desktop, `robots.txt`, `sitemap.xml` dinámico, imagen Open Graph con previsualización correcta al compartir por WhatsApp.
 - `tsc --noEmit` y `npm run build` limpios.
@@ -92,7 +93,19 @@ Pendientes y recomendaciones:
 
 - [ ] **WhatsApp real**: `NEXT_PUBLIC_WHATSAPP_NUMBER` sigue placeholder en Render y `.env.local` hasta tener el número de Nelly — es lo único que mantiene deshabilitados los botones verdes.
 - [ ] **Usuario admin definitivo de Nelly**: crear con su correo real, promover a admin, y que ella defina su contraseña vía `/recuperar` o `/admin/cuenta`. Retirar accesos de prueba.
-- [ ] **SMTP propio (recomendación)**: el correo predeterminado de Supabase funciona y está validado para pruebas, pero tiene límites de envío por hora y no es la configuración recomendada para un lanzamiento comercial. Configurar Resend o SES (ya contemplado en `TECH_STACK.md`) antes de aumentar el volumen de usuarios.
+- [ ] **SMTP propio + plantilla de confirmación (OBLIGATORIO antes del lanzamiento público)**. El correo predeterminado de Supabase funciona para pruebas, pero (a) tiene límites de envío por hora y (b) **no permite editar las plantillas de correo** ("Set up custom SMTP to edit templates"). Hoy la confirmación de registro usa la plantilla por defecto (`{{ .ConfirmationURL }}`), cuyo enlace de un solo uso puede ser consumido por el prefetch del cliente de correo (comprobado en pruebas: la cuenta se confirma igual y el usuario puede iniciar sesión, y `/login` ya muestra un mensaje claro con opción de reenvío, pero el clic del usuario termina en "enlace vencido"). Pasos obligatorios, en orden:
+  1. Configurar **SMTP propio** (Resend o SES, ya contemplado en `TECH_STACK.md`) en Supabase → Authentication → SMTP.
+  2. **Verificar el dominio de envío** en el proveedor elegido (SPF/DKIM) para que los correos no caigan a spam.
+  3. Reemplazar la plantilla **Confirm signup** (Authentication → Emails) por la versión con `TokenHash`, compatible con el flujo SSR (`/auth/callback` ya soporta `token_hash` + `type` con `verifyOtp`):
+     ```html
+     <h2>Confirma tu correo</h2>
+     <p>¡Hola! Gracias por crear tu cuenta en Naturelly.</p>
+     <p>Para terminar, confirma tu correo con este enlace:</p>
+     <p><a href="{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=email">Confirmar mi correo</a></p>
+     <p>Si tú no creaste esta cuenta, puedes ignorar este mensaje.</p>
+     ```
+     Se usa `{{ .RedirectTo }}` (no `{{ .SiteURL }}`) para que el enlace conserve el origen desde el que se registró el usuario (local o producción); es seguro porque el código siempre envía `emailRedirectTo` con `?next=`.
+  4. **Volver a validar con un correo externo real** (Gmail u otro): confirmación de registro (debe terminar en `/cuenta` con sesión) y recuperación de contraseña.
 - [ ] **Plan de hosting (recomendación)**: el plan gratuito de Render duerme el servicio tras inactividad (arranques fríos de ~30–60 s); evaluar plan de pago o keep-alive. Revisar también la política de backups del plan de Supabase antes de operar con volumen real.
 - [ ] **Dominio propio (recomendación)**: al decidirlo, actualizar `NEXT_PUBLIC_SITE_URL` en Render, Site URL/Redirect URLs en Supabase, orígenes y redirect del OAuth de Google, y `TECH_STACK.md`.
 - [ ] **Google Search Console (recomendación)**: verificar propiedad y enviar `sitemap.xml`.
@@ -102,7 +115,6 @@ Pendientes y recomendaciones:
 
 Por fase (ver `ROADMAP.md`); ninguna bloquea el lanzamiento:
 
-- **Fase 1 restante:** cuentas de clientes (`/registro`, `/cuenta`, `/cuenta/pedidos`, middleware de `/cuenta`).
 - **Fase 2:** blog/recetas gestionables, FAQ y contacto administrables, página de ingredientes, SEO fino (datos estructurados de producto), analytics, testimonios.
 - **Fase 3:** pagos online (Culqi vs Mercado Pago, Yape/Plin), correos transaccionales, páginas legales (T&C, privacidad, libro de reclamaciones — requisito legal para cobrar online en Perú).
 - **Fase 4:** cupones, reseñas verificadas, suscripción mensual, canal mayorista, notificaciones por WhatsApp Business API.

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, ShoppingBag } from "lucide-react";
 import { useCartStore } from "@/stores/cart";
 import MobileNav from "./MobileNav";
+import AuthNav from "./AuthNav";
 
 export const NAV_LINKS = [
   { href: "/tienda", label: "Tienda" },
@@ -61,6 +62,7 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
+            <AuthNav variant="desktop" />
           </nav>
 
           <button

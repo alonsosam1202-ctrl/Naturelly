@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { NAV_LINKS } from "./Header";
+import AuthNav from "./AuthNav";
 
 type MobileNavProps = {
   open: boolean;
@@ -85,6 +86,8 @@ export default function MobileNav({ open, onClose }: MobileNavProps) {
               {link.label}
             </Link>
           ))}
+          <div className="my-2 h-px bg-amarillo-suave" aria-hidden />
+          <AuthNav variant="mobile" onNavigate={onClose} />
         </nav>
       </div>
     </div>

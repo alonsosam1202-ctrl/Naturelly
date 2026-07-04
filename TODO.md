@@ -13,7 +13,7 @@
 
 ## Fase 1 — MVP
 
-> ✅ **MVP TÉCNICO CERRADO (2026-07-03).** Validación manual completa en producción (https://naturelly.onrender.com): tienda, catálogo, carrito, checkout, pedidos + WhatsApp, panel admin completo (pedidos/productos/packs), auth con correo y Google, recuperación y cambio de contraseña, responsive (360/390/430/desktop), accesibilidad, robots/sitemap/Open Graph y previsualización por WhatsApp. Lo pendiente para el lanzamiento público es información y recursos, no código: ver `docs/LAUNCH_CHECKLIST.md`.
+> 🔶 **MVP AMPLIADO (2026-07-03): cuentas de clientes dentro del alcance.** Todo lo anterior sigue validado en producción (tienda, pedidos + WhatsApp, panel admin completo, auth correo + Google, recuperación, calidad/SEO/accesibilidad/responsive). El módulo de **registro y cuentas de clientes** está implementado y con 22/22 pruebas automatizadas en verde; **el MVP no se considera cerrado hasta su validación manual** por Alonso. Pendientes de lanzamiento (información y recursos): ver `docs/LAUNCH_CHECKLIST.md`.
 
 ### Setup
 - [x] `create-next-app` con TypeScript, Tailwind, ESLint, App Router, `src/` (scaffold manual equivalente: la carpeta ya contenía los docs).
@@ -49,11 +49,14 @@
 - [x] Páginas `/nosotros`, `/faq`, `/contacto` (+ `/api/contacto`). `/recetas` quedó como teaser (el blog es fase 2).
 
 ### Cuentas
-- [~] `/registro`, `/login`, `/recuperar` con Supabase Auth (`/login`, `/recuperar`, `/actualizar-contrasena` y `/auth/callback` **validados en producción**, incluida la recuperación con correo real; `/registro` pendiente para el bloque Cuentas de clientes).
+- [x] `/registro`, `/login`, `/recuperar` con Supabase Auth (registro con confirmación de correo y Google; login general con **redirección por rol**: admin → `/admin`, customer → `/cuenta`; recuperación validada en producción).
 - [x] Cambio de contraseña del usuario autenticado en `/admin/cuenta` (updateUser con sesión propia, sin secret key) — validado en producción.
-- [x] Login con Google **validado en producción** (PKCE + `/auth/callback` con origen confiable desde `NEXT_PUBLIC_SITE_URL`; admin → `/admin`, no-admin → "Acceso denegado"; botón controlado por `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED`).
-- [~] Middleware de protección de rutas (protege `/admin/**`; falta `/cuenta/**`).
-- [ ] `/cuenta` (perfil editable) y `/cuenta/pedidos` (historial con estados).
+- [x] Login con Google para admin **y clientes** (PKCE + `/auth/callback` con origen confiable desde `NEXT_PUBLIC_SITE_URL` y destino por rol; vinculación automática Google↔contraseña por correo conservada; "Acceso denegado" solo al entrar manualmente a `/admin`).
+- [x] Middleware de protección de rutas (`/admin/**` por rol y `/cuenta/**` por sesión, con `next` sanitizado).
+- [x] `/cuenta` (perfil editable: SOLO nombre y celular) + `/cuenta/pedidos` (historial propio vía RLS) + `/cuenta/pedidos/[id]` (detalle con precios snapshot).
+- [x] Checkout: prefill desde el perfil con sesión, pedido asociado al usuario verificado con `getUser()` en servidor (jamás `user_id` del cliente); compra invitada intacta con invitación discreta a registrarse.
+
+> Pruebas del módulo de cuentas (2026-07-03): 22/22 automatizadas en verde — login customer/admin, middleware de `/cuenta` y `/admin`, `next=//evil.com` rechazado, redirección por rol en callback (customer→/cuenta, admin→/admin), compra invitada con `user_id` malicioso IGNORADO (quedó null), compra autenticada de punta a punta por la API con cookie real (user_id correcto) y visible en su historial, IDOR bloqueado (B no ve pedidos/items de A), escalada de `role` bloqueada, RPC y edición directa de pedidos/precios/stock bloqueadas para customer, whitelist de perfil + trigger `updated_at`, precios snapshot intactos, cancelación idempotente, sitemap sin rutas privadas y noindex en `/registro` y `/cuenta`. Usuarios `qa-cuentas-*` eliminados por UUID; pedidos de prueba `NAT-Y5GA`, `NAT-GXC2`, `NAT-9PZZ` y `NAT-C5P3` cancelados con stock repuesto. **Pendiente: validación manual de Alonso.**
 
 > Pruebas del bloque de contraseñas (2026-07-03): login con contraseña OK; flujo completo de recuperación a nivel API (enlace → sesión → contraseña nueva → login con la nueva, la vieja rechazada, enlace de un solo uso); callback con código inválido no crea sesión y redirige a `/login?error=enlace`; la UI de `/recuperar` muestra SIEMPRE mensaje genérico. Todo validado después en producción: recuperación con correo real, Google OAuth (admin → `/admin`, customer → "Acceso denegado", logout) y el badge corregido.
 

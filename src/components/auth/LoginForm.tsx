@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -8,8 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import ResendConfirmation from "@/components/auth/ResendConfirmation";
 import { loginSchema, type LoginValues } from "@/lib/validations/auth";
 import { createClient } from "@/lib/supabase/client";
+import { homePathForRole, sanitizeNextPath } from "@/lib/auth-redirect";
+
+// El botón de Google se controla por flag (activo en producción)
+const GOOGLE_AUTH_ENABLED =
+  process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true";
 
 /** Logo "G" de Google en SVG inline (sin librerías nuevas). */
 function GoogleIcon() {
@@ -35,16 +41,13 @@ function GoogleIcon() {
   );
 }
 
-// El botón de Google queda oculto hasta configurar el OAuth Client
-// (Google Auth Platform + provider en Supabase). El código OAuth se conserva.
-const GOOGLE_AUTH_ENABLED =
-  process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true";
-
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [googlePending, setGooglePending] = useState(false);
+  const [hashErrorCode, setHashErrorCode] = useState<string | null>(null);
+  const [showResend, setShowResend] = useState(false);
 
   const {
     register,
@@ -52,15 +55,53 @@ export default function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<LoginValues>({ resolver: zodResolver(loginSchema) });
 
-  // Solo rutas internas (evita open redirect)
-  const redirectParam = searchParams.get("redirect");
-  const redirectTo =
-    redirectParam && redirectParam.startsWith("/") && !redirectParam.startsWith("//")
-      ? redirectParam
-      : "/admin";
+  // Solo rutas internas (sanitización centralizada); se acepta el nombre
+  // legado "redirect" por compatibilidad
+  const safeNext = sanitizeNextPath(
+    searchParams.get("next") ?? searchParams.get("redirect")
+  );
 
   // Enlace de recuperación/OAuth inválido o vencido (desde /auth/callback)
   const linkError = searchParams.get("error") === "enlace";
+
+  // GoTrue devuelve los errores de sus enlaces de correo en el FRAGMENTO
+  // (#error=access_denied&error_code=otp_expired), que nunca llega al
+  // servidor y sobrevive a las redirecciones. Se lee aquí en el cliente
+  // para dar un mensaje veraz, y se limpia de la URL.
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+    const params = new URLSearchParams(hash.slice(1));
+    const code = params.get("error_code");
+    if (code || params.get("error")) {
+      setHashErrorCode(code ?? "unknown");
+      history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search
+      );
+    }
+  }, []);
+
+  /** Destino tras autenticarse: `next` interno válido o el home por rol. */
+  async function resolveDestination(): Promise<string> {
+    if (safeNext) return safeNext;
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return "/cuenta";
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .maybeSingle();
+      return homePathForRole(profile?.role);
+    } catch {
+      return "/cuenta";
+    }
+  }
 
   async function onSubmit(values: LoginValues) {
     setErrorMessage(null);
@@ -75,7 +116,7 @@ export default function LoginForm() {
         setErrorMessage("Correo o contraseña incorrectos.");
         return;
       }
-      router.replace(redirectTo);
+      router.replace(await resolveDestination());
       router.refresh();
     } catch {
       setErrorMessage(
@@ -89,11 +130,14 @@ export default function LoginForm() {
     setGooglePending(true);
     try {
       const supabase = createClient();
-      // PKCE: /auth/callback intercambia el code; el rol lo decide el
-      // servidor (layout del panel + RLS), nunca el proveedor.
+      // PKCE: /auth/callback intercambia el code y decide el destino por
+      // rol en servidor; `next` se conserva a través del flujo OAuth
+      const callback = `${location.origin}/auth/callback${
+        safeNext ? `?next=${encodeURIComponent(safeNext)}` : ""
+      }`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: `${location.origin}/auth/callback` },
+        options: { redirectTo: callback },
       });
       if (error) {
         setErrorMessage("No se pudo iniciar sesión con Google. Inténtalo de nuevo.");
@@ -110,14 +154,26 @@ export default function LoginForm() {
 
   return (
     <div className="flex flex-col gap-5">
-      {linkError && (
-        <p
-          role="alert"
-          className="rounded-2xl bg-terracota/10 px-4 py-3 font-bold text-terracota"
-        >
-          El enlace no es válido o ya venció. Inicia sesión o pide uno nuevo
-          en &quot;¿Olvidaste tu contraseña?&quot;.
-        </p>
+      {(linkError || hashErrorCode) && (
+        <div className="flex flex-col gap-3">
+          <p
+            role="alert"
+            className="rounded-2xl bg-terracota/10 px-4 py-3 font-bold text-terracota"
+          >
+            {hashErrorCode === "otp_expired"
+              ? "El enlace venció o ya fue usado. Si ya confirmaste tu cuenta, inicia sesión con normalidad; para la contraseña usa \"¿Olvidaste tu contraseña?\"."
+              : "El enlace no es válido o ya venció. Inicia sesión o pide uno nuevo en \"¿Olvidaste tu contraseña?\"."}
+          </p>
+          <button
+            type="button"
+            onClick={() => setShowResend((v) => !v)}
+            aria-expanded={showResend}
+            className="self-start text-sm font-bold text-miel-oscura hover:text-tinta"
+          >
+            ¿Aún no confirmas tu cuenta? Reenviar correo de confirmación
+          </button>
+          {showResend && <ResendConfirmation />}
+        </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
@@ -188,6 +244,16 @@ export default function LoginForm() {
           </button>
         </>
       )}
+
+      <p className="text-center text-cacao">
+        ¿Aún no tienes cuenta?{" "}
+        <Link
+          href={`/registro${safeNext ? `?next=${encodeURIComponent(safeNext)}` : ""}`}
+          className="font-bold text-miel-oscura hover:text-tinta"
+        >
+          Crear cuenta
+        </Link>
+      </p>
     </div>
   );
 }

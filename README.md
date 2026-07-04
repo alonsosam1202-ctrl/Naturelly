@@ -4,11 +4,12 @@ Ecommerce artesanal premium para **Naturelly**, marca de granolas hechas a mano 
 
 ## Estado actual
 
-✅ **MVP técnico completo y validado en producción** (2026-07-03).
+🔶 **MVP en cierre final** (2026-07-03).
 
 - **Producción:** https://naturelly.onrender.com
-- Todos los flujos verificados manualmente de punta a punta (tienda, pedidos, panel admin, autenticación, SEO técnico, accesibilidad y responsive).
-- Lo pendiente para el lanzamiento público es **información y recursos, no código**: datos reales de Nelly, logo y fotografías. Ver [`docs/LAUNCH_CHECKLIST.md`](./docs/LAUNCH_CHECKLIST.md).
+- Tienda, pedidos, panel admin, autenticación, SEO técnico, accesibilidad y responsive: **validados manualmente en producción**.
+- **Cuentas de clientes** (registro, login por rol, perfil, historial de pedidos): implementadas con 22/22 pruebas automatizadas; pendiente la validación manual final.
+- Para el lanzamiento público faltan además **información y recursos**: datos reales de Nelly, logo y fotografías. Ver [`docs/LAUNCH_CHECKLIST.md`](./docs/LAUNCH_CHECKLIST.md).
 
 ## Funciones principales
 
@@ -24,10 +25,15 @@ Ecommerce artesanal premium para **Naturelly**, marca de granolas hechas a mano 
 - CRUD de packs con selector de variantes, ahorro estimado y disponibilidad calculada.
 - Todo con soft delete: nada se borra físicamente.
 
+**Cuentas de clientes (`/registro`, `/cuenta`)**
+- Registro con correo (confirmación por email) o Google; login general con redirección por rol (admin → panel, cliente → cuenta).
+- Perfil editable (solo nombre y celular), historial de pedidos propios y detalle con precios snapshot — todo protegido por RLS con la sesión del usuario.
+- El checkout precarga los datos del perfil y asocia el pedido a la cuenta con identidad verificada en servidor; la compra como invitado sigue intacta.
+
 **Autenticación y seguridad**
 - Login con correo/contraseña y con Google (OAuth PKCE), recuperación y cambio de contraseña.
 - Triple capa de autorización para el panel: middleware → verificación server-side de sesión + rol → RLS y RPCs en la base de datos.
-- Grants de mínimo privilegio + RLS en todas las tablas; la clave secreta jamás sale del servidor.
+- Grants de mínimo privilegio + RLS en todas las tablas; la clave secreta jamás sale del servidor; el `user_id` de un pedido nunca proviene del navegador.
 
 ## Stack
 

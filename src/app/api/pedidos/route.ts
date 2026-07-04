@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createOrderSchema } from "@/lib/validations/order";
 import { isSupabaseAdminConfigured } from "@/lib/supabase/config";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { OrderSummary } from "@/types";
 
 /**
@@ -43,6 +44,46 @@ export async function POST(request: Request) {
     );
   }
 
+  // ── Identidad verificada en SERVIDOR ─────────────────────────────────
+  // getUser() valida el token contra Supabase Auth (nunca getSession, y
+  // jamás un user_id del formulario/JSON/headers: Zod ya descartó cualquier
+  // clave desconocida y aquí el payload se construye campo por campo).
+  // - Sin sesión (AuthSessionMissingError): compra de invitado normal.
+  // - Cualquier OTRO fallo de Auth: error controlado — no se degrada
+  //   silenciosamente a invitado para no perder la asociación del cliente.
+  let verifiedUserId: string | null = null;
+  try {
+    const sessionClient = await createSupabaseServerClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await sessionClient.auth.getUser();
+    if (
+      authError &&
+      authError.name !== "AuthSessionMissingError" &&
+      !authError.message.toLowerCase().includes("session missing")
+    ) {
+      console.error("verificación de sesión falló:", authError.message);
+      return NextResponse.json(
+        {
+          error:
+            "No pudimos verificar tu sesión. Inténtalo de nuevo en un momento.",
+        },
+        { status: 500 }
+      );
+    }
+    verifiedUserId = user?.id ?? null;
+  } catch (unexpected) {
+    console.error("verificación de sesión falló:", unexpected);
+    return NextResponse.json(
+      {
+        error:
+          "No pudimos verificar tu sesión. Inténtalo de nuevo en un momento.",
+      },
+      { status: 500 }
+    );
+  }
+
   const input = parsed.data;
   const supabase = createAdminClient();
   const { data, error } = await supabase.rpc("create_order", {
@@ -53,6 +94,8 @@ export async function POST(request: Request) {
       delivery_district: input.deliveryDistrict || null,
       delivery_address: input.deliveryAddress || null,
       notes: input.notes || null,
+      // Solo desde la sesión verificada; null = invitado
+      user_id: verifiedUserId,
       items: input.items.map((item) => ({
         variant_id: item.variantId ?? null,
         bundle_id: item.bundleId ?? null,
