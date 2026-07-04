@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ShoppingBag } from "lucide-react";
 import Button from "@/components/ui/Button";
 import PriceTag from "./PriceTag";
@@ -25,12 +26,28 @@ export default function BundleCard({ bundle }: { bundle: CatalogBundle }) {
   return (
     <article className="flex flex-col overflow-hidden rounded-3xl bg-blanco-crema shadow-calida ring-1 ring-tinta/5">
       <div className="px-4 pt-4">
-        <div className="flex items-end justify-center overflow-hidden rounded-t-[10rem] rounded-b-2xl bg-amarillo/70 p-8">
-          <BowlIllustration
-            primary="#E6A12D"
-            secondary="#FEDB5F"
-            className="h-auto w-2/3"
-          />
+        <div
+          className={`relative flex items-end justify-center overflow-hidden rounded-t-[10rem] rounded-b-2xl bg-amarillo/70 ${
+            bundle.image_url ? "aspect-[7/8]" : "p-8"
+          }`}
+        >
+          {bundle.image_url ? (
+            // Foto real del pack (bundles.image_url); alt = nombre del pack
+            // porque el esquema no tiene columna alt para bundles
+            <Image
+              src={bundle.image_url}
+              alt={`Pack ${bundle.name}`}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          ) : (
+            <BowlIllustration
+              primary="#E6A12D"
+              secondary="#FEDB5F"
+              className="h-auto w-2/3"
+            />
+          )}
         </div>
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5">

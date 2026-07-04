@@ -47,20 +47,28 @@
 - [x] Páginas `/nosotros`, `/faq`, `/contacto` (+ `/api/contacto`). `/recetas` quedó como teaser (el blog es fase 2).
 
 ### Cuentas
-- [~] `/registro`, `/login`, `/recuperar` con Supabase Auth (`/login` hecho para el admin; `/registro` y `/recuperar` pendientes para el bloque Cuentas).
+- [~] `/registro`, `/login`, `/recuperar` con Supabase Auth (`/login` y `/recuperar` + `/actualizar-contrasena` + `/auth/callback` hechos; `/registro` pendiente para el bloque Cuentas).
+- [x] Cambio de contraseña del usuario autenticado en `/admin/cuenta` (updateUser con sesión propia, sin secret key).
+- [~] Login con Google (`signInWithOAuth` + PKCE implementado; el botón está **oculto tras `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=false`** hasta configurar el OAuth Client en Google/Supabase y probarlo).
 - [~] Middleware de protección de rutas (protege `/admin/**`; falta `/cuenta/**`).
 - [ ] `/cuenta` (perfil editable) y `/cuenta/pedidos` (historial con estados).
+
+> Pruebas del bloque de contraseñas (2026-07-03): login con contraseña OK; flujo completo de recuperación a nivel API (enlace → sesión → contraseña nueva → login con la nueva, la vieja rechazada, enlace de un solo uso); callback con código inválido no crea sesión y redirige a `/login?error=enlace`; la UI de `/recuperar` muestra SIEMPRE mensaje genérico. Pendientes manuales: correo real de recuperación, Google (tras configuración) y revisión visual del badge corregido.
 
 ### Admin
 - [x] Layout admin con verificación de rol (middleware + verificación server-side + RLS/RPC).
 - [x] Dashboard con resumen (pedidos pendientes, en proceso, entregados, ventas de últimos 7 días).
-- [ ] CRUD de productos con variantes.
-- [ ] Subida de imágenes a Storage con preview.
-- [ ] CRUD de bundles.
+- [x] CRUD de productos con variantes (`/admin/productos`, crear/editar, soft delete con confirmación; variantes nunca se borran, se desactivan).
+- [x] Subida de imágenes a Storage con preview, alt obligatorio, reemplazo, orden y eliminación controlada (BD primero, Storage después).
+- [x] CRUD de bundles (`/admin/packs`: crear/editar con selector de variantes, resumen de ahorro y disponibilidad estimada, imagen única en `bundles.image_url`, soft delete con confirmación). Limitaciones de esquema documentadas en `DATABASE_SCHEMA.md` (sin precio tachado, badge ni orden de ítems).
 - [x] Tabla de pedidos con filtro por estado y cambio de estado (`/admin/pedidos` + detalle con acciones).
 - [x] Reposición segura de stock al cancelar un pedido (RPC `set_order_status`: transaccional, con lock e idempotente — verificado que cancelar dos veces no repone doble).
 
-> Pruebas del bloque admin (2026-07-03): las 13 verificaciones automatizadas pasaron (login, RLS, transiciones, saltos bloqueados, restock exacto de variantes y bundles, no-op del doble cancelado, redirección del middleware). Pedidos de prueba que quedaron en la BD: `NAT-YQFC` y `NAT-PPJ5` (cancelados), `NAT-GU8G` (entregado) — no se borran. Falta la verificación visual en navegador de la pantalla "Acceso denegado" para un no-admin (la protección de datos ya está probada).
+> Pruebas del CRUD de packs (2026-07-03): 12/12 pasaron (crear pack con 2 variantes, slug duplicado y cantidad 0 rechazados, no-admin bloqueado para crear/editar, pack activo visible/inactivo invisible para anon, la compra descuenta componentes exactos, el pedido histórico conserva nombre y precio tras editar el pack, cancelar repone exactamente una vez, borrado físico bloqueado por FK de pedidos). En BD quedaron: pack "Pack de prueba interna EDITADO" (desactivado; no se puede borrar porque tiene el pedido `NAT-VUKV` cancelado) — puede renombrarse y reutilizarse. **Validado manualmente en local y producción**: creación con varias variantes, resumen de suma/ahorro/disponibilidad, duplicados impedidos, edición de precio y cantidades, imagen (subir/reemplazar/quitar), desactivar/reactivar, visibilidad en `/packs`, compra con descuento de componentes, cancelación con reposición idempotente, y panel revisado en celular.
+>
+> Pruebas del CRUD de productos (2026-07-03): 11/11 verificaciones de permisos pasaron (admin crea/edita producto y variante, sube imagen servida públicamente; anon y no-admin bloqueados para crear/editar catálogo y subir al bucket; SKU duplicado rechazado por constraint; producto desactivado desaparece de la tienda). Datos y usuarios de prueba eliminados. **Validado manualmente en local y producción**: crear producto con variante, subir imagen con alt, editar nombre/descripción/ingredientes/precio/stock, reemplazar y reordenar imágenes, desactivar/reactivar, cambios reflejados en `/tienda` y `/producto/[slug]`, y formulario revisado desde celular. El CRUD de packs queda desbloqueado.
+>
+> Pruebas del bloque admin (2026-07-03): las 13 verificaciones automatizadas pasaron (login, RLS, transiciones, saltos bloqueados, restock exacto de variantes y bundles, no-op del doble cancelado, redirección del middleware). **Validado además manualmente en navegador**: flujo completo `pendiente → confirmado → en_preparacion → en_camino → entregado`, bloqueo del pedido entregado, botón de WhatsApp al cliente y visualización del pedido en el panel. Pedidos de prueba que quedaron en la BD: `NAT-YQFC` y `NAT-PPJ5` (cancelados), `NAT-GU8G` (entregado) — no se borran. Pendiente menor: ver en navegador la pantalla "Acceso denegado" con un usuario no-admin (la protección de datos ya está probada a nivel de RLS y RPC).
 
 ### Calidad y deploy
 - [ ] Revisión responsive completa (360 px como piso).

@@ -60,6 +60,11 @@ Cada producto se vende en presentaciones distintas. **El precio vive aquí, no e
 | `sku` | `text` UNIQUE | ej. `NAT-AND-250` |
 | `is_active` | `boolean` | default `true` |
 
+**Comportamientos del panel admin (documentados):**
+- Los productos y variantes **nunca se eliminan físicamente** (los pedidos históricos los referencian): se desactivan con `is_active` (soft delete). Las variantes existentes tampoco se quitan del formulario, solo se desactivan.
+- Un producto **activo** no puede quedar sin ninguna presentación activa: el panel bloquea guardar/activar en ese caso con un mensaje claro (no hay override — primero se activa una presentación o se desactiva el producto).
+- Al eliminar o reemplazar una imagen, la fila de `product_images` se modifica PRIMERO y el archivo del bucket se borra solo tras confirmarse la BD; un archivo huérfano en Storage es tolerable, una fila apuntando a un archivo inexistente no.
+
 ### `product_images`
 
 | Columna | Tipo | Notas |
@@ -81,6 +86,14 @@ bundle_items: id, bundle_id FK → bundles (cascade),
 ```
 
 El precio del bundle es fijo (definido por Nelly), no la suma de sus partes: ahí está el descuento.
+
+**Comportamientos del panel admin (documentados):**
+- Los packs **nunca se eliminan físicamente** (`order_items` referencia `bundle_id`): se desactivan con `is_active`. Los pedidos históricos conservan nombre y precio (snapshot en `order_items`).
+- Al guardar, los `bundle_items` se **reemplazan** por la composición nueva — seguro porque los pedidos no referencian `bundle_items`.
+- Un pack **activo** exige al menos una variante activa (de producto activo); el panel bloquea guardar/activar en caso contrario.
+- **Imagen**: una sola (`bundles.image_url`), subida al bucket `product-images` bajo `bundles/<id>/…` (el bucket cubre "productos y bundles"). No hay columna `alt`: la tienda usa el nombre del pack como texto alternativo. Reemplazar/quitar sigue la regla BD-primero-Storage-después.
+- **Limitaciones del esquema** (se agregarían con migración si Nelly las pide): los packs no tienen `compare_at_price` (precio tachado), `badge`, `sort_order`, ni orden de ítems (`bundle_items` no tiene `position`).
+- La **disponibilidad estimada** del panel es `min(floor(stock / cantidad))` sobre sus componentes; la validación real de stock la hace `create_order` con lock al comprar.
 
 ### `orders`
 

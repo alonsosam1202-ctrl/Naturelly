@@ -26,6 +26,24 @@ export default function AdminHeader({ name }: { name: string | null }) {
           >
             Pedidos
           </Link>
+          <Link
+            href="/admin/productos"
+            className="rounded-full px-4 py-2 font-bold text-tinta hover:bg-amarillo-suave"
+          >
+            Productos
+          </Link>
+          <Link
+            href="/admin/packs"
+            className="rounded-full px-4 py-2 font-bold text-tinta hover:bg-amarillo-suave"
+          >
+            Packs
+          </Link>
+          <Link
+            href="/admin/cuenta"
+            className="rounded-full px-4 py-2 font-bold text-tinta hover:bg-amarillo-suave"
+          >
+            Mi cuenta
+          </Link>
           <LogoutButton />
         </nav>
       </div>

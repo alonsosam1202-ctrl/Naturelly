@@ -58,9 +58,11 @@ export default async function ProductoPage({ params }: { params: Params }) {
               className="h-auto w-4/5"
             />
           )}
+          {/* En el ápice del arco: left/top en la esquina quedan fuera del
+              radio de 12rem y el overflow-hidden recortaba la etiqueta */}
           {product.badge && (
             <Badge
-              className={`absolute left-5 top-6 -rotate-3 shadow-calida ${accent.badgeClass}`}
+              className={`absolute left-1/2 top-5 -translate-x-1/2 -rotate-3 whitespace-nowrap shadow-calida ${accent.badgeClass}`}
             >
               {PRODUCT_BADGE_LABELS[product.badge] ?? product.badge}
             </Badge>
