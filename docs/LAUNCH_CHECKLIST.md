@@ -2,16 +2,24 @@
 
 > Actualizado 2026-07-04. Posicionamiento aprobado: **"Naturelly — Delicias
 > artesanales hechas por Nelly"** ("delicias artesanales" es el término paraguas
-> que une la granola, las tortas y futuros productos). La plataforma técnica está
-> completa y validada en producción (https://naturelly.onrender.com).
+> que une la granola, las tortas y futuros productos).
+>
+> **Estado técnico:** el **MVP base está validado en producción**
+> (https://naturelly.onrender.com). La **adaptación del catálogo está lista y la
+> migración `20260704120000` ya fue aplicada y verificada en la BD remota**; la
+> interfaz adaptada (textos "delicias artesanales", panel con categorías reales,
+> sección de tortas personalizadas) **está pendiente de desplegar y validar en
+> Render hasta el siguiente push**.
 
 **Realidad del negocio (confirmada por Alonso):** Nelly tiene **una sola receta de
 granola validada** (ya se vende internamente a familiares y amigos; no hay otros
-sabores probados) y sus productos más fuertes son las **tortas**: torta de
-zanahoria (carrot cake solo como término secundario de búsqueda), torta de
-chocolate, torta de naranja y **tortas personalizadas con decoración sencilla de
-fondant** (sin compra directa: "Cotizar por WhatsApp"). Todos los nombres visibles
-van en español.
+sabores probados) y sus productos más fuertes son las **tortas**. El **catálogo
+preliminar conocido** —pendiente de validación final con Nelly— es: granola
+artesanal, torta de zanahoria (carrot cake solo como término secundario de
+búsqueda), torta de chocolate, torta de naranja y **tortas personalizadas con
+decoración sencilla de fondant** (sin compra directa: "Cotizar por WhatsApp").
+**No se asume que las cuatro estarán activas desde el inicio**: Nelly decide
+cuáles arrancan. Todos los nombres visibles van en español.
 
 **El plan tiene dos etapas.** La primera NO es un lanzamiento público masivo:
 
@@ -23,14 +31,17 @@ van en español.
 > **NO bloquean esta etapa:** dominio propio, Search Console, SMTP personalizado,
 > políticas legales completas, logo/branding definitivo.
 
-- [ ] 🟠 **Migración `20260704120000_real_categories.sql` aplicada** (creada y con dry-run limpio; pendiente de aprobación de Alonso para `db push`) + `database.ts` regenerado.
-- [ ] 🟠 **Productos reales cargados** (granola + 3 tortas) con la tabla de datos que completa Alonso/Nelly — sin inventar nada.
+- [x] `[V]` 🟠 **Migración `20260704120000_real_categories.sql` aplicada y validada** (2026-07-04): 10 migraciones `local = remote`, categorías reales verificadas, `weight_grams` acepta NULL, datos históricos intactos y `database.ts` regenerado desde remoto. Ver Anexo 4 (registro histórico).
+- [ ] 🟠 **Productos reales cargados** desde el catálogo preliminar (granola + tortas conocidas), con la tabla de datos que completa Alonso/Nelly — sin inventar nada; **se activan solo los que Nelly confirme**.
 - [ ] 🟠 **Precios reales** en cada presentación.
 - [ ] 🟠 **Stock/cupos iniciales** (granola = unidades; tortas = cupos de pedidos que Nelly acepta; ver Anexo 3).
-- [ ] 🟠 **WhatsApp real** en Render y `.env.local` (`NEXT_PUBLIC_WHATSAPP_NUMBER`) — activa los botones verdes y la sección de tortas personalizadas (se muestra sola).
+- [ ] 🟠 **Ingredientes y alérgenos confirmados** por Nelly para cada producto activo (secciones B–E del cuestionario).
+- [ ] 🟠 **Conservación y duración** de cada producto activo (indicación para el cliente).
+- [ ] 🟠 **Anticipación de los productos por encargo** definida y visible en su descripción.
+- [ ] 🟠 **WhatsApp real** (`NEXT_PUBLIC_WHATSAPP_NUMBER`): `.env.local` **ya tiene un número real** (no se documenta aquí); **Render todavía mantiene el placeholder** — falta cargarlo allí para que los botones verdes y la sección de tortas personalizadas se activen en producción.
 - [ ] 🟠 **Zonas básicas de entrega** definidas (aunque sea la lista corta inicial en `DELIVERY_DISTRICTS`) y costos comunicados por WhatsApp.
 - [ ] 🟠 **Métodos de pago** acordados (Yape/Plin/efectivo — se coordinan por WhatsApp, como está diseñado).
-- [ ] 🟠 **Cuenta admin definitiva de Nelly** creada y promovida; accesos de prueba retirados.
+- [ ] 🟠 **Cuenta admin definitiva del responsable autorizado** (puede ser Nelly o Alonso) creada y promovida; **revocar solo los accesos de prueba innecesarios, sin retirar cuentas reales necesarias**.
 - [ ] 🟠 **Fotos suficientes** (al menos 1 buena foto por producto activo; las ilustraciones cubren lo que falte).
 - [ ] 🟠 **Productos y packs placeholder desactivados** cuando los reales estén activos (Anexo 1).
 - [ ] 🟠 **Pedido de prueba como invitado** en producción (flujo completo hasta WhatsApp real).
@@ -191,7 +202,7 @@ Marca el checkbox `[x]` cuando llegue a `[V]` (o `[C]` si no aplica validación)
 
 ### I. WhatsApp y contacto
 
-- [ ] `[P]` 🟠 Número de WhatsApp definitivo del negocio (hoy placeholder; botones verdes deshabilitados). — Respuesta:
+- [ ] `[R]` 🟠 Número de WhatsApp definitivo del negocio (ya cargado en `.env.local`; falta cargarlo en Render — botones verdes aún deshabilitados en producción). Confirmar con Nelly que es el definitivo. — Respuesta:
 - [ ] `[P]` 🟡 Nombre que se mostrará en WhatsApp (¿"Naturelly", "Nelly — Naturelly"?). — Respuesta:
 - [ ] `[P]` 🟡 ¿Quiere mensaje de bienvenida automático en WhatsApp Business? — Respuesta:
 - [ ] `[P]` 🟡 Horario en el que responde WhatsApp (para la web y manejar expectativas). — Respuesta:
@@ -252,7 +263,7 @@ Marca el checkbox `[x]` cuando llegue a `[V]` (o `[C]` si no aplica validación)
 - [ ] `[P]` 🟠 ¿Quién actualizará el stock/cupos día a día? — Respuesta:
 - [ ] `[P]` 🟠 ¿Quién revisará los pedidos nuevos y cada cuánto? — Respuesta:
 - [ ] `[P]` 🟠 ¿Quién cambiará los estados (confirmado → en preparación → en camino → entregado)? — Respuesta:
-- [ ] `[P]` 🟠 Cuenta administradora definitiva de Nelly (correo real; se promueve a admin; ella define su contraseña). — Respuesta:
+- [ ] `[P]` 🟠 Cuenta administradora definitiva del responsable autorizado, que puede ser Nelly o Alonso (correo real; se promueve a admin; el titular define su contraseña). — Respuesta:
 
 ### N. Cierre de etapa
 
@@ -279,7 +290,7 @@ snapshots históricos); reutilizar un registro solo si es seguro y no confunde.
 | "Pack de prueba interna EDITADO" | Desactivado | Sí (1 ítem) | Dejar como histórico. |
 | "Pack duo" (`pack-duo`, prueba interna) | **Desactivado** (2026-07-04, sin pedidos) | No | Dejar desactivado. |
 | Pedidos `NAT-*` de prueba | En BD | — | Quedan como histórico (los pedidos jamás se borran). |
-| Nº WhatsApp | Placeholder `51XXXXXXXXX` | — | Cargar en Render + `.env.local` + `site_settings.whatsapp_number` (Etapa 1). |
+| Nº WhatsApp | Real en `.env.local` (no se documenta); **placeholder en Render** | — | Cargar en Render + `site_settings.whatsapp_number` (Etapa 1). |
 | Distritos delivery | 3 de ejemplo en `src/lib/constants.ts` | — | Reemplazar con la lista real (G) + `site_settings.delivery_districts`. |
 | Costo de delivery | S/ 0 (se coordina por WhatsApp) | — | Cobrarlo online requiere cambio futuro en `create_order` (no bloquea). |
 | FAQ | 6 preguntas, algunas con `TODO` | — | Completar con G, H y J. |
@@ -291,8 +302,10 @@ snapshots históricos); reutilizar un registro solo si es seguro y no confunde.
 
 Para el **uso interno**, el correo predeterminado de Supabase alcanza: pocos
 registros por día, y la web ya maneja bien el caso del enlace consumido (mensaje
-claro en `/login` + botón "Reenviar correo de confirmación" con cooldown). Límite a
-tener en cuenta: ~2-4 correos de auth por hora.
+claro en `/login` + botón "Reenviar correo de confirmación" con cooldown). Ten en
+cuenta que ese servicio tiene un **límite bajo de correos de autenticación por
+hora** (la cifra exacta puede cambiar: verificar los límites vigentes en la
+documentación/dashboard de Supabase antes del lanzamiento).
 
 Antes del **lanzamiento público** es obligatorio:
 
@@ -303,7 +316,7 @@ Antes del **lanzamiento público** es obligatorio:
    <h2>Confirma tu correo</h2>
    <p>¡Hola! Gracias por crear tu cuenta en Naturelly.</p>
    <p>Para terminar, confirma tu correo con este enlace:</p>
-   <p><a href="{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=email">Confirmar mi correo</a></p>
+   <p><a href="{{ .RedirectTo }}&amp;token_hash={{ .TokenHash }}&amp;type=email">Confirmar mi correo</a></p>
    <p>Si tú no creaste esta cuenta, puedes ignorar este mensaje.</p>
    ```
    Se usa `{{ .RedirectTo }}` (no `{{ .SiteURL }}`) para que el enlace conserve el origen desde el que se registró el usuario; es seguro porque el código siempre envía `emailRedirectTo` con `?next=`.
@@ -311,18 +324,17 @@ Antes del **lanzamiento público** es obligatorio:
 
 ## Anexo 3 — Cómo se representa el catálogo real (decisiones cerradas)
 
-- **Categorías**: `granola`, `torta`, `personalizado` (migración `20260704120000`, pendiente de aplicar). Las categorías antiguas quedan solo para los placeholders.
+- **Categorías**: `granola`, `torta`, `personalizado` — **ya disponibles en la BD** (migración `20260704120000` aplicada y verificada el 2026-07-04). Las categorías antiguas quedan solo para los placeholders.
 - **Granola** → producto con variantes por presentación; `weight_grams` con el peso real; `stock` = unidades disponibles.
 - **Tortas** → un producto por torta, variantes por tamaño en `size_label` ("Pequeña — 8 porciones", "Mediana — 12 porciones", "Grande — 20 porciones"); `weight_grams` vacío (NULL); **`stock` = cupos de producción**: `5` significa "Nelly acepta hasta 5 pedidos de esta torta por ahora", `0` significa "no acepto más por el momento". Ella lo ajusta desde el panel; el checkout valida y la cancelación repone el cupo igual que siempre. **Sin calendarios ni reservas.**
-- **Tortas personalizadas** → NO son un producto comprable. Ya existe la sección informativa (`CustomCakesSection` en `/tienda`): decoración sencilla con fondant, diseños sujetos a evaluación, coordinación de tamaño/sabor/decoración y botón "Cotizar por WhatsApp". **Se publica sola cuando `NEXT_PUBLIC_WHATSAPP_NUMBER` deje de ser placeholder**; sin precio, sin carrito, sin configurador. No se agregó columna `quote_only`: no hace falta porque no participa del catálogo comprable.
+- **Tortas personalizadas** → NO son un producto comprable. Ya existe la sección informativa (`CustomCakesSection` en `/tienda`): decoración sencilla con fondant, diseños sujetos a evaluación, coordinación de tamaño/sabor/decoración y botón "Cotizar por WhatsApp". **Se publica sola cuando `NEXT_PUBLIC_WHATSAPP_NUMBER` deje de ser placeholder** (verificado en ambos estados con builds locales; en Render seguirá oculta hasta cargar el número real allí y desplegar); sin precio, sin carrito, sin configurador. No se agregó columna `quote_only`: no hace falta porque no participa del catálogo comprable.
 - **`/packs`**: técnicamente disponible con estado vacío correcto; fuera de protagonismo hasta que Nelly defina promociones reales. No inventar combos.
 - **`/recetas`**: existe pero fuera de la navegación principal (Fase 2).
 
-## Anexo 4 — Migración `20260704120000_real_categories.sql` (creada; PENDIENTE de aprobación para `db push`)
+## Anexo 4 — Registro histórico: migración `20260704120000_real_categories.sql` (APLICADA el 2026-07-04)
 
-Estado: archivo creado en `supabase/migrations/`, **dry-run limpio** (solo esa
-migración saldría), `DATABASE_SCHEMA.md` ya actualizado, código del panel y tipos ya
-adaptados. **No se aplica sin aprobación expresa de Alonso.**
+Aplicada con `db push` tras aprobación expresa de Alonso (dry-run previo limpio;
+`DATABASE_SCHEMA.md` actualizado antes de la migración, según la regla del proyecto).
 
 ```sql
 alter table public.products drop constraint products_category_check;
@@ -332,19 +344,21 @@ alter table public.products add constraint products_category_check
 alter table public.product_variants alter column weight_grams drop not null;
 ```
 
-- **No toca datos**: conserva productos, variantes, precios, stock, pedidos e `order_items`; solo amplía el CHECK y relaja un NOT NULL.
-- **Rollback** (solo posible si aún no hay filas con categorías nuevas ni `weight_grams` NULL):
-  ```sql
-  alter table public.products drop constraint products_category_check;
-  alter table public.products add constraint products_category_check
-    check (category in ('clasica', 'andina', 'chocolate', 'especial'));
-  alter table public.product_variants alter column weight_grams set not null;
-  ```
-- Tras aplicar: regenerar `src/types/database.ts` (`supabase gen types typescript --linked`). El panel ya ofrece las categorías nuevas y el peso opcional — **no crear productos con categoría nueva o sin peso ANTES de aplicar la migración** (la BD los rechazaría).
+**Verificación posterior (todo en verde):**
+- 10 migraciones con `local = remote`.
+- El CHECK acepta las 7 categorías (`granola`, `torta`, `personalizado` + las 4 legado) y rechaza valores fuera de la lista.
+- `product_variants.weight_grams` acepta `NULL` (probado con una variante "Prueba — 8 porciones") y sigue aceptando pesos en gramos.
+- No tocó datos: productos, variantes, precios, stock, pedidos e `order_items` idénticos antes y después (4 / 7 / 15 / 16).
+- Prueba controlada con un producto temporal desactivado (crear → editar → eliminar sin afectar históricos).
+- `src/types/database.ts` **regenerado desde el esquema remoto** (`supabase gen types typescript --linked`).
+
+El rollback documentado en su momento (restaurar el CHECK original y `set not null`)
+queda solo como referencia histórica: ya no es aplicable una vez que existan filas
+con categorías nuevas o peso NULL.
 
 ## Anexo 5 — Recomendaciones que no bloquean ninguna etapa
 
-- 🟡 **Plan de hosting**: el plan gratuito de Render duerme el servicio tras inactividad (arranques fríos de ~30–60 s); molesto incluso en uso interno — evaluar plan de pago o keep-alive.
+- 🟡 **Plan de hosting**: el plan gratuito de Render duerme el servicio tras inactividad y el primer acceso sufre un arranque frío perceptible (verificar la duración y condiciones vigentes en la documentación de Render antes del lanzamiento); molesto incluso en uso interno — evaluar plan de pago o keep-alive.
 - 🔵 **Fase 2**: blog/recetas gestionables, FAQ administrable, datos estructurados de producto, analytics, testimonios.
 - 🔵 **Fase 3**: pagos online (Culqi vs Mercado Pago, Yape/Plin), correos transaccionales, páginas legales (T&C, privacidad, libro de reclamaciones — requisito legal para cobrar online en Perú).
 - 🔵 **Mejoras opcionales**: rate limiting en `/api/pedidos`, columna de alérgenos, `compare_at_price`/`badge`/orden en packs, modo "por encargo" sin stock, monitoreo de errores.
