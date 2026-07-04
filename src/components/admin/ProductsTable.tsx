@@ -23,7 +23,7 @@ function categoryLabel(category: ProductCategory): string {
 
 function StateBadge({ isActive }: { isActive: boolean }) {
   return isActive ? (
-    <Badge className="bg-salvia/20 text-salvia">Visible</Badge>
+    <Badge className="bg-salvia/20 text-salvia-oscura">Visible</Badge>
   ) : (
     <Badge className="bg-terracota/10 text-terracota">Desactivado</Badge>
   );
@@ -87,7 +87,7 @@ export default function ProductsTable({
       </ul>
 
       {/* Desktop */}
-      <div className="hidden overflow-hidden rounded-3xl bg-blanco-crema shadow-calida md:block">
+      <div className="hidden overflow-x-auto rounded-3xl bg-blanco-crema shadow-calida md:block">
         <table className="w-full text-left">
           <thead>
             <tr className="border-b border-amarillo-suave text-sm uppercase tracking-wide text-cacao">
@@ -129,7 +129,7 @@ export default function ProductsTable({
                   <div className="flex items-center gap-3">
                     <Link
                       href={`/admin/productos/${product.id}/editar`}
-                      className="font-bold text-miel hover:text-miel-oscura"
+                      className="font-bold text-miel-oscura hover:text-tinta"
                     >
                       Editar
                     </Link>

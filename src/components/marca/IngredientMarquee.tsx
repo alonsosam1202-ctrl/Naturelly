@@ -1,6 +1,8 @@
 import { MARQUEE_INGREDIENTS } from "@/lib/constants";
 
-/** Separadores en acentos rotativos para que la cinta se sienta viva. */
+/** Separadores en acentos rotativos para que la cinta se sienta viva.
+ *  Decorativos (la cinta entera es aria-hidden): usan los tonos vivos,
+ *  exentos de contraste AA. */
 const SEPARATOR_COLORS = [
   "text-miel",
   "text-amarillo",

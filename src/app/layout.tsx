@@ -16,16 +16,33 @@ const karla = Karla({
   variable: "--font-karla",
 });
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://naturelly.onrender.com";
+
+const SITE_DESCRIPTION =
+  "Granola artesanal con superalimentos andinos, tostada a mano en tandas pequeñas y endulzada solo con miel de abeja. De la cocina de Nelly a tu mesa.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
-  ),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Naturelly — Granola artesanal de Arequipa",
     template: "%s · Naturelly",
   },
-  description:
-    "Granola artesanal con superalimentos andinos, tostada a mano en tandas pequeñas y endulzada solo con miel de abeja. De la cocina de Nelly a tu mesa.",
+  description: SITE_DESCRIPTION,
+  // La imagen la aporta src/app/opengraph-image.tsx (temporal hasta tener logo)
+  openGraph: {
+    type: "website",
+    locale: "es_PE",
+    url: SITE_URL,
+    siteName: "Naturelly",
+    title: "Naturelly — Granola artesanal de Arequipa",
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Naturelly — Granola artesanal de Arequipa",
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({

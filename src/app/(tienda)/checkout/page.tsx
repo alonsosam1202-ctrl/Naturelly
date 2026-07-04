@@ -15,7 +15,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <SectionHeader
+      <SectionHeader as="h1"
         eyebrow="Checkout"
         title="Casi listo: tus datos de entrega"
         description="Tu pedido se registra con un código único y luego lo confirmamos juntos por WhatsApp."

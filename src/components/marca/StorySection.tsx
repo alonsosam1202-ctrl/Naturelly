@@ -27,14 +27,14 @@ export default function StorySection() {
   return (
     <section className="bg-blush">
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 pb-12 pt-16 text-center sm:px-6">
-        <p className="text-sm font-bold uppercase tracking-[0.2em] text-miel">
+        <p className="text-sm font-bold uppercase tracking-[0.2em] text-miel-oscura">
           Del Perú para el mundo
         </p>
         <p className="font-display text-3xl font-semibold leading-snug text-tinta sm:text-4xl">
           Mientras otras marcas presumen{" "}
           <em className="italic text-cacao">granos ancestrales</em>, nosotros
           venimos de la tierra donde{" "}
-          <em className="italic text-salvia">nacieron esos granos</em>.
+          <em className="italic text-salvia-oscura">nacieron esos granos</em>.
         </p>
         <p className="max-w-xl text-lg text-cacao">
           Cada lote se tuesta a mano en la cocina de Nelly, en Arequipa: de su
@@ -58,7 +58,7 @@ export default function StorySection() {
         <div className="mt-8 text-center">
           <Link
             href="/nosotros"
-            className="inline-flex items-center gap-2 font-bold text-miel transition-colors hover:text-miel-oscura"
+            className="inline-flex items-center gap-2 font-bold text-miel-oscura transition-colors hover:text-tinta"
           >
             Conoce nuestra historia
             <ArrowRight className="size-4" aria-hidden />

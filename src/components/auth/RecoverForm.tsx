@@ -38,7 +38,7 @@ export default function RecoverForm() {
   if (sent) {
     return (
       <div className="rounded-2xl bg-salvia/15 p-6 text-center">
-        <p className="font-display text-xl font-semibold text-salvia">
+        <p className="font-display text-xl font-semibold text-salvia-oscura">
           Revisa tu correo
         </p>
         <p className="mt-2 text-cacao">

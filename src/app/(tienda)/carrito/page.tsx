@@ -17,7 +17,7 @@ export default function CarritoPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <SectionHeader eyebrow="Carrito" title="Tu pedido hasta ahora" />
+      <SectionHeader as="h1" eyebrow="Carrito" title="Tu pedido hasta ahora" />
 
       {!mounted ? null : items.length === 0 ? (
         <EmptyCart />

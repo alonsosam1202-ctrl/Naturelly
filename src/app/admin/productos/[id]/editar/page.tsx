@@ -70,7 +70,7 @@ export default async function AdminEditarProductoPage({
       <div>
         <Link
           href="/admin/productos"
-          className="inline-flex items-center gap-2 font-bold text-miel hover:text-miel-oscura"
+          className="inline-flex items-center gap-2 font-bold text-miel-oscura hover:text-tinta"
         >
           <ArrowLeft className="size-4" aria-hidden />
           Volver a productos
@@ -80,7 +80,7 @@ export default async function AdminEditarProductoPage({
             {product.name}
           </h1>
           {product.is_active ? (
-            <Badge className="bg-salvia/20 text-salvia">Visible</Badge>
+            <Badge className="bg-salvia/20 text-salvia-oscura">Visible</Badge>
           ) : (
             <Badge className="bg-terracota/10 text-terracota">
               Desactivado
@@ -102,7 +102,7 @@ export default async function AdminEditarProductoPage({
       {creado === "1" && (
         <p
           role="status"
-          className="rounded-2xl bg-salvia/15 px-4 py-3 font-bold text-salvia"
+          className="rounded-2xl bg-salvia/15 px-4 py-3 font-bold text-salvia-oscura"
         >
           ¡Producto creado! Ahora agrega sus fotos más abajo.
         </p>

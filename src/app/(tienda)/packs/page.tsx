@@ -16,7 +16,7 @@ export default async function PacksPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <SectionHeader
+      <SectionHeader as="h1"
         eyebrow="Packs"
         title="Combos con precio especial"
         description="Arma tu despensa o prueba todas las variedades pagando menos que por separado."

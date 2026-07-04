@@ -70,7 +70,7 @@ export default function OrdersTable({
       </ul>
 
       {/* Desktop: tabla */}
-      <div className="hidden overflow-hidden rounded-3xl bg-blanco-crema shadow-calida md:block">
+      <div className="hidden overflow-x-auto rounded-3xl bg-blanco-crema shadow-calida md:block">
         <table className="w-full text-left">
           <thead>
             <tr className="border-b border-amarillo-suave text-sm uppercase tracking-wide text-cacao">
@@ -105,7 +105,7 @@ export default function OrdersTable({
                   <td className="px-5 py-4">
                     <Link
                       href={`/admin/pedidos/${order.id}`}
-                      className="font-bold text-miel hover:text-miel-oscura"
+                      className="font-bold text-miel-oscura hover:text-tinta"
                     >
                       Ver detalle
                     </Link>

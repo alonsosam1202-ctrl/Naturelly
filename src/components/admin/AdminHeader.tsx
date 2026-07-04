@@ -6,7 +6,7 @@ export default function AdminHeader({ name }: { name: string | null }) {
     <div className="border-b border-amarillo-suave bg-blanco-crema">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-miel">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-miel-oscura">
             Panel de Naturelly
           </p>
           <p className="font-display text-xl font-semibold text-tinta">

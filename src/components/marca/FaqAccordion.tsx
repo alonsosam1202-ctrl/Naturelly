@@ -18,7 +18,7 @@ export default function FaqAccordion({ faqs }: { faqs: Faq[] }) {
             <span className="flex items-center justify-between gap-4">
               {faq.question}
               <span
-                className="text-miel transition-transform group-open:rotate-45"
+                className="text-miel-oscura transition-transform group-open:rotate-45"
                 aria-hidden
               >
                 +

@@ -138,7 +138,7 @@ export default function LoginForm() {
           />
           <Link
             href="/recuperar"
-            className="self-end text-sm font-bold text-miel hover:text-miel-oscura"
+            className="self-end text-sm font-bold text-miel-oscura hover:text-tinta"
           >
             ¿Olvidaste tu contraseña?
           </Link>

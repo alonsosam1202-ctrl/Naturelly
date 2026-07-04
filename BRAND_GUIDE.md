@@ -31,15 +31,18 @@ Principios:
 | `amarillo` | `#FEDB5F` | **Amarillo Naturelly, protagonista**: footer, arcos, CTA, sabor clásico |
 | `amarillo-suave` | `#FFE9A8` | Bordes, paneles cálidos, estados suaves |
 | `tinta` | `#18212A` | Negro tinta: títulos, texto principal, nav, botones primarios, marquee |
-| `miel` | `#E6A12D` | Miel tostada: precios, links, eyebrows, acentos |
-| `miel-oscura` | `#C9871C` | Hover de links en miel |
-| `salvia` | `#7CA66A` | Éxito, frescura, sabor andino |
+| `miel` | `#E6A12D` | Miel tostada DECORATIVA: fondos, gradientes, ilustraciones (no cumple AA como texto) |
+| `miel-oscura` | `#9C6410` | Miel para TEXTO: precios, links, eyebrows, foco visible (AA 4.5:1 sobre fondos claros) |
+| `salvia` | `#7CA66A` | Salvia DECORATIVA: fondos, arcos, puntos, ilustraciones |
+| `salvia-oscura` | `#3E6B35` | Salvia para TEXTO: mensajes de éxito, badges (AA sobre fondos claros y tintes) |
 | `berry` | `#E9B6D0` | Pastel frutal: sabor especial, acentos editoriales |
 | `lavanda` | `#E8C7F0` | Pastel editorial: fondo del sabor chocolate, variedad de bloques |
 | `cacao` | `#5A3A28` | SOLO detalle: texto secundario, granos ilustrados. Nunca bloque de fondo |
-| `terracota` | `#E0654A` | SOLO errores, urgencia y estado cancelado |
+| `terracota` | `#B04527` | SOLO errores, urgencia y estado cancelado (AA como texto y con texto blanco) |
 
-Reglas de color: el verde WhatsApp (`#3E9B4F`) se reserva exclusivamente para acciones de WhatsApp. Los estados de pedido usan colores semánticos consistentes (pendiente/en preparación/en camino = amarillos con texto cacao, confirmado/entregado = salvia, cancelado = terracota). El único bloque oscuro permitido es la cinta de ingredientes (fondo tinta); el footer es **amarillo**, no oscuro.
+**Regla de accesibilidad (obligatoria):** los acentos vivos (`miel`, `salvia`) son solo decorativos; todo TEXTO en esos tonos usa su variante `-oscura` (contraste AA ≥ 4.5:1 verificado). Los badges sobre `bg-miel` usan texto `tinta`, nunca blanco. Excepción: elementos `aria-hidden` puramente decorativos (p. ej. los separadores del marquee).
+
+Reglas de color: el verde WhatsApp (`#2E7D3F`, tono oscuro AA con texto blanco) se reserva exclusivamente para acciones de WhatsApp. Los estados de pedido usan colores semánticos consistentes (pendiente/en preparación/en camino = amarillos con texto cacao, confirmado/entregado = salvia, cancelado = terracota). El único bloque oscuro permitido es la cinta de ingredientes (fondo tinta); el footer es **amarillo**, no oscuro.
 
 ## Formas orgánicas y sellos
 

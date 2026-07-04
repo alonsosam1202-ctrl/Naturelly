@@ -62,6 +62,9 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
+      <h1 className="font-display text-3xl font-semibold text-tinta">
+        Resumen
+      </h1>
       <div className="grid gap-4 sm:grid-cols-2">
         {cards.map((card) => (
           <div

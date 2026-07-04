@@ -14,7 +14,7 @@ export default function ContactoPage() {
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <div className="grid gap-10 md:grid-cols-2">
         <div className="flex flex-col gap-6">
-          <SectionHeader
+          <SectionHeader as="h1"
             eyebrow="Contacto"
             title="Conversemos"
             description="¿Una consulta sobre tu pedido, una idea o un antojo grande? Escríbenos por aquí o directo por WhatsApp."

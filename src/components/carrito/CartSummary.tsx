@@ -26,7 +26,7 @@ export default function CartSummary() {
       </div>
       <div className="flex items-center justify-between border-t border-amarillo-suave pt-3">
         <span className="font-bold text-tinta">Total referencial</span>
-        <span className="font-display text-2xl font-semibold text-miel">
+        <span className="font-display text-2xl font-semibold text-miel-oscura">
           {formatPrice(subtotal)}
         </span>
       </div>

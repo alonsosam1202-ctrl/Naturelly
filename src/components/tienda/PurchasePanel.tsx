@@ -61,7 +61,7 @@ export default function PurchasePanel({ product }: { product: CatalogProduct }) 
               aria-pressed={option.id === selectedId}
               className={`rounded-full border-2 px-5 py-2.5 font-bold transition-colors ${
                 option.id === selectedId
-                  ? "border-miel bg-miel text-blanco-crema"
+                  ? "border-miel bg-miel text-tinta"
                   : "border-amarillo-suave bg-blanco-crema text-tinta hover:border-miel"
               }`}
             >

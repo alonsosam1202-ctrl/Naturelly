@@ -78,7 +78,7 @@ export default async function AdminEditarPackPage({
       <div>
         <Link
           href="/admin/packs"
-          className="inline-flex items-center gap-2 font-bold text-miel hover:text-miel-oscura"
+          className="inline-flex items-center gap-2 font-bold text-miel-oscura hover:text-tinta"
         >
           <ArrowLeft className="size-4" aria-hidden />
           Volver a packs
@@ -88,7 +88,7 @@ export default async function AdminEditarPackPage({
             {bundle.name}
           </h1>
           {bundle.is_active ? (
-            <Badge className="bg-salvia/20 text-salvia">Visible</Badge>
+            <Badge className="bg-salvia/20 text-salvia-oscura">Visible</Badge>
           ) : (
             <Badge className="bg-terracota/10 text-terracota">
               Desactivado
@@ -100,7 +100,7 @@ export default async function AdminEditarPackPage({
       {creado === "1" && (
         <p
           role="status"
-          className="rounded-2xl bg-salvia/15 px-4 py-3 font-bold text-salvia"
+          className="rounded-2xl bg-salvia/15 px-4 py-3 font-bold text-salvia-oscura"
         >
           ¡Pack creado! Puedes agregar su foto aquí a la derecha.
         </p>

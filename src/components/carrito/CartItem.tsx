@@ -18,7 +18,7 @@ export default function CartItem({ line }: { line: CartLine }) {
     <div className="flex flex-col gap-3 rounded-2xl bg-crema p-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <Link href={href} className="font-bold text-tinta hover:text-miel">
+          <Link href={href} className="font-bold text-tinta hover:text-miel-oscura">
             {line.name}
           </Link>
           <p className="text-sm text-cacao">{line.detail}</p>

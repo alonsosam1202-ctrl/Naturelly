@@ -27,7 +27,7 @@ export const FLAVOR_ACCENTS: Record<
     primary: "#E6A12D",
     secondary: "#FEDB5F",
     archClass: "bg-amarillo/70",
-    badgeClass: "bg-miel text-blanco-crema",
+    badgeClass: "bg-miel text-tinta",
     gradientClass: "from-amarillo to-miel",
   },
   andina: {
@@ -66,13 +66,13 @@ export const ORDER_STATUS_LABELS: Record<
   { label: string; className: string }
 > = {
   pendiente: { label: "Pendiente", className: "bg-amarillo-suave text-cacao" },
-  confirmado: { label: "Confirmado", className: "bg-salvia/20 text-salvia" },
+  confirmado: { label: "Confirmado", className: "bg-salvia/20 text-salvia-oscura" },
   en_preparacion: {
     label: "En preparación",
     className: "bg-amarillo/40 text-cacao",
   },
   en_camino: { label: "En camino", className: "bg-amarillo/40 text-cacao" },
-  entregado: { label: "Entregado", className: "bg-salvia/20 text-salvia" },
+  entregado: { label: "Entregado", className: "bg-salvia/20 text-salvia-oscura" },
   cancelado: {
     label: "Cancelado",
     className: "bg-terracota/10 text-terracota",

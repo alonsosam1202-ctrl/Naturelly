@@ -60,6 +60,8 @@ export default function MobileNav({ open, onClose }: MobileNavProps) {
             className="rounded-full p-2 text-tinta hover:bg-amarillo-suave"
             aria-label="Cerrar menú"
             onClick={onClose}
+            // Foco inicial dentro del diálogo para navegación por teclado
+            autoFocus
           >
             <X className="size-5" aria-hidden />
           </button>

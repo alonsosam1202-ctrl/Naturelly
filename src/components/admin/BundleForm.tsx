@@ -300,7 +300,7 @@ export default function BundleForm({ initial, variantOptions }: BundleFormProps)
         </p>
         <p className="flex justify-between font-bold text-tinta">
           <span>Ahorro estimado del cliente</span>
-          <span className={summary.saving > 0 ? "text-salvia" : "text-terracota"}>
+          <span className={summary.saving > 0 ? "text-salvia-oscura" : "text-terracota"}>
             {formatPrice(summary.saving)}
           </span>
         </p>
@@ -319,7 +319,7 @@ export default function BundleForm({ initial, variantOptions }: BundleFormProps)
           role="status"
           className={`rounded-2xl px-4 py-3 font-bold ${
             result.ok
-              ? "bg-salvia/15 text-salvia"
+              ? "bg-salvia/15 text-salvia-oscura"
               : "bg-terracota/10 text-terracota"
           }`}
         >

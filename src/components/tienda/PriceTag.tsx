@@ -16,7 +16,7 @@ export default function PriceTag({
   return (
     <p className={`flex items-baseline gap-2 ${className}`}>
       {prefix && <span className="text-sm text-cacao">{prefix}</span>}
-      <span className="font-display text-xl font-semibold text-miel">
+      <span className="font-display text-xl font-semibold text-miel-oscura">
         {formatPrice(price)}
       </span>
       {compareAtPrice != null && compareAtPrice > price && (

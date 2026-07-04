@@ -22,13 +22,13 @@ export default function Hero() {
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 md:grid-cols-2 md:pt-16">
         <div className="flex flex-col gap-5">
-          <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-miel">
+          <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-miel-oscura">
             <span className="size-2 rounded-full bg-salvia" aria-hidden />
             Granola artesanal de Arequipa
           </p>
           <h1 className="font-display text-4xl font-semibold leading-tight text-tinta sm:text-6xl">
             Tostada a mano, endulzada solo con{" "}
-            <em className="italic text-miel">miel</em>
+            <em className="italic text-miel-oscura">miel</em>
           </h1>
           <p className="max-w-md text-lg text-cacao">
             Superalimentos andinos —quinua, kiwicha, aguaymanto, cacao— en

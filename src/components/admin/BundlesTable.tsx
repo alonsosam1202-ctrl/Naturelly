@@ -25,7 +25,7 @@ export interface AdminBundleListItem {
 
 function StateBadge({ isActive }: { isActive: boolean }) {
   return isActive ? (
-    <Badge className="bg-salvia/20 text-salvia">Visible</Badge>
+    <Badge className="bg-salvia/20 text-salvia-oscura">Visible</Badge>
   ) : (
     <Badge className="bg-terracota/10 text-terracota">Desactivado</Badge>
   );
@@ -124,7 +124,7 @@ export default function BundlesTable({
         className={`rounded-full border-2 px-4 py-1.5 text-sm font-bold transition-colors disabled:opacity-50 ${
           bundle.is_active
             ? "border-terracota text-terracota hover:bg-terracota hover:text-blanco-crema"
-            : "border-salvia text-salvia hover:bg-salvia hover:text-blanco-crema"
+            : "border-salvia text-salvia-oscura hover:bg-salvia hover:text-blanco-crema"
         }`}
       >
         {bundle.is_active ? "Desactivar" : "Activar"}
@@ -139,7 +139,7 @@ export default function BundlesTable({
           role="status"
           className={`rounded-2xl px-4 py-3 font-bold ${
             result.ok
-              ? "bg-salvia/15 text-salvia"
+              ? "bg-salvia/15 text-salvia-oscura"
               : "bg-terracota/10 text-terracota"
           }`}
         >
@@ -170,7 +170,7 @@ export default function BundlesTable({
             <div className="flex flex-wrap items-center gap-3">
               <Link
                 href={`/admin/packs/${bundle.id}/editar`}
-                className="font-bold text-miel hover:text-miel-oscura"
+                className="font-bold text-miel-oscura hover:text-tinta"
               >
                 Editar
               </Link>
@@ -181,7 +181,7 @@ export default function BundlesTable({
       </ul>
 
       {/* Desktop */}
-      <div className="hidden overflow-hidden rounded-3xl bg-blanco-crema shadow-calida md:block">
+      <div className="hidden overflow-x-auto rounded-3xl bg-blanco-crema shadow-calida md:block">
         <table className="w-full text-left">
           <thead>
             <tr className="border-b border-amarillo-suave text-sm uppercase tracking-wide text-cacao">
@@ -219,7 +219,7 @@ export default function BundlesTable({
                   <div className="flex items-center gap-3">
                     <Link
                       href={`/admin/packs/${bundle.id}/editar`}
-                      className="font-bold text-miel hover:text-miel-oscura"
+                      className="font-bold text-miel-oscura hover:text-tinta"
                     >
                       Editar
                     </Link>

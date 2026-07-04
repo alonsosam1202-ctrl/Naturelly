@@ -14,6 +14,21 @@ export default function CartDrawer() {
 
   useEffect(() => setMounted(true), []);
 
+  // Accesibilidad: Escape cierra y el fondo no se desplaza mientras está abierto
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeCart();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [isOpen, closeCart]);
+
   if (!mounted || !isOpen) return null;
 
   const subtotal = sumLineTotals(items);
@@ -36,6 +51,8 @@ export default function CartDrawer() {
             className="rounded-full p-2 text-tinta hover:bg-amarillo-suave"
             aria-label="Cerrar carrito"
             onClick={closeCart}
+            // Foco inicial dentro del diálogo para navegación por teclado
+            autoFocus
           >
             <X className="size-5" aria-hidden />
           </button>

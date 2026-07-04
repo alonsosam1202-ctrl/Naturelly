@@ -15,7 +15,7 @@ export default function NosotrosPage() {
     <>
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 md:grid-cols-2">
         <div className="flex flex-col gap-5">
-          <SectionHeader
+          <SectionHeader as="h1"
             eyebrow="Nuestra historia"
             title="La granola que una madre haría para su propia familia"
           />

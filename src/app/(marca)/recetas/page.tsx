@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function RecetasPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
-      <SectionHeader
+      <SectionHeader as="h1"
         eyebrow="Recetas"
         title="Se está horneando algo rico"
         description="Muy pronto: recetas con granola para desayunos, postres y antojos de media tarde, directo de la cocina de Nelly."

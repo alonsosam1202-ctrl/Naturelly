@@ -10,7 +10,7 @@ export default function AdminNuevoProductoPage() {
       <div>
         <Link
           href="/admin/productos"
-          className="inline-flex items-center gap-2 font-bold text-miel hover:text-miel-oscura"
+          className="inline-flex items-center gap-2 font-bold text-miel-oscura hover:text-tinta"
         >
           <ArrowLeft className="size-4" aria-hidden />
           Volver a productos

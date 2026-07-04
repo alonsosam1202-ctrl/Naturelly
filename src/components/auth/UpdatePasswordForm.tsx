@@ -110,7 +110,7 @@ export default function UpdatePasswordForm({
         </p>
         <Link
           href="/recuperar"
-          className="mt-4 inline-block font-bold text-miel hover:text-miel-oscura"
+          className="mt-4 inline-block font-bold text-miel-oscura hover:text-tinta"
         >
           Pedir un enlace nuevo
         </Link>
@@ -121,7 +121,7 @@ export default function UpdatePasswordForm({
   if (phase === "done") {
     return (
       <div className="rounded-2xl bg-salvia/15 p-6 text-center">
-        <p className="font-display text-xl font-semibold text-salvia">
+        <p className="font-display text-xl font-semibold text-salvia-oscura">
           ¡Contraseña actualizada!
         </p>
         <p className="mt-2 text-cacao">
@@ -129,7 +129,7 @@ export default function UpdatePasswordForm({
         </p>
         <Link
           href={successHref}
-          className="mt-4 inline-block font-bold text-miel hover:text-miel-oscura"
+          className="mt-4 inline-block font-bold text-miel-oscura hover:text-tinta"
         >
           {successLabel}
         </Link>

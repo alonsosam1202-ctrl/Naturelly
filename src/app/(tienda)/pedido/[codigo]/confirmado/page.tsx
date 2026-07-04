@@ -10,8 +10,10 @@ import { ORDER_STATUS_LABELS } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
+// noindex: página privada por código; sin datos personales en la metadata
 export const metadata: Metadata = {
   title: "Pedido confirmado",
+  robots: { index: false, follow: false },
 };
 
 type Params = Promise<{ codigo: string }>;
@@ -56,7 +58,7 @@ export default async function PedidoConfirmadoPage({
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
       <div className="flex flex-col items-center gap-3 text-center">
-        <CheckCircle2 className="size-14 text-salvia" aria-hidden />
+        <CheckCircle2 className="size-14 text-salvia-oscura" aria-hidden />
         <h1 className="font-display text-3xl font-semibold text-tinta sm:text-4xl">
           ¡Tu pedido quedó registrado!
         </h1>
@@ -86,7 +88,7 @@ export default async function PedidoConfirmadoPage({
         </ul>
         <div className="mt-4 flex items-center justify-between border-t border-amarillo-suave pt-4">
           <span className="font-bold text-tinta">Total</span>
-          <span className="font-display text-2xl font-semibold text-miel">
+          <span className="font-display text-2xl font-semibold text-miel-oscura">
             {formatPrice(order.total)}
           </span>
         </div>

@@ -54,7 +54,7 @@ export default function ProductActiveToggle({
           role="status"
           className={`rounded-2xl px-4 py-3 font-bold ${
             result.ok
-              ? "bg-salvia/15 text-salvia"
+              ? "bg-salvia/15 text-salvia-oscura"
               : "bg-terracota/10 text-terracota"
           }`}
         >
@@ -70,7 +70,7 @@ export default function ProductActiveToggle({
           className={`w-full rounded-full border-2 px-6 py-3 font-bold transition-colors disabled:opacity-50 ${
             isActive
               ? "border-terracota text-terracota hover:bg-terracota hover:text-blanco-crema"
-              : "border-salvia text-salvia hover:bg-salvia hover:text-blanco-crema"
+              : "border-salvia text-salvia-oscura hover:bg-salvia hover:text-blanco-crema"
           }`}
         >
           {isActive ? "Desactivar producto" : "Activar producto"}

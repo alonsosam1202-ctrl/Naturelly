@@ -91,7 +91,7 @@ export default async function ProductoPage({ params }: { params: Params }) {
             <ul className="flex flex-wrap gap-2">
               {product.benefits.map((benefit) => (
                 <li key={benefit}>
-                  <Badge className="bg-salvia/15 text-salvia">{benefit}</Badge>
+                  <Badge className="bg-salvia/15 text-salvia-oscura">{benefit}</Badge>
                 </li>
               ))}
             </ul>

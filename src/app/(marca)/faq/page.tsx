@@ -41,7 +41,7 @@ const FAQS = [
 export default function FaqPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <SectionHeader
+      <SectionHeader as="h1"
         eyebrow="Preguntas frecuentes"
         title="¿Tienes dudas? Aquí las resolvemos"
       />

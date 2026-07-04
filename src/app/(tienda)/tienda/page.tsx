@@ -33,11 +33,11 @@ export default async function TiendaPage({
       {/* Cabecera editorial sobre lino */}
       <div className="bg-blush">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pb-10 pt-12 sm:px-6">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-miel">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-miel-oscura">
             Tienda
           </p>
           <h1 className="max-w-2xl font-display text-4xl font-semibold text-tinta sm:text-5xl">
-            Elige tu <em className="italic text-miel">sabor</em>
+            Elige tu <em className="italic text-miel-oscura">sabor</em>
           </h1>
           <p className="max-w-xl text-lg text-cacao">
             Cada bolsa sale de una tanda pequeña, tostada a mano y endulzada

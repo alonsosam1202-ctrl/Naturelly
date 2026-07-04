@@ -24,21 +24,26 @@
   /* Contraste */
   --color-tinta: #18212a;
 
-  /* Acentos */
+  /* Acentos decorativos (fondos, arcos, ilustraciones) */
   --color-miel: #e6a12d;
-  --color-miel-oscura: #c9871c;
   --color-salvia: #7ca66a;
   --color-berry: #e9b6d0;
   --color-lavanda: #e8c7f0;
 
+  /* Variantes oscuras para TEXTO y botones: cumplen contraste AA (4.5:1)
+     sobre los fondos claros de la marca. Los decorativos no cambian. */
+  --color-miel-oscura: #9c6410;
+  --color-salvia-oscura: #3e6b35;
+
   /* Detalle cálido (nunca bloque dominante) */
   --color-cacao: #5a3a28;
 
-  /* Solo errores, urgencia y estado cancelado */
-  --color-terracota: #e0654a;
+  /* Solo errores, urgencia y estado cancelado (AA con texto blanco y
+     como texto sobre fondos claros) */
+  --color-terracota: #b04527;
 
-  /* Reservado exclusivamente para acciones de WhatsApp */
-  --color-whatsapp: #3e9b4f;
+  /* Reservado exclusivamente para acciones de WhatsApp (tono oscuro AA) */
+  --color-whatsapp: #2e7d3f;
 
   --shadow-calida: 0 4px 24px rgba(24, 33, 42, 0.07);
   --shadow-calida-lg: 0 14px 40px rgba(24, 33, 42, 0.12);
@@ -130,9 +135,9 @@
     color: var(--color-tinta);
   }
 
-  /* Accesibilidad: foco visible en color de marca */
+  /* Accesibilidad: foco visible en color de marca (variante AA) */
   :focus-visible {
-    outline: 2px solid var(--color-miel);
+    outline: 2px solid var(--color-miel-oscura);
     outline-offset: 2px;
   }
 

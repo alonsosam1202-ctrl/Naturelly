@@ -53,7 +53,7 @@ export default function StatusActions({ orderId, status }: StatusActionsProps) {
           role="status"
           className={`rounded-2xl px-4 py-3 font-bold ${
             result.ok
-              ? "bg-salvia/15 text-salvia"
+              ? "bg-salvia/15 text-salvia-oscura"
               : "bg-terracota/10 text-terracota"
           }`}
         >
