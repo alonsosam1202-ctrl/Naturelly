@@ -26,7 +26,7 @@
 
 **Criterio de salida:** Nelly gestiona el catálogo sola y procesa pedidos reales de punta a punta.
 
-**Estado (2026-07-03):** pasos 1–7 completos y validados (setup, BD real con migraciones aplicadas, tienda pública, carrito, checkout con RPC y confirmación por WhatsApp, deploy en Render probado en producción). Paso 9 completo y **validado manualmente**: gestión de pedidos con reposición de stock, CRUD de productos con imágenes y **CRUD de packs**. Paso 8 parcial (login admin, recuperación y cambio de contraseña listos; registro y `/cuenta` de clientes pendientes). Pendientes para cerrar la fase: datos reales de Nelly (bloqueado por su información), dominio propio, y revisión final de calidad (paso 10 ya existe como contenido fijo).
+**Estado (2026-07-03): ✅ MVP TÉCNICO CERRADO Y VALIDADO EN PRODUCCIÓN** (https://naturelly.onrender.com). Todos los flujos verificados manualmente: tienda pública, carrito, checkout, pedidos con WhatsApp, panel admin completo (pedidos con reposición de stock, CRUD de productos con imágenes, CRUD de packs), autenticación con correo y **Google OAuth**, recuperación y cambio de contraseña en producción, cierre de calidad (SEO técnico con robots/sitemap/Open Graph, accesibilidad AA, responsive 360–desktop). Único código pendiente de la fase: `/registro` y `/cuenta` de clientes (decidido para después del lanzamiento). Para lanzar al público faltan **información y recursos, no código**: datos reales de Nelly, recursos visuales (logo/fotos) y configuración final — detallado en `docs/LAUNCH_CHECKLIST.md`.
 
 ## Fase 2 — Contenido y experiencia de marca
 **Objetivo:** la web trabaja el posicionamiento, no solo la venta.

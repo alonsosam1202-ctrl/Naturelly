@@ -13,6 +13,8 @@
 
 ## Fase 1 — MVP
 
+> ✅ **MVP TÉCNICO CERRADO (2026-07-03).** Validación manual completa en producción (https://naturelly.onrender.com): tienda, catálogo, carrito, checkout, pedidos + WhatsApp, panel admin completo (pedidos/productos/packs), auth con correo y Google, recuperación y cambio de contraseña, responsive (360/390/430/desktop), accesibilidad, robots/sitemap/Open Graph y previsualización por WhatsApp. Lo pendiente para el lanzamiento público es información y recursos, no código: ver `docs/LAUNCH_CHECKLIST.md`.
+
 ### Setup
 - [x] `create-next-app` con TypeScript, Tailwind, ESLint, App Router, `src/` (scaffold manual equivalente: la carpeta ya contenía los docs).
 - [x] Configurar tokens de marca en Tailwind según `BRAND_GUIDE.md`.
@@ -47,13 +49,13 @@
 - [x] Páginas `/nosotros`, `/faq`, `/contacto` (+ `/api/contacto`). `/recetas` quedó como teaser (el blog es fase 2).
 
 ### Cuentas
-- [~] `/registro`, `/login`, `/recuperar` con Supabase Auth (`/login` y `/recuperar` + `/actualizar-contrasena` + `/auth/callback` hechos; `/registro` pendiente para el bloque Cuentas).
-- [x] Cambio de contraseña del usuario autenticado en `/admin/cuenta` (updateUser con sesión propia, sin secret key).
-- [~] Login con Google (`signInWithOAuth` + PKCE implementado; el botón está **oculto tras `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=false`** hasta configurar el OAuth Client en Google/Supabase y probarlo).
+- [~] `/registro`, `/login`, `/recuperar` con Supabase Auth (`/login`, `/recuperar`, `/actualizar-contrasena` y `/auth/callback` **validados en producción**, incluida la recuperación con correo real; `/registro` pendiente para el bloque Cuentas de clientes).
+- [x] Cambio de contraseña del usuario autenticado en `/admin/cuenta` (updateUser con sesión propia, sin secret key) — validado en producción.
+- [x] Login con Google **validado en producción** (PKCE + `/auth/callback` con origen confiable desde `NEXT_PUBLIC_SITE_URL`; admin → `/admin`, no-admin → "Acceso denegado"; botón controlado por `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED`).
 - [~] Middleware de protección de rutas (protege `/admin/**`; falta `/cuenta/**`).
 - [ ] `/cuenta` (perfil editable) y `/cuenta/pedidos` (historial con estados).
 
-> Pruebas del bloque de contraseñas (2026-07-03): login con contraseña OK; flujo completo de recuperación a nivel API (enlace → sesión → contraseña nueva → login con la nueva, la vieja rechazada, enlace de un solo uso); callback con código inválido no crea sesión y redirige a `/login?error=enlace`; la UI de `/recuperar` muestra SIEMPRE mensaje genérico. Pendientes manuales: correo real de recuperación, Google (tras configuración) y revisión visual del badge corregido.
+> Pruebas del bloque de contraseñas (2026-07-03): login con contraseña OK; flujo completo de recuperación a nivel API (enlace → sesión → contraseña nueva → login con la nueva, la vieja rechazada, enlace de un solo uso); callback con código inválido no crea sesión y redirige a `/login?error=enlace`; la UI de `/recuperar` muestra SIEMPRE mensaje genérico. Todo validado después en producción: recuperación con correo real, Google OAuth (admin → `/admin`, customer → "Acceso denegado", logout) y el badge corregido.
 
 ### Admin
 - [x] Layout admin con verificación de rol (middleware + verificación server-side + RLS/RPC).
@@ -64,7 +66,7 @@
 - [x] Tabla de pedidos con filtro por estado y cambio de estado (`/admin/pedidos` + detalle con acciones).
 - [x] Reposición segura de stock al cancelar un pedido (RPC `set_order_status`: transaccional, con lock e idempotente — verificado que cancelar dos veces no repone doble).
 
-> Cierre de calidad (2026-07-03): verificado en server local — `robots.txt` correcto, `sitemap.xml` solo con URLs públicas (0 privadas), `opengraph-image` 200 image/png (45 KB), og:image/twitter:card/og:locale presentes en el HTML, noindex en las 5 rutas no indexables y ausente en `/` y `/tienda`. ⚠️ Recordatorio: `NEXT_PUBLIC_SITE_URL=https://naturelly.onrender.com` debe estar configurada en Render para que sitemap/robots/OG usen la URL real.
+> Cierre de calidad (2026-07-03): verificado en server local — `robots.txt` correcto, `sitemap.xml` solo con URLs públicas (0 privadas), `opengraph-image` 200 image/png (45 KB), og:image/twitter:card/og:locale presentes en el HTML, noindex en las 5 rutas no indexables y ausente en `/` y `/tienda`. `NEXT_PUBLIC_SITE_URL` ya está configurada en Render (verificada en producción con el flujo OAuth y la previsualización OG).
 >
 > Pruebas del CRUD de packs (2026-07-03): 12/12 pasaron (crear pack con 2 variantes, slug duplicado y cantidad 0 rechazados, no-admin bloqueado para crear/editar, pack activo visible/inactivo invisible para anon, la compra descuenta componentes exactos, el pedido histórico conserva nombre y precio tras editar el pack, cancelar repone exactamente una vez, borrado físico bloqueado por FK de pedidos). En BD quedaron: pack "Pack de prueba interna EDITADO" (desactivado; no se puede borrar porque tiene el pedido `NAT-VUKV` cancelado) — puede renombrarse y reutilizarse. **Validado manualmente en local y producción**: creación con varias variantes, resumen de suma/ahorro/disponibilidad, duplicados impedidos, edición de precio y cantidades, imagen (subir/reemplazar/quitar), desactivar/reactivar, visibilidad en `/packs`, compra con descuento de componentes, cancelación con reposición idempotente, y panel revisado en celular.
 >
@@ -73,8 +75,8 @@
 > Pruebas del bloque admin (2026-07-03): las 13 verificaciones automatizadas pasaron (login, RLS, transiciones, saltos bloqueados, restock exacto de variantes y bundles, no-op del doble cancelado, redirección del middleware). **Validado además manualmente en navegador**: flujo completo `pendiente → confirmado → en_preparacion → en_camino → entregado`, bloqueo del pedido entregado, botón de WhatsApp al cliente y visualización del pedido en el panel. Pedidos de prueba que quedaron en la BD: `NAT-YQFC` y `NAT-PPJ5` (cancelados), `NAT-GU8G` (entregado) — no se borran. Pendiente menor: ver en navegador la pantalla "Acceso denegado" con un usuario no-admin (la protección de datos ya está probada a nivel de RLS y RPC).
 
 ### Calidad y deploy
-- [~] Revisión responsive completa (360 px como piso) — auditoría de código hecha (tablas admin con scroll horizontal en md, drawers, formularios, pills con wrap); falta la pasada visual final en dispositivo por Alonso.
-- [x] Accesibilidad: contraste AA verificado y corregido con variantes de texto oscuras (`miel-oscura #9C6410`, `salvia-oscura #3E6B35`, `terracota #B04527`, WhatsApp `#2E7D3F`), foco visible AA, `h1` en todas las páginas (SectionHeader con prop `as`), Escape + bloqueo de scroll + foco inicial en drawers, labels/aria ya presentes, `prefers-reduced-motion` global.
+- [x] Revisión responsive completa **validada en producción** (360, 390, 430 px y escritorio; auditoría de código + pasada visual).
+- [x] Accesibilidad **validada en producción**: contraste AA verificado y corregido con variantes de texto oscuras (`miel-oscura #9C6410`, `salvia-oscura #3E6B35`, `terracota #B04527`, WhatsApp `#2E7D3F`), foco visible AA, `h1` en todas las páginas (SectionHeader con prop `as`), Escape + bloqueo de scroll + foco inicial en drawers, labels/aria ya presentes, `prefers-reduced-motion` global.
 - [x] Metadata y Open Graph: `sitemap.ts` dinámico (solo públicas + productos activos con `updated_at`, tolerante a fallos), `robots.ts` (disallow solo `/admin`, `/api`, `/auth`), imagen OG temporal 1200×630 con `next/og` (TODO: reemplazar cuando exista el logo), OG/Twitter completos, noindex verificado en carrito/checkout/pedido/login/recuperación/admin.
 - [x] Deploy en Render (https://naturelly.onrender.com) con variables de Supabase configuradas. **Flujo validado de punta a punta en producción**: pedido `NAT-W3KE` registrado con su order_item y stock descontado 9→8 (quedó como pedido de prueba, no se borra).
 - [ ] Dominio propio (TODO: confirmar con Nelly).

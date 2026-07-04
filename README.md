@@ -2,66 +2,84 @@
 
 Ecommerce artesanal premium para **Naturelly**, marca de granolas hechas a mano por Nelly en Arequipa, Perú. Construido con Next.js, TypeScript, Tailwind CSS y Supabase.
 
-> Granola artesanal con superalimentos andinos, tostada en tandas pequeñas y endulzada solo con miel de abeja.
+## Estado actual
 
-## ¿Qué es este proyecto?
+✅ **MVP técnico completo y validado en producción** (2026-07-03).
 
-Una tienda online completa que permite a los clientes descubrir la marca, explorar el catálogo, armar su carrito y realizar pedidos (fase 1: cierre por WhatsApp, con el pedido registrado en Supabase). Incluye cuentas de cliente con historial de pedidos y un panel de administración para que la fundadora gestione productos, precios, imágenes y pedidos sin tocar código.
+- **Producción:** https://naturelly.onrender.com
+- Todos los flujos verificados manualmente de punta a punta (tienda, pedidos, panel admin, autenticación, SEO técnico, accesibilidad y responsive).
+- Lo pendiente para el lanzamiento público es **información y recursos, no código**: datos reales de Nelly, logo y fotografías. Ver [`docs/LAUNCH_CHECKLIST.md`](./docs/LAUNCH_CHECKLIST.md).
 
-## Problema que resuelve
+## Funciones principales
 
-Hoy los pedidos se gestionan de forma manual e informal (mensajes sueltos de WhatsApp, sin registro centralizado). Eso genera:
+**Tienda pública (mobile-first, español peruano)**
+- Catálogo con categorías, detalle de producto con variantes (250 g / 500 g) y packs con precio especial.
+- Carrito persistente (invitados incluidos) y checkout validado.
+- Los pedidos se registran SIEMPRE en Supabase (código `NAT-XXXX`, precios recalculados en servidor con validación de stock transaccional) y luego se confirman por WhatsApp.
+- SEO técnico: sitemap dinámico, robots, Open Graph con previsualización correcta en WhatsApp.
 
-- Pedidos perdidos o mal anotados.
-- Cero visibilidad de historial, clientes frecuentes o productos más vendidos.
-- Una imagen de marca que no refleja la calidad premium del producto.
+**Panel administrativo (`/admin`, para usuaria no técnica)**
+- Gestión de pedidos: filtros por estado, detalle completo, transiciones válidas (`pendiente → confirmado → en_preparacion → en_camino → entregado`), cancelación con **reposición idempotente de stock** (variantes y packs).
+- CRUD de productos con variantes e imágenes (subida directa a Storage, alt obligatorio, orden y reemplazo).
+- CRUD de packs con selector de variantes, ahorro estimado y disponibilidad calculada.
+- Todo con soft delete: nada se borra físicamente.
 
-Este proyecto profesionaliza la marca con una experiencia de compra moderna, ordena los pedidos en una base de datos y deja lista la infraestructura para pagos online.
+**Autenticación y seguridad**
+- Login con correo/contraseña y con Google (OAuth PKCE), recuperación y cambio de contraseña.
+- Triple capa de autorización para el panel: middleware → verificación server-side de sesión + rol → RLS y RPCs en la base de datos.
+- Grants de mínimo privilegio + RLS en todas las tablas; la clave secreta jamás sale del servidor.
 
 ## Stack
 
 | Capa | Tecnología |
 |---|---|
-| Frontend | Next.js 15 (App Router) + TypeScript |
-| Estilos | Tailwind CSS |
-| Backend / BD | Supabase (Postgres, Auth, Storage, RLS) |
-| Estado del carrito | Zustand (persistido en localStorage) |
-| Validación | Zod |
+| Framework | Next.js 15 (App Router, Server Components) |
+| Lenguaje | TypeScript estricto |
+| Estilos | Tailwind CSS 4 (tokens de `BRAND_GUIDE.md`) |
+| Backend | Supabase (Postgres 15, Auth, Storage, RLS) |
+| Estado (carrito) | Zustand + persist |
+| Validación | Zod (cliente y servidor) |
+| Formularios | React Hook Form |
 | Deploy | Render (https://naturelly.onrender.com) |
 
-Detalle completo en [`TECH_STACK.md`](./TECH_STACK.md).
+## Variables de entorno
+
+Copiar `.env.example` a `.env.local` y completar (solo nombres; los valores nunca se documentan):
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_SECRET_KEY` — **solo servidor**
+- `NEXT_PUBLIC_WHATSAPP_NUMBER`
+- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED`
+
+Para la CLI de Supabase (migraciones), además: `SUPABASE_DB_PASSWORD` en `.env.local`.
+
+> ⚠️ **Nunca exponer claves privadas.** `SUPABASE_SECRET_KEY` y `SUPABASE_DB_PASSWORD` no llevan prefijo `NEXT_PUBLIC_`, no se importan en componentes cliente, no se loguean, no se commitean (`.env.local` está en `.gitignore`) y no se pegan en chats ni documentación. Las mismas variables públicas + la secret key deben configurarse en el dashboard de Render.
+
+## Desarrollo local
+
+```bash
+npm install
+cp .env.example .env.local   # completar variables
+npm run dev                  # http://localhost:3000
+```
+
+- Sin Supabase configurado, la web funciona en modo catálogo placeholder (el checkout avisa que no puede registrar pedidos).
+- Base de datos: las migraciones viven en `supabase/migrations/` (formato `<YYYYMMDDHHMMSS>_<nombre>.sql`) y se aplican con `npx supabase db push` sobre el proyecto vinculado. `supabase/seed.sql` es solo para desarrollo.
+- Verificación antes de cerrar cualquier cambio: `npx tsc --noEmit` y `npm run build`.
 
 ## Documentación
 
-| Archivo | Contenido |
+| Documento | Contenido |
 |---|---|
-| [`PROJECT_BRIEF.md`](./PROJECT_BRIEF.md) | Visión, alcance, funcionalidades, páginas y flujos |
-| [`TECH_STACK.md`](./TECH_STACK.md) | Tecnologías, versiones y justificación |
-| [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Estructura de carpetas, rutas y componentes |
-| [`DATABASE_SCHEMA.md`](./DATABASE_SCHEMA.md) | Modelo de datos en Supabase + políticas RLS |
-| [`BRAND_GUIDE.md`](./BRAND_GUIDE.md) | Identidad visual, paleta, tipografía y tono |
-| [`ROADMAP.md`](./ROADMAP.md) | Fases de desarrollo |
-| [`TODO.md`](./TODO.md) | Tareas pendientes por fase |
-| [`CLAUDE.md`](./CLAUDE.md) | Contexto y reglas para desarrollo asistido por IA |
-
-## Inicio rápido (una vez creado el proyecto)
-
-```bash
-# 1. Instalar dependencias
-npm install
-
-# 2. Configurar variables de entorno
-cp .env.example .env.local
-# Completar: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-# SUPABASE_SECRET_KEY (solo server), NEXT_PUBLIC_WHATSAPP_NUMBER
-
-# 3. Correr en desarrollo
-npm run dev
-```
-
-## Estado actual
-
-🚧 **Fase 1 — MVP en desarrollo.** La tienda pública (catálogo, carrito, checkout y flujo de pedido por WhatsApp) ya está implementada y compila; funciona con catálogo placeholder mientras no se configure Supabase. Pendientes de la fase: crear el proyecto Supabase y aplicar migraciones, cuentas de cliente y panel admin. Ver [`TODO.md`](./TODO.md) y [`ROADMAP.md`](./ROADMAP.md).
+| `CLAUDE.md` | Reglas de trabajo del proyecto |
+| `PROJECT_BRIEF.md` | Visión, usuarios y alcance |
+| `ARCHITECTURE.md` | Estructura, rutas y componentes |
+| `DATABASE_SCHEMA.md` | Esquema, RLS, grants y RPCs |
+| `BRAND_GUIDE.md` | Dirección visual "Bright Wellness" y tokens |
+| `ROADMAP.md` / `TODO.md` | Fases y estado de tareas |
+| `docs/LAUNCH_CHECKLIST.md` | Pendientes para el lanzamiento público |
 
 ## Licencia
 
