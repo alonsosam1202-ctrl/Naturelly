@@ -6,7 +6,7 @@ import WhatsAppButton from "@/components/ui/WhatsAppButton";
 export const metadata: Metadata = {
   title: "Contacto",
   description:
-    "Escríbenos: pedidos, ventas al por mayor o cualquier consulta sobre nuestra granola artesanal.",
+    "Escríbenos: pedidos, tortas personalizadas o cualquier consulta sobre nuestras delicias artesanales.",
 };
 
 export default function ContactoPage() {
@@ -17,7 +17,7 @@ export default function ContactoPage() {
           <SectionHeader as="h1"
             eyebrow="Contacto"
             title="Conversemos"
-            description="¿Una consulta sobre tu pedido, una idea o un antojo grande? Escríbenos por aquí o directo por WhatsApp."
+            description="¿Una consulta sobre tu pedido, una torta personalizada o un antojo grande? Escríbenos por aquí o directo por WhatsApp."
           />
           <div>
             <WhatsAppButton

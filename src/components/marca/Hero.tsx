@@ -4,15 +4,15 @@ import RotatingSeal from "./RotatingSeal";
 import FloatingIngredients from "./FloatingIngredients";
 
 const TRUST_POINTS = [
-  "Solo miel de abeja",
-  "Tandas pequeñas",
+  "Hecho a mano",
+  "En pequeñas cantidades",
   "Hecho en Arequipa",
 ];
 
 /** Chips flotantes con moderación: dos, no una nube. */
 const FLOATING_CHIPS = [
-  { label: "Quinua", className: "left-0 top-12 -rotate-6", delay: "0s" },
-  { label: "Miel de abeja", className: "-right-2 bottom-16 rotate-3", delay: "2s" },
+  { label: "Granola artesanal", className: "left-0 top-12 -rotate-6", delay: "0s" },
+  { label: "Torta de zanahoria", className: "-right-2 bottom-16 rotate-3", delay: "2s" },
 ];
 
 export default function Hero() {
@@ -24,19 +24,18 @@ export default function Hero() {
         <div className="flex flex-col gap-5">
           <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-miel-oscura">
             <span className="size-2 rounded-full bg-salvia" aria-hidden />
-            Granola artesanal de Arequipa
+            Hecho artesanalmente en Arequipa
           </p>
           <h1 className="font-display text-4xl font-semibold leading-tight text-tinta sm:text-6xl">
-            Tostada a mano, endulzada solo con{" "}
-            <em className="italic text-miel-oscura">miel</em>
+            De la cocina de Nelly,{" "}
+            <em className="italic text-miel-oscura">para compartir</em>
           </h1>
           <p className="max-w-md text-lg text-cacao">
-            Superalimentos andinos —quinua, kiwicha, aguaymanto, cacao— en
-            tandas pequeñas que salen recién tostaditas de la cocina de Nelly a
-            tu mesa.
+            Granola artesanal, tortas caseras y pedidos personalizados,
+            preparados por Nelly en pequeñas cantidades.
           </p>
           <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/tienda">Ver granolas</ButtonLink>
+            <ButtonLink href="/tienda">Ver la tienda</ButtonLink>
             <ButtonLink href="/nosotros" variant="secondary">
               Nuestra historia
             </ButtonLink>

@@ -9,9 +9,9 @@ export default function EmptyCart({ onNavigate }: { onNavigate?: () => void }) {
       <p className="font-display text-2xl font-semibold text-tinta">
         Tu carrito está vacío
       </p>
-      <p className="text-cacao">La Andina Power te está esperando →</p>
+      <p className="text-cacao">Algo rico te está esperando en la tienda →</p>
       <ButtonLink href="/tienda" onClick={onNavigate}>
-        Ver granolas
+        Ver la tienda
       </ButtonLink>
     </div>
   );

@@ -51,7 +51,11 @@ function mapProduct(row: ProductRow): CatalogProduct {
     sort_order: row.sort_order,
     variants: (row.product_variants ?? [])
       .filter((variant) => variant.is_active)
-      .sort((a, b) => a.weight_grams - b.weight_grams),
+      // Peso primero (granola); sin peso (tortas por porciones) ordena por precio
+      .sort(
+        (a, b) =>
+          (a.weight_grams ?? 0) - (b.weight_grams ?? 0) || a.price - b.price
+      ),
     images: (row.product_images ?? []).sort((a, b) => a.position - b.position),
   };
 }

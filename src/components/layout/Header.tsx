@@ -7,11 +7,12 @@ import { useCartStore } from "@/stores/cart";
 import MobileNav from "./MobileNav";
 import AuthNav from "./AuthNav";
 
+// /recetas sigue existiendo (Fase 2) pero sale de la navegación principal
+// hasta tener contenido real: hoy es solo un "muy pronto".
 export const NAV_LINKS = [
   { href: "/tienda", label: "Tienda" },
   { href: "/packs", label: "Packs" },
   { href: "/nosotros", label: "Nosotros" },
-  { href: "/recetas", label: "Recetas" },
   { href: "/faq", label: "FAQ" },
   { href: "/contacto", label: "Contacto" },
 ];

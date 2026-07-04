@@ -2,9 +2,19 @@
 
 ## 1. Visión
 
-Naturelly es una marca de granolas artesanales fundada por Nelly en Arequipa, Perú. Cada lote se tuesta a mano, en tandas pequeñas, con superalimentos andinos (quinua, kiwicha, aguaymanto, cacao) y miel de abeja como único endulzante.
+Naturelly es la marca de **delicias artesanales** de Nelly en Arequipa, Perú. Todo se prepara a mano, en pequeñas cantidades, en su propia cocina.
 
-La web debe transmitir una experiencia de **marca premium, natural y cálida**, inspirada en el nivel de ecommerce de referentes como Purely Elizabeth, pero con identidad propia: mientras las marcas internacionales presumen "granos ancestrales", Naturelly los compra frescos, del origen. Ese es el ángulo narrativo central: **del Perú para el mundo, de la cocina de Nelly a tu mesa**.
+**Posicionamiento aprobado (2026-07-04): "Naturelly — Delicias artesanales hechas por Nelly".** "Delicias artesanales" es el término paraguas que une la granola, las tortas y los futuros productos artesanales; la web NO se presenta como tienda solo de granola.
+
+La web debe transmitir una experiencia de **marca premium, natural y cálida**, inspirada en el nivel de ecommerce de referentes como Purely Elizabeth, pero con identidad propia. El ángulo narrativo central: **de la cocina de Nelly, para compartir**.
+
+### Realidad actual del negocio (actualizado 2026-07-04)
+
+- Nelly tiene **una sola receta de granola validada**, que ya vende de manera interna a familiares y amigos. **No existen todavía otros sabores o recetas de granola**: la web no debe prometer variedades hasta que Nelly las pruebe y estandarice.
+- Sus productos más fuertes y solicitados hoy son las **tortas**: torta de zanahoria (el término "carrot cake" solo se usa como palabra secundaria de búsqueda, nunca como nombre principal), torta de chocolate y torta de naranja, además de tortas con **decoraciones sencillas de fondant** (figuras simples, no trabajos profesionales de alta complejidad).
+- Catálogo del arranque: la granola artesanal principal + las tres tortas + la opción de torta personalizada con fondant sencillo. La torta personalizada **no tiene precio fijo ni compra directa**: se presenta como "Cotizar por WhatsApp", con disponibilidad, diseño y precio coordinados previamente.
+- **Primera etapa = uso interno** (familiares, amigos y clientes actuales de Nelly), no un lanzamiento público masivo; los requisitos de cada etapa están en `docs/LAUNCH_CHECKLIST.md`.
+- Los ingredientes, endulzante, presentaciones y beneficios concretos de cada producto **están pendientes de confirmar con Nelly**; ningún texto de la web debe afirmarlos antes.
 
 ## 2. Problema que resuelve
 
@@ -18,7 +28,7 @@ La web debe transmitir una experiencia de **marca premium, natural y cálida**, 
 
 ## 3. Usuarios
 
-- **Cliente final**: personas en Arequipa (fase 1) que compran granola para su familia. Compran desde el celular mayoritariamente → **mobile-first obligatorio**.
+- **Cliente final**: personas en Arequipa (fase 1) que compran granola y tortas para su familia o para ocasiones especiales. Compran desde el celular mayoritariamente → **mobile-first obligatorio**.
 - **Invitado**: puede explorar y pedir sin crear cuenta (solo nombre + teléfono). Reducir fricción es prioridad.
 - **Admin (Nelly)**: usuaria no técnica. El panel debe ser extremadamente simple: formularios claros, en español, sin jerga.
 

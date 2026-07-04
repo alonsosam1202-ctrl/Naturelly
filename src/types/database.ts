@@ -330,7 +330,7 @@ export type Database = {
           size_label: string
           sku: string
           stock: number
-          weight_grams: number
+          weight_grams: number | null
         }
         Insert: {
           compare_at_price?: number | null
@@ -341,7 +341,7 @@ export type Database = {
           size_label: string
           sku: string
           stock?: number
-          weight_grams: number
+          weight_grams?: number | null
         }
         Update: {
           compare_at_price?: number | null
@@ -352,7 +352,7 @@ export type Database = {
           size_label?: string
           sku?: string
           stock?: number
-          weight_grams?: number
+          weight_grams?: number | null
         }
         Relationships: [
           {

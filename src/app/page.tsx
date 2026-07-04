@@ -12,7 +12,7 @@ export const revalidate = 60;
 const ORDER_STEPS = [
   {
     accent: "bg-amarillo text-tinta",
-    title: "Elige tus granolas",
+    title: "Elige tus antojos",
     description: "Explora la tienda y arma tu carrito desde el celular.",
   },
   {
@@ -28,7 +28,7 @@ const ORDER_STEPS = [
   {
     accent: "bg-tinta text-amarillo",
     title: "Llega a tu mesa",
-    description: "Recién tostadita, por delivery en Arequipa o recojo.",
+    description: "Recién hecho, por delivery en Arequipa o recojo.",
   },
 ];
 
@@ -44,9 +44,9 @@ export default async function HomePage() {
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <SectionHeader
-            eyebrow="La tanda de esta semana"
-            title="Nuestras granolas"
-            description="Hechas a mano, sin apuro y sin nada que no pondrías en tu propia cocina. Cada sabor tiene su propio color."
+            eyebrow="Recién salido de la cocina"
+            title="Nuestras delicias"
+            description="Preparaciones artesanales hechas a mano, sin apuro y sin nada que no pondrías en tu propia cocina."
           />
           <ButtonLink href="/tienda" variant="secondary">
             Ver toda la tienda
@@ -66,7 +66,7 @@ export default async function HomePage() {
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20">
         <SectionHeader
           eyebrow="Así de simple"
-          title="¿Cómo pido mi granola?"
+          title="¿Cómo hago mi pedido?"
           align="center"
         />
         <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -97,16 +97,16 @@ export default async function HomePage() {
         <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-16 text-center sm:px-6 md:py-20">
           <Reveal replay className="flex flex-col items-center gap-6">
             <p className="text-sm font-bold uppercase tracking-[0.2em] text-tinta/70">
-              Recién tostadita
+              Hecho a mano
             </p>
             <h2 className="max-w-2xl font-display text-3xl font-semibold text-tinta sm:text-5xl">
-              ¿Antojo de granola <em className="italic">crocante y dorada</em>?
+              ¿Antojo de algo <em className="italic">hecho en casa</em>?
             </h2>
             <p className="max-w-xl text-lg text-tinta/80">
-              Nada empalagosa, con miel de verdad. Haz tu pedido hoy y
-              coordinamos la entrega al toque.
+              Granola recién tostada o una torta para compartir. Haz tu pedido
+              hoy y coordinamos la entrega al toque.
             </p>
-            <ButtonLink href="/tienda">Ver granolas</ButtonLink>
+            <ButtonLink href="/tienda">Ver la tienda</ButtonLink>
           </Reveal>
         </div>
       </section>

@@ -49,7 +49,11 @@ export default async function AdminEditarProductoPage({
     benefitsText: (product.benefits ?? []).join("\n"),
     is_active: product.is_active,
     variants: [...product.product_variants]
-      .sort((a, b) => a.weight_grams - b.weight_grams)
+      .sort(
+        (a, b) =>
+          (a.weight_grams ?? 0) - (b.weight_grams ?? 0) ||
+          Number(a.price) - Number(b.price)
+      )
       .map((variant) => ({
         id: variant.id,
         size_label: variant.size_label,

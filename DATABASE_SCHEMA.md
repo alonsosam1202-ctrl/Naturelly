@@ -46,7 +46,7 @@ Extiende `auth.users`. Se crea automáticamente con un trigger al registrarse.
 | `story` | `text` | historia/origen (storytelling del detalle) |
 | `ingredients` | `text[]` | lista de ingredientes |
 | `benefits` | `text[]` | beneficios destacados |
-| `category` | `text` | `'clasica' \| 'andina' \| 'chocolate' \| 'especial'` |
+| `category` | `text` | Reales: `'granola' \| 'torta' \| 'personalizado'` (migración `20260704120000`). Legado (solo productos placeholder existentes, no usar en nuevos): `'clasica' \| 'andina' \| 'chocolate' \| 'especial'` |
 | `badge` | `text` NULL | `'nuevo' \| 'mas_vendido' \| 'edicion_limitada'` |
 | `is_active` | `boolean` | default `true`; soft delete |
 | `sort_order` | `int` | orden en el catálogo |
@@ -59,13 +59,18 @@ Cada producto se vende en presentaciones distintas. **El precio vive aquí, no e
 |---|---|---|
 | `id` | `uuid` PK | |
 | `product_id` | `uuid` FK → products | `on delete cascade` |
-| `size_label` | `text` | `'250 g'` \| `'500 g'` |
-| `weight_grams` | `int` | 250 / 500 |
+| `size_label` | `text` | Texto libre: `'250 g'`, `'500 g'`, `'Pequeña — 8 porciones'`, `'Mediana — 12 porciones'`, `'Grande — 20 porciones'` |
+| `weight_grams` | `int` NULL | Peso en gramos para granola; `NULL` cuando la presentación se describe por tamaño/porciones (tortas). Nullable desde la migración `20260704120000` |
 | `price` | `numeric(10,2)` | en soles (S/) |
 | `compare_at_price` | `numeric(10,2)` NULL | precio tachado para ofertas |
 | `stock` | `int` | default 0; el checkout valida contra esto |
 | `sku` | `text` UNIQUE | ej. `NAT-AND-250` |
 | `is_active` | `boolean` | default `true` |
+
+**Semántica del `stock` (documentada para Nelly — sin lógica nueva de inventario):**
+- **Granola**: `stock` = unidades listas para vender.
+- **Tortas (por encargo)**: `stock` = **cupos de producción** que Nelly acepta en el periodo actual. `stock = 5` significa "acepto hasta 5 pedidos de esta torta"; `stock = 0` significa "por ahora no acepto más". Nelly lo ajusta desde el panel cuando quiera.
+- El checkout y `create_order` validan contra ese número exactamente igual en ambos casos (misma transacción, mismo lock); la cancelación repone el cupo. No hay calendarios, reservas ni producción semanal automática.
 
 **Comportamientos del panel admin (documentados):**
 - Los productos y variantes **nunca se eliminan físicamente** (los pedidos históricos los referencian): se desactivan con `is_active` (soft delete). Las variantes existentes tampoco se quitan del formulario, solo se desactivan.

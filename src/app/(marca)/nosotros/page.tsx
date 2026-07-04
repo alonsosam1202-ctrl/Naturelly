@@ -7,7 +7,7 @@ import { ButtonLink } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: "Nosotros",
   description:
-    "La historia de Naturelly: granola artesanal hecha por Nelly en Arequipa, Perú.",
+    "La historia de Naturelly: delicias artesanales hechas por Nelly en Arequipa, Perú.",
 };
 
 export default function NosotrosPage() {
@@ -17,19 +17,19 @@ export default function NosotrosPage() {
         <div className="flex flex-col gap-5">
           <SectionHeader as="h1"
             eyebrow="Nuestra historia"
-            title="La granola que una madre haría para su propia familia"
+            title="Lo que Nelly haría para su propia familia"
           />
           <div className="space-y-4 text-lg text-cacao">
             <p>
-              Naturelly nace en Arequipa, en la cocina de Nelly. Cada lote se
-              tuesta a mano, en tandas pequeñas, con superalimentos andinos
-              —quinua, kiwicha, aguaymanto, cacao— y miel de abeja como único
-              endulzante.
+              Naturelly nace en Arequipa, en la cocina de Nelly. De ahí salen
+              su granola artesanal —una receta propia que empezó conquistando
+              a familiares y amigos— y sus tortas caseras: zanahoria,
+              chocolate y naranja, con decoraciones sencillas en fondant
+              cuando la ocasión lo pide.
             </p>
             <p>
-              Mientras las marcas internacionales presumen “granos
-              ancestrales”, nosotros los compramos frescos, del origen: de la
-              tierra donde nacieron esos granos.
+              Todo se prepara a mano y en tandas pequeñas: aquí no hay
+              fábrica, hay una cocina.
             </p>
             <p>
               {/* TODO: confirmar con Nelly la historia personal completa
@@ -39,7 +39,7 @@ export default function NosotrosPage() {
             </p>
           </div>
           <ButtonLink href="/tienda" className="w-fit">
-            Prueba nuestras granolas
+            Ver la tienda
           </ButtonLink>
         </div>
         <div className="mx-auto w-full max-w-sm">

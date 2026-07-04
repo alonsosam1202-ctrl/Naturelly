@@ -15,11 +15,14 @@ export const variantSchema = z.object({
     .trim()
     .min(1, "Indica la presentación (ej. 250 g)")
     .max(40, "Muy largo"),
+  // NULL cuando la presentación se describe por tamaño o porciones (tortas:
+  // "Mediana — 12 porciones"). Requiere la migración 20260704120000 en BD.
   weight_grams: z
     .number({ invalid_type_error: "Ingresa el peso en gramos" })
     .int("Solo números enteros")
     .min(1, "El peso debe ser mayor a 0")
-    .max(100000, "Peso demasiado grande"),
+    .max(100000, "Peso demasiado grande")
+    .nullable(),
   price: z
     .number({ invalid_type_error: "Ingresa el precio" })
     .min(0, "El precio no puede ser negativo")
@@ -60,9 +63,13 @@ export const productFormSchema = z
         /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
         "Solo minúsculas, números y guiones (ej. clasica-de-miel)"
       ),
-    category: z.enum(["clasica", "andina", "chocolate", "especial"], {
-      errorMap: () => ({ message: "Elige una categoría" }),
-    }),
+    category: z.enum(
+      // Reales primero; las cuatro últimas son legado de placeholders
+      ["granola", "torta", "personalizado", "clasica", "andina", "chocolate", "especial"],
+      {
+        errorMap: () => ({ message: "Elige una categoría" }),
+      }
+    ),
     // "" = sin etiqueta (la action lo convierte a null en BD)
     badge: z.enum(["", "nuevo", "mas_vendido", "edicion_limitada"]),
     tagline: z.string().trim().max(120, "Muy largo").optional().or(z.literal("")),

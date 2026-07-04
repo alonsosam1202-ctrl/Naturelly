@@ -6,7 +6,7 @@ import { ImageResponse } from "next/og";
 // remotos (fuente por defecto de next/og).
 
 export const alt =
-  "Naturelly — Granola artesanal de Arequipa, endulzada solo con miel";
+  "Naturelly — Delicias artesanales hechas por Nelly en Arequipa, Perú";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -79,7 +79,7 @@ export default function OpengraphImage() {
               textAlign: "center",
             }}
           >
-            Granola artesanal de Arequipa · endulzada solo con miel
+            Delicias artesanales hechas por Nelly · Arequipa, Perú
           </div>
         </div>
       </div>

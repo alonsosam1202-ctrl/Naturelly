@@ -28,7 +28,7 @@ export default async function CuentaPedidosPage() {
         <p className="text-cacao">
           Cuando hagas tu primer pedido, aquí podrás seguir su estado.
         </p>
-        <ButtonLink href="/tienda">Ver granolas</ButtonLink>
+        <ButtonLink href="/tienda">Ver la tienda</ButtonLink>
       </div>
     );
   }

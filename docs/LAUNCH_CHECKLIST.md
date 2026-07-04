@@ -1,121 +1,350 @@
 # LAUNCH_CHECKLIST — Naturelly
 
-> Estado al 2026-07-03: **MVP técnico cerrado y validado en producción**
-> (https://naturelly.onrender.com). Este documento separa lo que ya está
-> listo de lo que falta para abrir la tienda al público. Lo pendiente es
-> información y recursos, no código.
+> Actualizado 2026-07-04. Posicionamiento aprobado: **"Naturelly — Delicias
+> artesanales hechas por Nelly"** ("delicias artesanales" es el término paraguas
+> que une la granola, las tortas y futuros productos). La plataforma técnica está
+> completa y validada en producción (https://naturelly.onrender.com).
+
+**Realidad del negocio (confirmada por Alonso):** Nelly tiene **una sola receta de
+granola validada** (ya se vende internamente a familiares y amigos; no hay otros
+sabores probados) y sus productos más fuertes son las **tortas**: torta de
+zanahoria (carrot cake solo como término secundario de búsqueda), torta de
+chocolate, torta de naranja y **tortas personalizadas con decoración sencilla de
+fondant** (sin compra directa: "Cotizar por WhatsApp"). Todos los nombres visibles
+van en español.
+
+**El plan tiene dos etapas.** La primera NO es un lanzamiento público masivo:
 
 ---
 
-## A. Completado técnicamente ✅
+## ETAPA 1 — Uso interno (familiares, amigos y clientes actuales de Nelly)
 
-Validado manualmente en producción:
+> Objetivo: que las personas que ya le compran a Nelly pidan por la web.
+> **NO bloquean esta etapa:** dominio propio, Search Console, SMTP personalizado,
+> políticas legales completas, logo/branding definitivo.
 
-- Tienda pública completa: catálogo, detalle con variantes, packs, carrito persistente, checkout.
-- Pedidos registrados en Supabase (código `NAT-XXXX`, precios recalculados en servidor, stock transaccional) + mensaje de WhatsApp prellenado.
-- Panel admin: gestión de pedidos con transiciones válidas y **reposición idempotente de stock al cancelar** (variantes y packs), CRUD de productos con imágenes, CRUD de packs, resumen del negocio.
-- Autenticación: correo/contraseña, **Google OAuth activado y validado en producción** (`NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=true` en Render), recuperación y cambio de contraseña validados en producción.
-- **Cuentas de clientes** (nuevo en el alcance del MVP): registro con confirmación de correo y Google, login con redirección por rol (admin → `/admin`, cliente → `/cuenta`; "Acceso denegado" solo al forzar `/admin`), perfil editable (nombre y celular), historial y detalle de pedidos propios con RLS, checkout con prefill y asociación segura del pedido — 22/22 pruebas automatizadas en verde; pendiente validación manual.
-- Seguridad: middleware + verificación server-side de rol + RLS y grants de mínimo privilegio + RPCs con autorización interna. 8 migraciones aplicadas y versionadas.
-- Calidad: contraste AA, `h1` y aria correctos, teclado en drawers, `prefers-reduced-motion`, responsive 360/390/430/desktop, `robots.txt`, `sitemap.xml` dinámico, imagen Open Graph con previsualización correcta al compartir por WhatsApp.
-- `tsc --noEmit` y `npm run build` limpios.
+- [ ] 🟠 **Migración `20260704120000_real_categories.sql` aplicada** (creada y con dry-run limpio; pendiente de aprobación de Alonso para `db push`) + `database.ts` regenerado.
+- [ ] 🟠 **Productos reales cargados** (granola + 3 tortas) con la tabla de datos que completa Alonso/Nelly — sin inventar nada.
+- [ ] 🟠 **Precios reales** en cada presentación.
+- [ ] 🟠 **Stock/cupos iniciales** (granola = unidades; tortas = cupos de pedidos que Nelly acepta; ver Anexo 3).
+- [ ] 🟠 **WhatsApp real** en Render y `.env.local` (`NEXT_PUBLIC_WHATSAPP_NUMBER`) — activa los botones verdes y la sección de tortas personalizadas (se muestra sola).
+- [ ] 🟠 **Zonas básicas de entrega** definidas (aunque sea la lista corta inicial en `DELIVERY_DISTRICTS`) y costos comunicados por WhatsApp.
+- [ ] 🟠 **Métodos de pago** acordados (Yape/Plin/efectivo — se coordinan por WhatsApp, como está diseñado).
+- [ ] 🟠 **Cuenta admin definitiva de Nelly** creada y promovida; accesos de prueba retirados.
+- [ ] 🟠 **Fotos suficientes** (al menos 1 buena foto por producto activo; las ilustraciones cubren lo que falte).
+- [ ] 🟠 **Productos y packs placeholder desactivados** cuando los reales estén activos (Anexo 1).
+- [ ] 🟠 **Pedido de prueba como invitado** en producción (flujo completo hasta WhatsApp real).
+- [ ] 🟠 **Pedido de prueba con cuenta registrada** (correo).
+- [ ] 🟠 **Pedido/login de prueba con Google.**
+- [ ] 🟠 **Estados y stock probados con Nelly**: confirmar → preparar → en camino → entregado, y una cancelación verificando que el cupo/stock se repone.
 
----
+## ETAPA 2 — Lanzamiento público
 
-## B. Información real pendiente de Nelly 📋
+> Todo lo anterior más:
 
-Recopilar en una sesión con Nelly. Entre paréntesis, **dónde se carga**:
-
-**Catálogo** (todo desde el panel admin → `/admin/productos` y `/admin/packs`):
-- [ ] Nombre real y descripción de cada granola (los 3 actuales son provisionales).
-- [ ] Ingredientes exactos de cada receta.
-- [ ] **Alérgenos** — el esquema no tiene columna propia: incluirlos dentro de ingredientes o descripción (ej. "Contiene frutos secos"); si se quiere campo dedicado, requiere migración (ver E).
-- [ ] Tamaños/presentaciones reales (¿250 g y 500 g son correctos?).
-- [ ] Precios reales por presentación.
-- [ ] Stock inicial real.
-- [ ] Beneficios o características reales (sin inventar claims).
-- [ ] Historia de cada granola (campo "Su historia").
-- [ ] Packs reales: composición, nombre y precio (renombrar o desactivar el "Pack de prueba interna EDITADO").
-
-**Negocio** (se cargan en configuración o código, ver inventario abajo):
-- [ ] Número de WhatsApp del negocio.
-- [ ] Horarios de atención.
-- [ ] Zonas (distritos) de delivery y costos por zona.
-- [ ] Medios de pago aceptados al coordinar (efectivo, Yape, Plin…).
-- [ ] Historia de Nelly y de Naturelly (página `/nosotros`).
-- [ ] Preguntas frecuentes reales (revisar/completar las 5 actuales).
-- [ ] Datos de contacto (correo del negocio, redes si existen).
-- [ ] Políticas de pedidos, cambios y entregas (mínimos, anticipación, qué pasa si no está el cliente, etc.).
+- [ ] 🔴 **Dominio propio** (actualizar `NEXT_PUBLIC_SITE_URL`, Site URL/Redirects en Supabase, OAuth de Google y docs).
+- [ ] 🔴 **SMTP propio + dominio de envío verificado** (SPF/DKIM) — Anexo 2.
+- [ ] 🔴 **Plantilla "Confirm signup" con TokenHash** aplicada y revalidada (Anexo 2).
+- [ ] 🔴 **Logo definitivo** + favicon + imagen Open Graph reales.
+- [ ] 🔴 **Políticas publicadas** (pedidos, pagos, cancelaciones, entregas, personalizados — sección J).
+- [ ] 🔴 **Alérgenos revisados** en todos los productos publicados.
+- [ ] 🔴 **Textos finales** (historia real de Nelly en `/nosotros`, FAQ completa sin TODOs).
+- [ ] 🔴 **Search Console**: propiedad verificada y `sitemap.xml` enviado.
+- [ ] 🔴 **Publicación definitiva de la app de Google Auth** (pantalla de consentimiento en producción, con dominio propio).
+- [ ] 🔴 **Backups**: revisar la política del plan de Supabase (y plan de hosting de Render — Anexo 5).
+- [ ] 🔴 **Revisión completa con Nelly**: ella opera catálogo y pedidos sola, en su celular.
 
 ---
 
-## C. Recursos visuales pendientes 🎨
+## Cuestionario para la reunión con Nelly
 
-- [ ] **Logo definitivo** de Naturelly (hoy: wordmark tipográfico temporal).
-- [ ] **Fotografías reales de productos** (guía en `BRAND_GUIDE.md`: luz natural, fondos pastel de la paleta por sabor) — se suben desde el panel; reemplazan a las ilustraciones automáticamente.
-- [ ] **Imágenes de packs** (una por pack, desde el panel).
-- [ ] **Imagen Open Graph definitiva** (la actual es temporal, marcada con TODO en `src/app/opengraph-image.tsx`).
-- [ ] **Favicon definitivo** derivado del logo (hoy: bowl genérico en `src/app/icon.svg`).
-- [ ] **Textos alternativos** de las fotos reales al subirlas (el panel los exige; escribirlos descriptivos, ej. "Bolsa de granola Clásica de Miel de 250 g").
+**Estado de cada punto** — todos comienzan en `[P]`; ve reemplazando la letra:
+
+- `[P]` Pendiente de definir con Nelly · `[R]` Información recibida · `[C]` Cargado en Naturelly · `[V]` Validado en producción
+
+Marca el checkbox `[x]` cuando llegue a `[V]` (o `[C]` si no aplica validación).
+
+**Prioridad:** 🟠 necesario para el **uso interno** · 🔴 obligatorio antes del **lanzamiento público** · 🟡 recomendado, puede esperar · 🔵 función futura.
+
+### A. Decisiones principales de la marca
+
+- [ ] `[P]` 🟡 Nombre comercial: "Naturelly" y el lema "Delicias artesanales hechas por Nelly" ya están aprobados por Alonso — validar con Nelly que le gustan. — Respuesta:
+- [ ] `[P]` 🟡 Frase principal del hero (hoy: "De la cocina de Nelly, para compartir"). ¿La aprueba o propone otra? — Respuesta:
+- [ ] `[P]` 🔴 Propuesta de valor: ¿qué hace diferentes sus productos, con sus palabras? (sin exagerar ni inventar) — Respuesta:
+- [ ] `[P]` 🔴 ¿Cómo quiere presentarse Nelly? (¿con su nombre y foto, solo el nombre, o solo la marca?) — Respuesta:
+- [ ] `[P]` 🟡 Público objetivo: ¿a quién le vende hoy y a quién quiere llegar? — Respuesta:
+- [ ] `[P]` 🟡 Tono de comunicación: ¿cercano y casero (como está hoy), más elegante, más juvenil? — Respuesta:
+- [ ] `[P]` 🟠 Productos del arranque interno: confirmar la lista (granola + torta de zanahoria + torta de chocolate + torta de naranja + personalizadas por cotización). — Respuesta:
+- [ ] `[P]` 🟠 Productos que NO quiere vender todavía (para no publicarlos por error). — Respuesta:
+
+### B. Granola artesanal
+
+- [ ] `[P]` 🟠 Nombre definitivo de la granola (los nombres actuales de la web son de prueba). — Respuesta:
+- [ ] `[P]` 🟠 Descripción corta (para la tarjeta) y descripción completa (para su página). — Respuesta:
+- [ ] `[P]` 🟠 Receta e ingredientes exactos, en orden. — Respuesta:
+- [ ] `[P]` 🟠 Alérgenos (frutos secos, gluten, etc.) — se publican dentro de ingredientes/descripción. — Respuesta:
+- [ ] `[P]` 🟠 ¿Con qué se endulza? (la web YA NO afirma "solo miel" hasta que Nelly lo confirme). — Respuesta:
+- [ ] `[P]` 🟠 Presentaciones reales y peso de cada una (¿bolsa? ¿250 g / 500 g u otros?). — Respuesta:
+- [ ] `[P]` 🟠 Precio de cada presentación. — Respuesta:
+- [ ] `[P]` 🟠 Stock inicial de cada presentación (o cuántas puede producir por semana). — Respuesta:
+- [ ] `[P]` 🔴 ¿Cuánto dura la granola desde que se hace? — Respuesta:
+- [ ] `[P]` 🟡 ¿Cómo se conserva? (indicación para el cliente) — Respuesta:
+- [ ] `[P]` 🟠 Disponibilidad: ¿siempre hay, o se hace por tandas/encargo? — Respuesta:
+- [ ] `[P]` 🟡 Tiempo de preparación de una tanda (si es por encargo). — Respuesta:
+- [ ] `[P]` 🟡 ¿Acepta pedidos grandes (p. ej. 10+ bolsas)? ¿Con cuánta anticipación? — Respuesta:
+- [ ] `[P]` 🔵 Información nutricional — SOLO si tiene datos reales; si no, no se publica. — Respuesta:
+- [ ] `[P]` 🟡 Beneficios que SÍ pueden afirmarse sin exagerar (p. ej. "sin conservantes" solo si es verdad). — Respuesta:
+- [ ] `[P]` 🟠 Fotografías: bolsa/empaque, granola servida, detalle de textura (guía en `BRAND_GUIDE.md`). — Respuesta:
+
+### C. Torta de zanahoria (carrot cake)
+
+- [ ] `[P]` 🟠 Tamaños disponibles (diámetro o nombre del molde). — Respuesta:
+- [ ] `[P]` 🟠 Porciones aproximadas por tamaño. — Respuesta:
+- [ ] `[P]` 🟠 Ingredientes (incluye si lleva frutos secos, pasas, etc.). — Respuesta:
+- [ ] `[P]` 🟠 Relleno (¿lleva? ¿de qué?). — Respuesta:
+- [ ] `[P]` 🟠 Cobertura (¿frosting de queso crema u otra?). — Respuesta:
+- [ ] `[P]` 🟡 Decoraciones posibles sin costo extra. — Respuesta:
+- [ ] `[P]` 🟠 Precio por tamaño. — Respuesta:
+- [ ] `[P]` 🟠 Tiempo de anticipación mínimo para pedirla. — Respuesta:
+- [ ] `[P]` 🟡 Conservación (¿refrigerada?) y duración recomendada. — Respuesta:
+- [ ] `[P]` 🟠 Alérgenos. — Respuesta:
+- [ ] `[P]` 🟠 Disponibilidad (¿cualquier día? ¿solo con encargo?). — Respuesta:
+- [ ] `[P]` 🟠 Fotografías: torta entera, porción/corte, detalle de cobertura. — Respuesta:
+
+### D. Torta de chocolate
+
+- [ ] `[P]` 🟠 Tamaños disponibles. — Respuesta:
+- [ ] `[P]` 🟠 Porciones por tamaño. — Respuesta:
+- [ ] `[P]` 🟠 Ingredientes. — Respuesta:
+- [ ] `[P]` 🟠 Relleno (¿fudge, manjar, otro?). — Respuesta:
+- [ ] `[P]` 🟠 Cobertura. — Respuesta:
+- [ ] `[P]` 🟡 Decoraciones posibles sin costo extra. — Respuesta:
+- [ ] `[P]` 🟠 Precio por tamaño. — Respuesta:
+- [ ] `[P]` 🟠 Anticipación mínima. — Respuesta:
+- [ ] `[P]` 🟡 Conservación y duración. — Respuesta:
+- [ ] `[P]` 🟠 Alérgenos. — Respuesta:
+- [ ] `[P]` 🟠 Disponibilidad. — Respuesta:
+- [ ] `[P]` 🟠 Fotografías: entera, porción, detalle. — Respuesta:
+
+### E. Torta de naranja
+
+- [ ] `[P]` 🟠 Tamaños disponibles. — Respuesta:
+- [ ] `[P]` 🟠 Porciones por tamaño. — Respuesta:
+- [ ] `[P]` 🟠 Ingredientes. — Respuesta:
+- [ ] `[P]` 🟠 Relleno (si lleva). — Respuesta:
+- [ ] `[P]` 🟠 Cobertura o glaseado. — Respuesta:
+- [ ] `[P]` 🟡 Decoraciones posibles sin costo extra. — Respuesta:
+- [ ] `[P]` 🟠 Precio por tamaño. — Respuesta:
+- [ ] `[P]` 🟠 Anticipación mínima. — Respuesta:
+- [ ] `[P]` 🟡 Conservación y duración. — Respuesta:
+- [ ] `[P]` 🟠 Alérgenos. — Respuesta:
+- [ ] `[P]` 🟠 Disponibilidad. — Respuesta:
+- [ ] `[P]` 🟠 Fotografías: entera, porción, detalle. — Respuesta:
+
+### F. Tortas personalizadas y fondant
+
+> Ya existe la sección "Tortas personalizadas — Decoraciones sencillas con fondant —
+> Cotizar por WhatsApp" (se publica sola cuando haya WhatsApp real). Sin precio fijo,
+> sin carrito, sin configurador. Estas respuestas afinan el texto y las reglas.
+
+- [ ] `[P]` 🟠 ¿Qué tipo de figuras sencillas puede hacer? (ejemplos concretos: animales, flores, números…) — Respuesta:
+- [ ] `[P]` 🟠 ¿Qué figuras o estilos NO acepta? (para decirlo claro y evitar malentendidos) — Respuesta:
+- [ ] `[P]` 🟠 Nivel máximo de complejidad que se compromete a entregar. — Respuesta:
+- [ ] `[P]` 🟠 Tamaños de torta disponibles para personalizar. — Respuesta:
+- [ ] `[P]` 🟠 Sabores disponibles para la torta base (¿solo los tres o más?). — Respuesta:
+- [ ] `[P]` 🟡 Cantidad máxima de figuras por torta. — Respuesta:
+- [ ] `[P]` 🟡 Colores con los que trabaja normalmente. — Respuesta:
+- [ ] `[P]` 🟡 ¿Escribe textos o nombres en la torta? — Respuesta:
+- [ ] `[P]` 🟡 ¿Acepta fotos de referencia del cliente? ¿Cómo las maneja (parecido aproximado, no copia exacta)? — Respuesta:
+- [ ] `[P]` 🟠 Anticipación mínima para un pedido personalizado. — Respuesta:
+- [ ] `[P]` 🟠 Rango de precios aproximado (desde / hasta) para orientar al cliente. — Respuesta:
+- [ ] `[P]` 🟠 ¿Cómo quiere cotizar? (¿qué datos necesita del cliente para dar precio?) — Respuesta:
+- [ ] `[P]` 🟠 ¿Pide adelanto? ¿De cuánto? — Respuesta:
+- [ ] `[P]` 🔴 Política de cambios (¿hasta cuándo se puede cambiar el diseño?). — Respuesta:
+- [ ] `[P]` 🔴 Política de cancelación (¿se devuelve el adelanto?). — Respuesta:
+- [ ] `[P]` 🟡 Fotografías de trabajos anteriores con fondant (para mostrar el estilo real). — Respuesta:
+
+### G. Operación
+
+- [ ] `[P]` 🟠 Días y horarios de atención (respuesta de pedidos). — Respuesta:
+- [ ] `[P]` 🟠 Días en los que produce (¿hornea todos los días?). — Respuesta:
+- [ ] `[P]` 🟠 ¿Qué productos requieren pedido con anticipación y cuánta? — Respuesta:
+- [ ] `[P]` 🟡 Capacidad máxima semanal (cuántas tortas/tandas puede asumir sin quedar mal). — Respuesta:
+- [ ] `[P]` 🟡 Días no disponibles (descanso, viajes, fechas bloqueadas). — Respuesta:
+- [ ] `[P]` 🟡 ¿Acepta pedidos urgentes (mismo día / día siguiente)? ¿Con recargo? — Respuesta:
+- [ ] `[P]` 🟠 Recojo: ¿hay punto de recojo? ¿Dónde y en qué horarios? — Respuesta:
+- [ ] `[P]` 🟠 Delivery: ¿quién entrega (ella, motorizado, taxi)? — Respuesta:
+- [ ] `[P]` 🟠 Zonas (distritos) donde entrega. — Respuesta:
+- [ ] `[P]` 🟠 Costo de delivery por zona. — Respuesta:
+- [ ] `[P]` 🔴 Responsable de las entregas y qué pasa si el cliente no está. — Respuesta:
+- [ ] `[P]` 🔵 ¿Pedidos fuera de Arequipa? (hoy la web dice que no; confirmar que se queda así). — Respuesta:
+
+### H. Pagos
+
+- [ ] `[P]` 🟠 ¿Acepta Yape? ¿A qué número/nombre? — Respuesta:
+- [ ] `[P]` 🟠 ¿Acepta Plin? — Respuesta:
+- [ ] `[P]` 🟡 ¿Acepta transferencia bancaria? ¿Qué banco(s)? — Respuesta:
+- [ ] `[P]` 🟠 ¿Acepta efectivo contra entrega? — Respuesta:
+- [ ] `[P]` 🟠 ¿Cuándo pide adelanto y cuándo pago total? (sobre todo en tortas) — Respuesta:
+- [ ] `[P]` 🟡 ¿Pide comprobante de pago (captura) antes de preparar? — Respuesta:
+- [ ] `[P]` 🔴 Política de devolución del dinero (¿en qué casos devuelve?). — Respuesta:
+
+### I. WhatsApp y contacto
+
+- [ ] `[P]` 🟠 Número de WhatsApp definitivo del negocio (hoy placeholder; botones verdes deshabilitados). — Respuesta:
+- [ ] `[P]` 🟡 Nombre que se mostrará en WhatsApp (¿"Naturelly", "Nelly — Naturelly"?). — Respuesta:
+- [ ] `[P]` 🟡 ¿Quiere mensaje de bienvenida automático en WhatsApp Business? — Respuesta:
+- [ ] `[P]` 🟡 Horario en el que responde WhatsApp (para la web y manejar expectativas). — Respuesta:
+- [ ] `[P]` 🟡 Instagram del negocio (si existe o si va a crear uno). — Respuesta:
+- [ ] `[P]` 🟡 Facebook (si existe). — Respuesta:
+- [ ] `[P]` 🟡 Correo del negocio. — Respuesta:
+- [ ] `[P]` 🟡 Dirección o punto de recojo — SOLO si desea mostrarlo públicamente. — Respuesta:
+
+### J. Políticas (para publicar en la Etapa 2)
+
+- [ ] `[P]` 🔴 Política de pedidos (mínimos, cómo se confirma, cuándo queda "cerrado"). — Respuesta:
+- [ ] `[P]` 🔴 Política de pagos (adelantos, plazos). — Respuesta:
+- [ ] `[P]` 🔴 Política de cancelaciones (hasta cuándo; qué pasa con el adelanto). — Respuesta:
+- [ ] `[P]` 🔴 Política de cambios en el pedido. — Respuesta:
+- [ ] `[P]` 🔴 Política de entregas (rangos de hora, qué pasa si nadie recibe). — Respuesta:
+- [ ] `[P]` 🔴 Política de personalizados (el diseño aprobado es el que se entrega, parecido razonable). — Respuesta:
+- [ ] `[P]` 🔴 ¿Qué pasa si hay un error en el pedido (de ella o del cliente)? — Respuesta:
+- [ ] `[P]` 🟡 Indicaciones de conservación que el cliente debe seguir. — Respuesta:
+- [ ] `[P]` 🔴 Responsabilidad por alérgenos: texto claro tipo "elaborado en una cocina donde se manipulan frutos secos, gluten…" (confirmar cuáles). — Respuesta:
+- [ ] `[P]` 🟡 Privacidad de datos: los datos del cliente solo se usan para el pedido (la web ya opera así). — Respuesta:
+
+### K. Historia de Nelly y Naturelly
+
+- [ ] `[P]` 🔴 ¿Cómo comenzó todo? — Respuesta:
+- [ ] `[P]` 🔴 ¿Desde cuándo prepara estos productos? — Respuesta:
+- [ ] `[P]` 🟡 ¿Por qué empezó (motivación real)? — Respuesta:
+- [ ] `[P]` 🟡 ¿Quiénes fueron sus primeros clientes? (hoy la web dice que empezó con familiares y amigos — confirmar). — Respuesta:
+- [ ] `[P]` 🔴 ¿Qué hace diferentes sus productos, en sus palabras? — Respuesta:
+- [ ] `[P]` 🟡 ¿Cómo es su proceso artesanal (paso a paso simple)? — Respuesta:
+- [ ] `[P]` 🟡 Un mensaje personal de Nelly para sus clientes (1-3 frases, con su voz). — Respuesta:
+- [ ] `[P]` 🔴 ¿Qué información NO desea publicar? (privacidad primero). — Respuesta:
+
+### L. Recursos visuales
+
+- [ ] `[P]` 🔴 Logo definitivo (hoy: wordmark tipográfico temporal — suficiente para uso interno). — Respuesta:
+- [ ] `[P]` 🟡 Versiones del logo (fondo claro/oscuro, ícono solo). — Respuesta:
+- [ ] `[P]` 🟡 Paleta final: ¿aprueba la actual (crema + amarillo + tinta, "Bright Wellness")? — Respuesta:
+- [ ] `[P]` 🟠 Fotos de cada producto activo (granola y cada torta) — mínimo 1 buena por producto. — Respuesta:
+- [ ] `[P]` 🟡 Fotos de las presentaciones de granola (cada tamaño/empaque). — Respuesta:
+- [ ] `[P]` 🟠 Fotos de tortas completas. — Respuesta:
+- [ ] `[P]` 🟡 Fotos de porciones/cortes. — Respuesta:
+- [ ] `[P]` 🟡 Fotos de trabajos con fondant ya entregados. — Respuesta:
+- [ ] `[P]` 🟡 Foto de Nelly — solo si desea aparecer. — Respuesta:
+- [ ] `[P]` 🔵 Fotos del proceso (manos, horno, cocina). — Respuesta:
+- [ ] `[P]` 🔴 Imagen Open Graph definitiva (hoy temporal). — Respuesta:
+- [ ] `[P]` 🔴 Favicon definitivo derivado del logo. — Respuesta:
+- [ ] `[P]` 🟠 Textos alternativos descriptivos al subir cada foto (el panel los exige; ej. "Torta de zanahoria de 20 cm con frosting"). — Respuesta:
+
+### M. Catálogo y administración
+
+- [ ] `[P]` 🟠 Productos ACTIVOS desde el arranque interno. — Respuesta:
+- [ ] `[P]` 🟠 Variantes de cada producto (presentaciones de granola / tamaños de torta con porciones). — Respuesta:
+- [ ] `[P]` 🟠 Precio de cada variante. — Respuesta:
+- [ ] `[P]` 🟠 Stock inicial (granola = unidades; tortas = cupos, ver Anexo 3). — Respuesta:
+- [ ] `[P]` 🟠 ¿Qué productos son SOLO por encargo? (se indica en su descripción + anticipación). — Respuesta:
+- [ ] `[P]` 🟡 Regla para "agotado temporal": stock en 0 o desactivar la variante. — Respuesta:
+- [ ] `[P]` 🟡 Packs reales que quiera ofrecer (si ninguno, `/packs` queda con su estado vacío — no inventar combos). — Respuesta:
+- [ ] `[P]` 🟠 ¿Quién actualizará el stock/cupos día a día? — Respuesta:
+- [ ] `[P]` 🟠 ¿Quién revisará los pedidos nuevos y cada cuánto? — Respuesta:
+- [ ] `[P]` 🟠 ¿Quién cambiará los estados (confirmado → en preparación → en camino → entregado)? — Respuesta:
+- [ ] `[P]` 🟠 Cuenta administradora definitiva de Nelly (correo real; se promueve a admin; ella define su contraseña). — Respuesta:
+
+### N. Cierre de etapa
+
+- [ ] `[P]` 🟠 Todos los ítems de la **Etapa 1** en verde → empezar el uso interno.
+- [ ] `[P]` 🔴 Todos los ítems de la **Etapa 2** en verde → lanzamiento público.
+- [ ] `[P]` 🔴 Fecha de lanzamiento público acordada con Nelly. — Respuesta:
 
 ---
 
-## Inventario de placeholders (qué, dónde y cómo se reemplaza)
+## Anexo 1 — Inventario de datos placeholder (estado real al 2026-07-04)
 
-| Dato placeholder | Ubicación | Valor actual | Reemplazo | Se cambia desde |
-|---|---|---|---|---|
-| Nombres de productos | Tabla `products` | "Clásica de Miel", "Andina Power", "Cacao & Café" (+ "granola granolera" de prueba) | Nombres reales | **Panel admin** |
-| Precios de variantes | Tabla `product_variants` | S/ 20 / 24 / 36 / 42 | Precios reales | **Panel admin** |
-| Stock | Tabla `product_variants` | 10 por variante (± pruebas) | Stock real | **Panel admin** |
-| Historias de producto | `products.story` | "TODO: confirmar con Nelly la historia real…" | Historias reales | **Panel admin** |
-| Ingredientes/beneficios | `products` | Listas provisionales | Recetas reales (incl. alérgenos) | **Panel admin** |
-| Packs | Tabla `bundles` | "Pack Trío Naturelly" S/ 62 + "Pack de prueba interna EDITADO" (desactivado) | Packs reales | **Panel admin** |
-| Nº de WhatsApp | `NEXT_PUBLIC_WHATSAPP_NUMBER` | `51XXXXXXXXX` (botones deshabilitados con aviso) | Número real | **Render** (env) + `.env.local` |
-| Nº de WhatsApp (copia informativa) | Tabla `site_settings`, clave `whatsapp_number` | `"51XXXXXXXXX"` | Número real | **Supabase** (Table Editor) |
-| Distritos de delivery | `src/lib/constants.ts` → `DELIVERY_DISTRICTS` | Cercado, Hunter, JLByR | Lista confirmada | **Código** (una línea) |
-| Distritos (copia informativa) | `site_settings`, clave `delivery_districts` | Los 3 mismos | Lista confirmada | **Supabase** |
-| Costo de delivery | RPC `create_order` (`delivery_fee = 0`) + `site_settings.delivery_fee_default` | S/ 0 (se coordina por WhatsApp) | Tarifas reales por zona | **Código/migración** cuando existan tarifas |
-| Textos de FAQ | `src/app/(marca)/faq/page.tsx` | 5 preguntas con datos por confirmar (zonas, pagos, duración) | Respuestas reales | **Código** (gestionable en Fase 2) |
-| Historia de Nelly | `src/app/(marca)/nosotros/page.tsx` | "Muy pronto te contaremos aquí la historia completa…" | Historia real | **Código** |
-| Imagen OG | `src/app/opengraph-image.tsx` | Wordmark temporal (TODO) | Diseño con logo final | **Código** |
-| Favicon | `src/app/icon.svg` | Bowl genérico | Ícono del logo | **Código** |
-| Dominio | `NEXT_PUBLIC_SITE_URL` + Supabase/Google config + `TECH_STACK.md` | naturelly.onrender.com | Dominio propio | **Render + Supabase + Google + docs** |
-| Pedidos de prueba | Tabla `orders` | `NAT-5XFK`, `NAT-W3KE`, `NAT-YQFC`, `NAT-GU8G`, `NAT-PPJ5`, `NAT-VUKV`, etc. | No se borran (regla); quedan como histórico | — |
-| Seed de desarrollo | `supabase/seed.sql` | Datos provisionales | Solo afecta entornos nuevos de dev; no tocar producción | — |
+Todos los productos y packs actuales son **datos de prueba**. Nada se borra (los
+pedidos históricos los referencian): se **desactiva** desde el panel. **Preferencia
+acordada: crear productos NUEVOS para el catálogo real** (evita confusión con los
+snapshots históricos); reutilizar un registro solo si es seguro y no confunde.
 
----
+| Elemento | Estado | Pedidos históricos | Qué hacer |
+|---|---|---|---|
+| "Clásica de Miel" (`clasica-de-miel`) | **Activo** (placeholder) | Sí (7 ítems) | Desactivar cuando la granola real esté activa. |
+| "Cholo Power" (`andina-power`, renombrado en pruebas) | **Activo** (placeholder) | Sí (5 ítems) | Desactivar cuando existan productos reales. |
+| "Cacao & Café" (`cacao-cafe`) | **Activo** (placeholder) | Sí (2 ítems) | Desactivar cuando existan productos reales. |
+| "Granola granolera" (`granola-granolera`, prueba interna) | **Desactivado** (2026-07-04, sin pedidos) | No | Dejar desactivado. |
+| "Pack Trío Naturelly" (`pack-trio-naturelly`) | **Activo** (placeholder) | Sí (1 ítem) | Desactivar antes del uso interno (promete "tres granolas" inexistentes); `/packs` mostrará su estado vacío. |
+| "Pack de prueba interna EDITADO" | Desactivado | Sí (1 ítem) | Dejar como histórico. |
+| "Pack duo" (`pack-duo`, prueba interna) | **Desactivado** (2026-07-04, sin pedidos) | No | Dejar desactivado. |
+| Pedidos `NAT-*` de prueba | En BD | — | Quedan como histórico (los pedidos jamás se borran). |
+| Nº WhatsApp | Placeholder `51XXXXXXXXX` | — | Cargar en Render + `.env.local` + `site_settings.whatsapp_number` (Etapa 1). |
+| Distritos delivery | 3 de ejemplo en `src/lib/constants.ts` | — | Reemplazar con la lista real (G) + `site_settings.delivery_districts`. |
+| Costo de delivery | S/ 0 (se coordina por WhatsApp) | — | Cobrarlo online requiere cambio futuro en `create_order` (no bloquea). |
+| FAQ | 6 preguntas, algunas con `TODO` | — | Completar con G, H y J. |
+| Historia en `/nosotros` | Párrafo "muy pronto…" | — | Reemplazar con K (Etapa 2; para uso interno basta lo actual). |
+| Imagen OG / favicon | Temporales | — | Reemplazar con el logo real (Etapa 2). |
+| Seed `supabase/seed.sql` | Datos provisionales | — | Solo entornos de desarrollo nuevos; no tocar producción. |
 
-## D. Configuración recomendada antes del lanzamiento público ⚙️
+## Anexo 2 — SMTP propio + plantilla de confirmación (Etapa 2 — NO bloquea el uso interno)
 
-**Ya configurado y validado en producción** (no pendiente): variables de Supabase, `NEXT_PUBLIC_SITE_URL`, y **Google OAuth activo** (`NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=true` en Render — cuenta admin entra a `/admin`, cuenta customer ve "Acceso denegado", cierre de sesión OK). La **recuperación de contraseña también está validada en producción** con el servicio de correo predeterminado de Supabase.
+Para el **uso interno**, el correo predeterminado de Supabase alcanza: pocos
+registros por día, y la web ya maneja bien el caso del enlace consumido (mensaje
+claro en `/login` + botón "Reenviar correo de confirmación" con cooldown). Límite a
+tener en cuenta: ~2-4 correos de auth por hora.
 
-Pendientes y recomendaciones:
+Antes del **lanzamiento público** es obligatorio:
 
-- [ ] **WhatsApp real**: `NEXT_PUBLIC_WHATSAPP_NUMBER` sigue placeholder en Render y `.env.local` hasta tener el número de Nelly — es lo único que mantiene deshabilitados los botones verdes.
-- [ ] **Usuario admin definitivo de Nelly**: crear con su correo real, promover a admin, y que ella defina su contraseña vía `/recuperar` o `/admin/cuenta`. Retirar accesos de prueba.
-- [ ] **SMTP propio + plantilla de confirmación (OBLIGATORIO antes del lanzamiento público)**. El correo predeterminado de Supabase funciona para pruebas, pero (a) tiene límites de envío por hora y (b) **no permite editar las plantillas de correo** ("Set up custom SMTP to edit templates"). Hoy la confirmación de registro usa la plantilla por defecto (`{{ .ConfirmationURL }}`), cuyo enlace de un solo uso puede ser consumido por el prefetch del cliente de correo (comprobado en pruebas: la cuenta se confirma igual y el usuario puede iniciar sesión, y `/login` ya muestra un mensaje claro con opción de reenvío, pero el clic del usuario termina en "enlace vencido"). Pasos obligatorios, en orden:
-  1. Configurar **SMTP propio** (Resend o SES, ya contemplado en `TECH_STACK.md`) en Supabase → Authentication → SMTP.
-  2. **Verificar el dominio de envío** en el proveedor elegido (SPF/DKIM) para que los correos no caigan a spam.
-  3. Reemplazar la plantilla **Confirm signup** (Authentication → Emails) por la versión con `TokenHash`, compatible con el flujo SSR (`/auth/callback` ya soporta `token_hash` + `type` con `verifyOtp`):
-     ```html
-     <h2>Confirma tu correo</h2>
-     <p>¡Hola! Gracias por crear tu cuenta en Naturelly.</p>
-     <p>Para terminar, confirma tu correo con este enlace:</p>
-     <p><a href="{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=email">Confirmar mi correo</a></p>
-     <p>Si tú no creaste esta cuenta, puedes ignorar este mensaje.</p>
-     ```
-     Se usa `{{ .RedirectTo }}` (no `{{ .SiteURL }}`) para que el enlace conserve el origen desde el que se registró el usuario (local o producción); es seguro porque el código siempre envía `emailRedirectTo` con `?next=`.
-  4. **Volver a validar con un correo externo real** (Gmail u otro): confirmación de registro (debe terminar en `/cuenta` con sesión) y recuperación de contraseña.
-- [ ] **Plan de hosting (recomendación)**: el plan gratuito de Render duerme el servicio tras inactividad (arranques fríos de ~30–60 s); evaluar plan de pago o keep-alive. Revisar también la política de backups del plan de Supabase antes de operar con volumen real.
-- [ ] **Dominio propio (recomendación)**: al decidirlo, actualizar `NEXT_PUBLIC_SITE_URL` en Render, Site URL/Redirect URLs en Supabase, orígenes y redirect del OAuth de Google, y `TECH_STACK.md`.
-- [ ] **Google Search Console (recomendación)**: verificar propiedad y enviar `sitemap.xml`.
-- [ ] **Sesión de carga con Nelly**: recopilar la sección B y cargar el catálogo real desde el panel — sirve además como la "prueba de punta a punta con Nelly" pendiente en `TODO.md`, y de paso se renombra o reutiliza el pack de prueba.
+1. Configurar **SMTP propio** (Resend o SES, ya contemplado en `TECH_STACK.md`) en Supabase → Authentication → SMTP.
+2. **Verificar el dominio de envío** (SPF/DKIM) para que los correos no caigan a spam.
+3. Reemplazar la plantilla **Confirm signup** (Authentication → Emails) por la versión con `TokenHash`, compatible con el flujo SSR (`/auth/callback` ya soporta `token_hash` + `type` con `verifyOtp`):
+   ```html
+   <h2>Confirma tu correo</h2>
+   <p>¡Hola! Gracias por crear tu cuenta en Naturelly.</p>
+   <p>Para terminar, confirma tu correo con este enlace:</p>
+   <p><a href="{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=email">Confirmar mi correo</a></p>
+   <p>Si tú no creaste esta cuenta, puedes ignorar este mensaje.</p>
+   ```
+   Se usa `{{ .RedirectTo }}` (no `{{ .SiteURL }}`) para que el enlace conserve el origen desde el que se registró el usuario; es seguro porque el código siempre envía `emailRedirectTo` con `?next=`.
+4. **Revalidar con un correo externo real**: confirmación de registro (debe terminar en `/cuenta` con sesión) y recuperación de contraseña.
 
-## E. Funciones post-lanzamiento 🔜
+## Anexo 3 — Cómo se representa el catálogo real (decisiones cerradas)
 
-Por fase (ver `ROADMAP.md`); ninguna bloquea el lanzamiento:
+- **Categorías**: `granola`, `torta`, `personalizado` (migración `20260704120000`, pendiente de aplicar). Las categorías antiguas quedan solo para los placeholders.
+- **Granola** → producto con variantes por presentación; `weight_grams` con el peso real; `stock` = unidades disponibles.
+- **Tortas** → un producto por torta, variantes por tamaño en `size_label` ("Pequeña — 8 porciones", "Mediana — 12 porciones", "Grande — 20 porciones"); `weight_grams` vacío (NULL); **`stock` = cupos de producción**: `5` significa "Nelly acepta hasta 5 pedidos de esta torta por ahora", `0` significa "no acepto más por el momento". Ella lo ajusta desde el panel; el checkout valida y la cancelación repone el cupo igual que siempre. **Sin calendarios ni reservas.**
+- **Tortas personalizadas** → NO son un producto comprable. Ya existe la sección informativa (`CustomCakesSection` en `/tienda`): decoración sencilla con fondant, diseños sujetos a evaluación, coordinación de tamaño/sabor/decoración y botón "Cotizar por WhatsApp". **Se publica sola cuando `NEXT_PUBLIC_WHATSAPP_NUMBER` deje de ser placeholder**; sin precio, sin carrito, sin configurador. No se agregó columna `quote_only`: no hace falta porque no participa del catálogo comprable.
+- **`/packs`**: técnicamente disponible con estado vacío correcto; fuera de protagonismo hasta que Nelly defina promociones reales. No inventar combos.
+- **`/recetas`**: existe pero fuera de la navegación principal (Fase 2).
 
-- **Fase 2:** blog/recetas gestionables, FAQ y contacto administrables, página de ingredientes, SEO fino (datos estructurados de producto), analytics, testimonios.
-- **Fase 3:** pagos online (Culqi vs Mercado Pago, Yape/Plin), correos transaccionales, páginas legales (T&C, privacidad, libro de reclamaciones — requisito legal para cobrar online en Perú).
-- **Fase 4:** cupones, reseñas verificadas, suscripción mensual, canal mayorista, notificaciones por WhatsApp Business API.
-- **Mejoras técnicas opcionales:** rate limiting en `/api/pedidos` (mencionado en `ARCHITECTURE.md`), migraciones para columnas hoy inexistentes (alérgenos en productos; `compare_at_price`/`badge`/orden de ítems en packs), imagen OG definitiva, monitoreo de errores.
+## Anexo 4 — Migración `20260704120000_real_categories.sql` (creada; PENDIENTE de aprobación para `db push`)
+
+Estado: archivo creado en `supabase/migrations/`, **dry-run limpio** (solo esa
+migración saldría), `DATABASE_SCHEMA.md` ya actualizado, código del panel y tipos ya
+adaptados. **No se aplica sin aprobación expresa de Alonso.**
+
+```sql
+alter table public.products drop constraint products_category_check;
+alter table public.products add constraint products_category_check
+  check (category in ('granola', 'torta', 'personalizado',
+                      'clasica', 'andina', 'chocolate', 'especial'));
+alter table public.product_variants alter column weight_grams drop not null;
+```
+
+- **No toca datos**: conserva productos, variantes, precios, stock, pedidos e `order_items`; solo amplía el CHECK y relaja un NOT NULL.
+- **Rollback** (solo posible si aún no hay filas con categorías nuevas ni `weight_grams` NULL):
+  ```sql
+  alter table public.products drop constraint products_category_check;
+  alter table public.products add constraint products_category_check
+    check (category in ('clasica', 'andina', 'chocolate', 'especial'));
+  alter table public.product_variants alter column weight_grams set not null;
+  ```
+- Tras aplicar: regenerar `src/types/database.ts` (`supabase gen types typescript --linked`). El panel ya ofrece las categorías nuevas y el peso opcional — **no crear productos con categoría nueva o sin peso ANTES de aplicar la migración** (la BD los rechazaría).
+
+## Anexo 5 — Recomendaciones que no bloquean ninguna etapa
+
+- 🟡 **Plan de hosting**: el plan gratuito de Render duerme el servicio tras inactividad (arranques fríos de ~30–60 s); molesto incluso en uso interno — evaluar plan de pago o keep-alive.
+- 🔵 **Fase 2**: blog/recetas gestionables, FAQ administrable, datos estructurados de producto, analytics, testimonios.
+- 🔵 **Fase 3**: pagos online (Culqi vs Mercado Pago, Yape/Plin), correos transaccionales, páginas legales (T&C, privacidad, libro de reclamaciones — requisito legal para cobrar online en Perú).
+- 🔵 **Mejoras opcionales**: rate limiting en `/api/pedidos`, columna de alérgenos, `compare_at_price`/`badge`/orden en packs, modo "por encargo" sin stock, monitoreo de errores.

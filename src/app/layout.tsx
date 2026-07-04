@@ -19,13 +19,17 @@ const karla = Karla({
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://naturelly.onrender.com";
 
+// "carrot cake" se menciona solo como término secundario de búsqueda; el
+// nombre visible del producto es "Torta de zanahoria".
 const SITE_DESCRIPTION =
-  "Granola artesanal con superalimentos andinos, tostada a mano en tandas pequeñas y endulzada solo con miel de abeja. De la cocina de Nelly a tu mesa.";
+  "Delicias artesanales hechas por Nelly en Arequipa, Perú: granola artesanal, torta de zanahoria (carrot cake), torta de chocolate, torta de naranja y tortas personalizadas. Pide por la web y coordina por WhatsApp.";
+
+const SITE_TITLE = "Naturelly — Delicias artesanales hechas por Nelly";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Naturelly — Granola artesanal de Arequipa",
+    default: SITE_TITLE,
     template: "%s · Naturelly",
   },
   description: SITE_DESCRIPTION,
@@ -35,12 +39,12 @@ export const metadata: Metadata = {
     locale: "es_PE",
     url: SITE_URL,
     siteName: "Naturelly",
-    title: "Naturelly — Granola artesanal de Arequipa",
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Naturelly — Granola artesanal de Arequipa",
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },
 };

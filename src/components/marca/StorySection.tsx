@@ -4,18 +4,18 @@ import { ArrowRight } from "lucide-react";
 const PILLARS = [
   {
     accent: "bg-miel",
-    title: "Miel como único endulzante",
-    description: "Nada de azúcar refinada ni jarabes: dulzor de verdad.",
+    title: "Hecho a mano",
+    description: "Cada delicia sale de la cocina de Nelly, no de una fábrica.",
   },
   {
     accent: "bg-salvia",
-    title: "Del origen, no del catálogo",
-    description: "Quinua, kiwicha y aguaymanto comprados frescos, de la tierra.",
+    title: "Recetas que ya conquistaron",
+    description: "Las mismas que su familia y amigos piden una y otra vez.",
   },
   {
     accent: "bg-amarillo",
-    title: "Tandas pequeñas",
-    description: "Cada lote sale tostadito, crocante y con nombre propio.",
+    title: "En tandas pequeñas",
+    description: "Sin producción en masa: lo justo para que llegue fresco.",
   },
 ];
 
@@ -28,17 +28,15 @@ export default function StorySection() {
     <section className="bg-blush">
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 pb-12 pt-16 text-center sm:px-6">
         <p className="text-sm font-bold uppercase tracking-[0.2em] text-miel-oscura">
-          Del Perú para el mundo
+          Hecho en Arequipa
         </p>
         <p className="font-display text-3xl font-semibold leading-snug text-tinta sm:text-4xl">
-          Mientras otras marcas presumen{" "}
-          <em className="italic text-cacao">granos ancestrales</em>, nosotros
-          venimos de la tierra donde{" "}
-          <em className="italic text-salvia-oscura">nacieron esos granos</em>.
+          Nada sale de esta cocina sin haber pasado por{" "}
+          <em className="italic text-salvia-oscura">las manos de Nelly</em>.
         </p>
         <p className="max-w-xl text-lg text-cacao">
-          Cada lote se tuesta a mano en la cocina de Nelly, en Arequipa: de su
-          cocina a tu mesa.
+          Sus delicias empezaron conquistando a familiares y amigos. Ahora
+          también puedes pedirlas tú.
         </p>
       </div>
 

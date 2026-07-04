@@ -1,10 +1,19 @@
 import type { OrderStatus, ProductCategory } from "@/types";
 
+/**
+ * Categorías del selector del admin y del filtro de tienda. Las tres
+ * primeras son las reales del negocio (requieren la migración
+ * 20260704120000 aplicada); las marcadas "(antiguo)" existen solo porque
+ * los productos placeholder las usan — no elegirlas para productos nuevos.
+ */
 export const CATEGORIES: { value: ProductCategory; label: string }[] = [
-  { value: "clasica", label: "Clásicas" },
-  { value: "andina", label: "Andinas" },
-  { value: "chocolate", label: "Chocolate" },
-  { value: "especial", label: "Especiales" },
+  { value: "granola", label: "Granola" },
+  { value: "torta", label: "Tortas" },
+  { value: "personalizado", label: "Personalizados" },
+  { value: "clasica", label: "Clásicas (antiguo)" },
+  { value: "andina", label: "Andinas (antiguo)" },
+  { value: "chocolate", label: "Chocolate (antiguo)" },
+  { value: "especial", label: "Especiales (antiguo)" },
 ];
 
 /**
@@ -23,6 +32,27 @@ export const FLAVOR_ACCENTS: Record<
     gradientClass: string;
   }
 > = {
+  granola: {
+    primary: "#E6A12D",
+    secondary: "#FEDB5F",
+    archClass: "bg-amarillo/70",
+    badgeClass: "bg-miel text-tinta",
+    gradientClass: "from-amarillo to-miel",
+  },
+  torta: {
+    primary: "#E9B6D0",
+    secondary: "#FEDB5F",
+    archClass: "bg-berry/50",
+    badgeClass: "bg-berry text-tinta",
+    gradientClass: "from-berry to-amarillo",
+  },
+  personalizado: {
+    primary: "#E8C7F0",
+    secondary: "#E6A12D",
+    archClass: "bg-lavanda/50",
+    badgeClass: "bg-lavanda text-tinta",
+    gradientClass: "from-lavanda to-berry",
+  },
   clasica: {
     primary: "#E6A12D",
     secondary: "#FEDB5F",
@@ -124,13 +154,17 @@ export const PRODUCT_BADGE_LABELS: Record<string, string> = {
   edicion_limitada: "Edición limitada",
 };
 
-/** Ingredientes andinos documentados en PROJECT_BRIEF.md (cinta marquee). */
+/**
+ * Cinta marquee: productos y valores REALES del negocio (granola de receta
+ * única + tortas confirmadas por Alonso el 2026-07-04). No listar
+ * ingredientes ni sabores sin confirmar con Nelly. Nombres en español.
+ */
 export const MARQUEE_INGREDIENTS = [
-  "Quinua",
-  "Kiwicha",
-  "Aguaymanto",
-  "Cacao",
-  "Miel de abeja",
-  "Tostada a mano",
-  "Tandas pequeñas",
+  "Granola artesanal",
+  "Torta de zanahoria",
+  "Torta de chocolate",
+  "Torta de naranja",
+  "Pedidos personalizados",
+  "Hecho a mano",
+  "Arequipa · Perú",
 ];

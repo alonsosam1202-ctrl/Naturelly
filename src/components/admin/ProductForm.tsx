@@ -23,7 +23,7 @@ type ProductFormProps = {
 
 const EMPTY_VARIANT = {
   size_label: "",
-  weight_grams: 250,
+  weight_grams: null,
   price: 0,
   compare_at_price: null,
   stock: 0,
@@ -54,7 +54,7 @@ export default function ProductForm({ initial }: ProductFormProps) {
     defaultValues: initial ?? {
       name: "",
       slug: "",
-      category: "clasica",
+      category: "granola",
       badge: "",
       tagline: "",
       description: "",
@@ -234,18 +234,20 @@ export default function ProductForm({ initial }: ProductFormProps) {
               <div className="grid gap-4 sm:grid-cols-2">
                 <Input
                   label="Presentación"
-                  placeholder="Ej. 250 g"
+                  placeholder="Ej. 250 g · Mediana — 12 porciones"
                   error={variantErrors?.size_label?.message}
                   {...register(`variants.${index}.size_label`)}
                 />
                 <Input
-                  label="Peso en gramos"
+                  label="Peso en gramos (opcional)"
                   type="number"
                   inputMode="numeric"
                   min={1}
+                  hint="Déjalo vacío si se vende por tamaño o porciones (tortas)"
                   error={variantErrors?.weight_grams?.message}
                   {...register(`variants.${index}.weight_grams`, {
-                    valueAsNumber: true,
+                    setValueAs: (value) =>
+                      value === "" || value === null ? null : Number(value),
                   })}
                 />
                 <Input

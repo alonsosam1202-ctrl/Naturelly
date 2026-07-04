@@ -20,8 +20,8 @@ export default function Footer() {
         <div className="flex flex-col gap-3">
           <p className="font-display text-2xl font-semibold">Naturelly</p>
           <p className="max-w-xs">
-            Granola artesanal con superalimentos andinos, tostada a mano en
-            tandas pequeñas y endulzada solo con miel de abeja.
+            Delicias artesanales hechas por Nelly en Arequipa, Perú: granola,
+            tortas caseras y pedidos personalizados.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-tinta/15 px-4 py-5 text-center text-sm">
-        © {year} Naturelly. Hecho con miel en Arequipa, Perú.
+        © {year} Naturelly. Hecho a mano en Arequipa, Perú.
       </div>
     </footer>
   );

@@ -9,7 +9,7 @@ export default function NotFound() {
         Esta página se la comieron
       </h1>
       <p className="text-cacao">
-        No encontramos lo que buscabas, pero la granola sigue ahí.
+        No encontramos lo que buscabas, pero la cocina sigue abierta.
       </p>
       <ButtonLink href="/">Volver al inicio</ButtonLink>
     </div>

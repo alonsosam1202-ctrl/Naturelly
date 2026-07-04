@@ -1,14 +1,26 @@
 // Tipos de dominio. Los tipos generados desde Supabase (database.ts) se
 // crearán con `supabase gen types typescript` cuando el proyecto exista.
 
-export type ProductCategory = "clasica" | "andina" | "chocolate" | "especial";
+// 'granola' | 'torta' | 'personalizado' son las categorías reales del
+// negocio (migración 20260704120000, pendiente de aplicar); las cuatro
+// restantes son legado de los productos placeholder y se conservan porque
+// los registros existentes las usan.
+export type ProductCategory =
+  | "granola"
+  | "torta"
+  | "personalizado"
+  | "clasica"
+  | "andina"
+  | "chocolate"
+  | "especial";
 
 export type ProductBadge = "nuevo" | "mas_vendido" | "edicion_limitada";
 
 export interface ProductVariant {
   id: string;
   size_label: string;
-  weight_grams: number;
+  // null = presentación por tamaño/porciones (tortas), no por peso
+  weight_grams: number | null;
   price: number;
   compare_at_price: number | null;
   stock: number;

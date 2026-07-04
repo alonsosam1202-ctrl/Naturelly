@@ -37,7 +37,7 @@ export default async function PedidoConfirmadoPage({
           y lo resolvemos al toque.
         </p>
         <div className="mt-8 flex justify-center gap-3">
-          <ButtonLink href="/tienda">Ver granolas</ButtonLink>
+          <ButtonLink href="/tienda">Ver la tienda</ButtonLink>
           <ButtonLink href="/contacto" variant="secondary">
             Contacto
           </ButtonLink>

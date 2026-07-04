@@ -6,7 +6,7 @@ import { ButtonLink } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: "Preguntas frecuentes",
   description:
-    "Resolvemos tus dudas sobre pedidos, delivery y nuestra granola artesanal.",
+    "Resolvemos tus dudas sobre pedidos, delivery, tortas personalizadas y nuestras delicias artesanales.",
 };
 
 // Contenido fijo en el MVP; en Fase 2 se gestiona desde el admin.
@@ -27,9 +27,14 @@ const FAQS = [
       "El pago se coordina por WhatsApp al confirmar tu pedido. Muy pronto podrás pagar directamente desde la web.",
   },
   {
-    question: "¿La granola tiene azúcar añadida?",
+    question: "¿Hacen tortas personalizadas?",
     answer:
-      "No. Usamos miel de abeja como único endulzante, sobre avena y superalimentos andinos tostados a mano.",
+      "Sí. Nelly prepara tortas con decoraciones sencillas en fondant. Cuéntanos tu idea por WhatsApp y te cotizamos según el tamaño y el diseño.", // TODO: confirmar con Nelly límites de personalización, anticipación y rangos de precio
+  },
+  {
+    question: "¿Qué lleva la granola?",
+    answer:
+      "Los ingredientes completos de cada producto están en su propia página, dentro de la tienda.",
   },
   {
     question: "¿Hacen envíos fuera de Arequipa?",
