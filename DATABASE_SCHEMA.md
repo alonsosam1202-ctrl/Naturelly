@@ -61,7 +61,7 @@ Cada producto se vende en presentaciones distintas. **El precio vive aquí, no e
 |---|---|---|
 | `id` | `uuid` PK | |
 | `product_id` | `uuid` FK → products | `on delete cascade` |
-| `size_label` | `text` | Texto libre: `'250 g'`, `'500 g'`, `'Mediana — 8-10 porciones'`, `'Grande — 14-16 porciones'`, `'Unidad'`, `'Docena'` |
+| `size_label` | `text` | Texto libre: `'250 g'`, `'500 g'`, `'Mediana — 22 porciones'`, `'Grande — 26 porciones'` (los 2 moldes fijos de Nelly, confirmados 2026-07-07), `'Unidad'`, `'Docena'` |
 | `weight_grams` | `int` NULL | Peso en gramos para granola; `NULL` cuando la presentación se describe por tamaño/porciones (tortas). Nullable desde la migración `20260704120000` |
 | `price` | `numeric(10,2)` NULL | en soles (S/). `NULL` = **precio pendiente de definir**: la variante NO puede activarse sin precio (regla del panel + validación Zod en servidor); como `create_order` solo vende variantes activas, un precio NULL jamás llega al checkout. Nullable desde la migración `20260707090000` |
 | `compare_at_price` | `numeric(10,2)` NULL | precio tachado para ofertas |

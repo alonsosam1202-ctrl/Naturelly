@@ -281,7 +281,7 @@ export default function ProductForm({ initial }: ProductFormProps) {
               <div className="grid gap-4 sm:grid-cols-2">
                 <Input
                   label="Presentación"
-                  placeholder="Ej. 250 g · Mediana — 12 porciones"
+                  placeholder="Ej. 250 g · Mediana — 22 porciones"
                   error={variantErrors?.size_label?.message}
                   {...register(`variants.${index}.size_label`)}
                 />

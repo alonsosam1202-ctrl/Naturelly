@@ -16,7 +16,7 @@ export const variantSchema = z.object({
     .min(1, "Indica la presentación (ej. 250 g)")
     .max(40, "Muy largo"),
   // NULL cuando la presentación se describe por tamaño o porciones (tortas:
-  // "Mediana — 12 porciones"). Requiere la migración 20260704120000 en BD.
+  // "Mediana — 22 porciones"). Requiere la migración 20260704120000 en BD.
   weight_grams: z
     .number({ invalid_type_error: "Ingresa el peso en gramos" })
     .int("Solo números enteros")
