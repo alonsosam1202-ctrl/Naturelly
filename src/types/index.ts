@@ -1,13 +1,15 @@
 // Tipos de dominio. Los tipos generados desde Supabase (database.ts) se
 // crearán con `supabase gen types typescript` cuando el proyecto exista.
 
-// 'granola' | 'torta' | 'personalizado' son las categorías reales del
-// negocio (migración 20260704120000, pendiente de aplicar); las cuatro
-// restantes son legado de los productos placeholder y se conservan porque
-// los registros existentes las usan.
+// Categorías reales del negocio (migraciones 20260704120000 y
+// 20260707090000); las cuatro últimas son legado de los productos
+// placeholder y se conservan porque los registros existentes las usan.
 export type ProductCategory =
   | "granola"
   | "torta"
+  | "postre"
+  | "salado"
+  | "cupcake"
   | "personalizado"
   | "clasica"
   | "andina"
@@ -44,6 +46,10 @@ export interface CatalogProduct {
   story: string;
   ingredients: string[];
   benefits: string[];
+  /** Alérgenos declarados (se muestran en la página del producto). */
+  allergens: string[];
+  /** true = solo por cotización: sin variantes ni compra, CTA a WhatsApp. */
+  is_quote_only: boolean;
   category: ProductCategory;
   badge: ProductBadge | null;
   sort_order: number;

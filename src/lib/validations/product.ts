@@ -23,10 +23,14 @@ export const variantSchema = z.object({
     .min(1, "El peso debe ser mayor a 0")
     .max(100000, "Peso demasiado grande")
     .nullable(),
+  // NULL = precio pendiente de definir. Regla dura (ver superRefine): una
+  // variante sin precio NO puede estar activa — así el catálogo público y
+  // create_order jamás ven precios pendientes.
   price: z
     .number({ invalid_type_error: "Ingresa el precio" })
     .min(0, "El precio no puede ser negativo")
-    .max(99999, "Precio demasiado alto"),
+    .max(99999, "Precio demasiado alto")
+    .nullable(),
   compare_at_price: z
     .number({ invalid_type_error: "Ingresa un número" })
     .min(0, "No puede ser negativo")
@@ -65,11 +69,25 @@ export const productFormSchema = z
       ),
     category: z.enum(
       // Reales primero; las cuatro últimas son legado de placeholders
-      ["granola", "torta", "personalizado", "clasica", "andina", "chocolate", "especial"],
+      [
+        "granola",
+        "torta",
+        "postre",
+        "salado",
+        "cupcake",
+        "personalizado",
+        "clasica",
+        "andina",
+        "chocolate",
+        "especial",
+      ],
       {
         errorMap: () => ({ message: "Elige una categoría" }),
       }
     ),
+    // Solo por cotización: sin presentaciones ni precio; la página del
+    // producto muestra "Cotizar por WhatsApp" en vez del panel de compra
+    is_quote_only: z.boolean(),
     // "" = sin etiqueta (la action lo convierte a null en BD)
     badge: z.enum(["", "nuevo", "mas_vendido", "edicion_limitada"]),
     tagline: z.string().trim().max(120, "Muy largo").optional().or(z.literal("")),
@@ -92,10 +110,46 @@ export const productFormSchema = z
       .max(1500, "Muy largo")
       .optional()
       .or(z.literal("")),
+    allergensText: z
+      .string()
+      .trim()
+      .max(1500, "Muy largo")
+      .optional()
+      .or(z.literal("")),
     is_active: z.boolean(),
-    variants: z.array(variantSchema).min(1, "Agrega al menos una presentación"),
+    // min(1) se valida en superRefine porque los solo-cotización llevan 0
+    variants: z.array(variantSchema),
   })
   .superRefine((data, ctx) => {
+    // Los solo-cotización no llevan presentaciones; el resto necesita 1+
+    if (data.is_quote_only && data.variants.length > 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["variants"],
+        message:
+          "Un producto solo por cotización no lleva presentaciones ni precio: quita las presentaciones o desmarca la opción.",
+      });
+    }
+    if (!data.is_quote_only && data.variants.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["variants"],
+        message: "Agrega al menos una presentación",
+      });
+    }
+
+    // Una presentación ACTIVA necesita precio definido (NULL = pendiente)
+    data.variants.forEach((variant, index) => {
+      if (variant.is_active && variant.price === null) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["variants", index, "price"],
+          message:
+            "Esta presentación no tiene precio todavía. Ponle precio o desactívala.",
+        });
+      }
+    });
+
     // SKUs repetidos dentro del mismo formulario
     const seen = new Set<string>();
     data.variants.forEach((variant, index) => {
@@ -111,8 +165,12 @@ export const productFormSchema = z
     });
 
     // Comportamiento documentado: un producto ACTIVO necesita al menos una
-    // presentación activa (si no, quedaría comprable pero sin opciones).
-    if (data.is_active && !data.variants.some((v) => v.is_active)) {
+    // presentación activa — salvo los solo-cotización, que no llevan.
+    if (
+      data.is_active &&
+      !data.is_quote_only &&
+      !data.variants.some((v) => v.is_active)
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["variants"],

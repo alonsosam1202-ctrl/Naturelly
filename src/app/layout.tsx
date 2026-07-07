@@ -22,7 +22,7 @@ const SITE_URL =
 // "carrot cake" se menciona solo como término secundario de búsqueda; el
 // nombre visible del producto es "Torta de zanahoria".
 const SITE_DESCRIPTION =
-  "Delicias artesanales hechas por Nelly en Arequipa, Perú: granola artesanal, torta de zanahoria (carrot cake), torta de chocolate, torta de naranja y tortas personalizadas. Pide por la web y coordina por WhatsApp.";
+  "Delicias artesanales hechas por Nelly en Arequipa, Perú: granola artesanal, torta de zanahoria (carrot cake), torta de chocolate, postres, cupcakes y tortas personalizadas. Pide por la web y coordina por WhatsApp.";
 
 const SITE_TITLE = "Naturelly — Delicias artesanales hechas por Nelly";
 

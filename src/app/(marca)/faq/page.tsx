@@ -19,12 +19,17 @@ const FAQS = [
   {
     question: "¿Dónde hacen delivery?",
     answer:
-      "Por ahora entregamos en Arequipa. Los distritos disponibles y el costo se confirman por WhatsApp al coordinar tu pedido.", // TODO: confirmar con Nelly distritos y tarifas
+      "Entregamos en toda Arequipa, en todos los distritos. El envío va por delivery externo (InDriver u otro similar) y su costo se coordina por WhatsApp al confirmar tu pedido; también puedes optar por recojo.",
   },
   {
     question: "¿Cómo pago?",
     answer:
-      "El pago se coordina por WhatsApp al confirmar tu pedido. Muy pronto podrás pagar directamente desde la web.",
+      "Por Yape, coordinado por WhatsApp al confirmar tu pedido: ahí te pasamos los datos. Muy pronto podrás pagar directamente desde la web.",
+  },
+  {
+    question: "¿Cuál es el horario de atención?",
+    answer:
+      "Atendemos pedidos de lunes a sábado, de 10 de la mañana a 7 de la noche. Las tortas y postres se preparan por encargo y se entregan al día siguiente de confirmar el pedido.",
   },
   {
     question: "¿Hacen tortas personalizadas?",

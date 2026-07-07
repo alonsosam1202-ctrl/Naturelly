@@ -20,6 +20,11 @@ function createPublicClient() {
   });
 }
 
+/** Variante tal como llega de la BD: el precio puede ser NULL (pendiente). */
+type VariantRow = Omit<CatalogProduct["variants"][number], "price"> & {
+  price: number | null;
+};
+
 interface ProductRow {
   id: string;
   slug: string;
@@ -29,10 +34,12 @@ interface ProductRow {
   story: string | null;
   ingredients: string[] | null;
   benefits: string[] | null;
+  allergens: string[] | null;
+  is_quote_only: boolean;
   category: CatalogProduct["category"];
   badge: CatalogProduct["badge"];
   sort_order: number;
-  product_variants: CatalogProduct["variants"] | null;
+  product_variants: VariantRow[] | null;
   product_images: CatalogProduct["images"] | null;
 }
 
@@ -46,11 +53,18 @@ function mapProduct(row: ProductRow): CatalogProduct {
     story: row.story ?? "",
     ingredients: row.ingredients ?? [],
     benefits: row.benefits ?? [],
+    allergens: row.allergens ?? [],
+    is_quote_only: row.is_quote_only,
     category: row.category,
     badge: row.badge,
     sort_order: row.sort_order,
     variants: (row.product_variants ?? [])
-      .filter((variant) => variant.is_active)
+      // El panel impide activar variantes sin precio; este filtro es la red
+      // extra para que un precio pendiente jamás llegue a la tienda
+      .filter(
+        (variant): variant is VariantRow & { price: number } =>
+          variant.is_active && variant.price !== null
+      )
       // Peso primero (granola); sin peso (tortas por porciones) ordena por precio
       .sort(
         (a, b) =>

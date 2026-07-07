@@ -70,13 +70,19 @@ export default function ProductCard({ product }: { product: CatalogProduct }) {
                 {sizes}
               </p>
             )}
-            {minPrice !== null && (
-              <p className="mt-0.5 flex items-baseline gap-1.5">
-                <span className="text-sm text-cacao">Desde</span>
-                <span className="font-display text-2xl font-semibold text-tinta">
-                  {formatPrice(minPrice)}
-                </span>
+            {product.is_quote_only ? (
+              <p className="mt-0.5 font-display text-lg font-semibold text-tinta">
+                Solo por cotización
               </p>
+            ) : (
+              minPrice !== null && (
+                <p className="mt-0.5 flex items-baseline gap-1.5">
+                  <span className="text-sm text-cacao">Desde</span>
+                  <span className="font-display text-2xl font-semibold text-tinta">
+                    {formatPrice(minPrice)}
+                  </span>
+                </p>
+              )
             )}
           </div>
           <span

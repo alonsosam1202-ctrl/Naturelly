@@ -9,6 +9,9 @@ import type { OrderStatus, ProductCategory } from "@/types";
 export const CATEGORIES: { value: ProductCategory; label: string }[] = [
   { value: "granola", label: "Granola" },
   { value: "torta", label: "Tortas" },
+  { value: "postre", label: "Postres" },
+  { value: "salado", label: "Salados" },
+  { value: "cupcake", label: "Cupcakes" },
   { value: "personalizado", label: "Personalizados" },
   { value: "clasica", label: "Clásicas (antiguo)" },
   { value: "andina", label: "Andinas (antiguo)" },
@@ -45,6 +48,27 @@ export const FLAVOR_ACCENTS: Record<
     archClass: "bg-berry/50",
     badgeClass: "bg-berry text-tinta",
     gradientClass: "from-berry to-amarillo",
+  },
+  postre: {
+    primary: "#E8C7F0",
+    secondary: "#FEDB5F",
+    archClass: "bg-lavanda/50",
+    badgeClass: "bg-lavanda text-tinta",
+    gradientClass: "from-lavanda to-amarillo",
+  },
+  salado: {
+    primary: "#7CA66A",
+    secondary: "#E6A12D",
+    archClass: "bg-salvia/30",
+    badgeClass: "bg-salvia text-blanco-crema",
+    gradientClass: "from-salvia to-miel",
+  },
+  cupcake: {
+    primary: "#FEDB5F",
+    secondary: "#E9B6D0",
+    archClass: "bg-amarillo/70",
+    badgeClass: "bg-amarillo text-tinta",
+    gradientClass: "from-amarillo to-berry",
   },
   personalizado: {
     primary: "#E8C7F0",
@@ -83,12 +107,31 @@ export const FLAVOR_ACCENTS: Record<
   },
 };
 
-// TODO: confirmar con Nelly la lista completa de distritos con delivery.
-// Los tres primeros vienen del ejemplo de DATABASE_SCHEMA.md.
+/**
+ * Zona de entrega confirmada (2026-07-07): toda Arequipa metropolitana, sin
+ * restricción por distrito. El costo del envío NO lo maneja la plataforma:
+ * se coordina por WhatsApp con delivery externo (InDriver u otro).
+ */
 export const DELIVERY_DISTRICTS = [
-  "Cercado",
-  "Hunter",
+  "Alto Selva Alegre",
+  "Arequipa (Cercado)",
+  "Cayma",
+  "Cerro Colorado",
+  "Characato",
+  "Jacobo Hunter",
   "José Luis Bustamante y Rivero",
+  "Mariano Melgar",
+  "Miraflores",
+  "Mollebaya",
+  "Paucarpata",
+  "Quequeña",
+  "Sabandía",
+  "Sachaca",
+  "Socabaya",
+  "Tiabaya",
+  "Uchumayo",
+  "Yanahuara",
+  "Yura",
 ];
 
 export const ORDER_STATUS_LABELS: Record<
@@ -155,15 +198,15 @@ export const PRODUCT_BADGE_LABELS: Record<string, string> = {
 };
 
 /**
- * Cinta marquee: productos y valores REALES del negocio (granola de receta
- * única + tortas confirmadas por Alonso el 2026-07-04). No listar
- * ingredientes ni sabores sin confirmar con Nelly. Nombres en español.
+ * Cinta marquee: productos y valores REALES del negocio (catálogo confirmado
+ * por Alonso el 2026-07-07; torta de naranja retirada — aún no se vende).
+ * No listar ingredientes ni sabores sin confirmar con Nelly. En español.
  */
 export const MARQUEE_INGREDIENTS = [
   "Granola artesanal",
-  "Torta de zanahoria",
-  "Torta de chocolate",
-  "Torta de naranja",
+  "Tortas caseras",
+  "Postres especiales",
+  "Cupcakes",
   "Pedidos personalizados",
   "Hecho a mano",
   "Arequipa · Perú",

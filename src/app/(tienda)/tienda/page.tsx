@@ -10,7 +10,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Tienda",
   description:
-    "Delicias artesanales hechas por Nelly en Arequipa: granola artesanal, torta de zanahoria (carrot cake), torta de chocolate y torta de naranja.",
+    "Delicias artesanales hechas por Nelly en Arequipa: granola artesanal, torta de zanahoria (carrot cake), torta de chocolate, postres y cupcakes.",
 };
 
 type SearchParams = Promise<{ categoria?: string }>;

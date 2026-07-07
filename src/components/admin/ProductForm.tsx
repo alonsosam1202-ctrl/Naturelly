@@ -24,11 +24,12 @@ type ProductFormProps = {
 const EMPTY_VARIANT = {
   size_label: "",
   weight_grams: null,
-  price: 0,
+  // null = precio pendiente (no puede activarse hasta definirlo)
+  price: null,
   compare_at_price: null,
   stock: 0,
   sku: "",
-  is_active: true,
+  is_active: false,
 };
 
 const inputClass =
@@ -61,13 +62,15 @@ export default function ProductForm({ initial }: ProductFormProps) {
       story: "",
       ingredientsText: "",
       benefitsText: "",
+      allergensText: "",
+      is_quote_only: false,
       is_active: true,
       variants: [EMPTY_VARIANT],
     },
   });
 
   // keyName evita que RHF pise el `id` real de las variantes existentes
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: "variants",
     keyName: "fieldKey",
@@ -80,6 +83,21 @@ export default function ProductForm({ initial }: ProductFormProps) {
       setValue("slug", slugify(nameValue ?? ""));
     }
   }, [nameValue, slugEdited, setValue]);
+
+  // Solo por cotización: sin presentaciones ni precio. Al marcarlo se
+  // quitan las presentaciones del formulario; al desmarcarlo vuelve una
+  // vacía. Solo aplica a productos SIN presentaciones guardadas (las
+  // existentes nunca se borran: tienen historial).
+  const isQuoteOnly = watch("is_quote_only");
+  const hasSavedVariants = (initial?.variants ?? []).some((v) => v.id);
+  useEffect(() => {
+    if (isQuoteOnly && !hasSavedVariants && fields.length > 0) {
+      replace([]);
+    }
+    if (!isQuoteOnly && fields.length === 0) {
+      replace([EMPTY_VARIANT]);
+    }
+  }, [isQuoteOnly, hasSavedVariants, fields.length, replace]);
 
   async function onSubmit(values: ProductFormValues) {
     setResult(null);
@@ -153,6 +171,21 @@ export default function ProductForm({ initial }: ProductFormProps) {
           />
           Visible en la tienda
         </label>
+        <div className="flex flex-col gap-1.5">
+          <label className="flex items-center gap-3 font-bold text-tinta">
+            <input
+              type="checkbox"
+              className="size-5 accent-[#E6A12D]"
+              {...register("is_quote_only")}
+            />
+            Solo por cotización (sin precio ni carrito)
+          </label>
+          <p className="text-sm text-cacao">
+            Para productos como la torta de novia: no se compra desde la web;
+            su página muestra un botón &quot;Cotizar por WhatsApp&quot; y todo
+            se coordina por ahí.
+          </p>
+        </div>
       </section>
 
       {/* ── Textos ────────────────────────────────────────────────── */}
@@ -190,6 +223,12 @@ export default function ProductForm({ initial }: ProductFormProps) {
           error={errors.benefitsText?.message}
           {...register("benefitsText")}
         />
+        <Textarea
+          label="Alérgenos (uno por línea)"
+          placeholder={"Gluten\nHuevo\nLácteos\nFrutos secos"}
+          error={errors.allergensText?.message}
+          {...register("allergensText")}
+        />
       </section>
 
       {/* ── Presentaciones y precios ──────────────────────────────── */}
@@ -205,6 +244,14 @@ export default function ProductForm({ initial }: ProductFormProps) {
         {errors.variants?.root?.message && (
           <p className="rounded-2xl bg-terracota/10 px-4 py-3 font-bold text-terracota">
             {errors.variants.root.message}
+          </p>
+        )}
+
+        {isQuoteOnly && (
+          <p className="rounded-2xl bg-lavanda/30 px-4 py-3 text-cacao">
+            Este producto es <strong>solo por cotización</strong>: no lleva
+            presentaciones ni precio. En su página se mostrará el botón
+            &quot;Cotizar por WhatsApp&quot;.
           </p>
         )}
 
@@ -256,9 +303,11 @@ export default function ProductForm({ initial }: ProductFormProps) {
                   inputMode="decimal"
                   step="0.10"
                   min={0}
+                  hint="Vacío = pendiente: la presentación no podrá activarse hasta tener precio"
                   error={variantErrors?.price?.message}
                   {...register(`variants.${index}.price`, {
-                    valueAsNumber: true,
+                    setValueAs: (value) =>
+                      value === "" || value === null ? null : Number(value),
                   })}
                 />
                 <Input
@@ -303,14 +352,16 @@ export default function ProductForm({ initial }: ProductFormProps) {
           );
         })}
 
-        <button
-          type="button"
-          onClick={() => append(EMPTY_VARIANT)}
-          className="inline-flex w-fit items-center gap-2 rounded-full border-2 border-tinta px-5 py-2.5 font-bold text-tinta hover:bg-tinta hover:text-amarillo"
-        >
-          <Plus className="size-4" aria-hidden />
-          Agregar presentación
-        </button>
+        {!isQuoteOnly && (
+          <button
+            type="button"
+            onClick={() => append(EMPTY_VARIANT)}
+            className="inline-flex w-fit items-center gap-2 rounded-full border-2 border-tinta px-5 py-2.5 font-bold text-tinta hover:bg-tinta hover:text-amarillo"
+          >
+            <Plus className="size-4" aria-hidden />
+            Agregar presentación
+          </button>
+        )}
       </section>
 
       {result && (

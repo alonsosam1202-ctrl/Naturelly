@@ -23,9 +23,8 @@ export default function NosotrosPage() {
             <p>
               Naturelly nace en Arequipa, en la cocina de Nelly. De ahí salen
               su granola artesanal —una receta propia que empezó conquistando
-              a familiares y amigos— y sus tortas caseras: zanahoria,
-              chocolate y naranja, con decoraciones sencillas en fondant
-              cuando la ocasión lo pide.
+              a familiares y amigos—, sus tortas caseras y sus postres, con
+              decoraciones sencillas en fondant cuando la ocasión lo pide.
             </p>
             <p>
               Todo se prepara a mano y en tandas pequeñas: aquí no hay

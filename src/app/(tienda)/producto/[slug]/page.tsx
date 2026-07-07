@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Badge from "@/components/ui/Badge";
 import PurchasePanel from "@/components/tienda/PurchasePanel";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import BowlIllustration from "@/components/marca/BowlIllustration";
 import RotatingSeal from "@/components/marca/RotatingSeal";
 import { getProductBySlug, getProducts } from "@/lib/catalog";
@@ -83,7 +84,26 @@ export default async function ProductoPage({ params }: { params: Params }) {
             <p className="mt-2 text-lg text-cacao">{product.tagline}</p>
           </div>
 
-          <PurchasePanel product={product} />
+          {product.is_quote_only ? (
+            // Solo por cotización: sin precio, sin cantidad, sin carrito.
+            // Disponibilidad, diseño y precio se coordinan por WhatsApp.
+            <div className="flex flex-col gap-3 rounded-2xl bg-lavanda/30 p-5">
+              <p className="font-bold text-tinta">Solo por cotización</p>
+              <p className="text-cacao">
+                Este producto se coordina directamente con Nelly: el tamaño,
+                el diseño y el precio se conversan antes de confirmar tu
+                pedido.
+              </p>
+              <div>
+                <WhatsAppButton
+                  message={`¡Hola! Vengo de la web de Naturelly y quiero cotizar: ${product.name}.`}
+                  label="Cotizar por WhatsApp"
+                />
+              </div>
+            </div>
+          ) : (
+            <PurchasePanel product={product} />
+          )}
 
           <p className="text-cacao">{product.description}</p>
 
@@ -100,25 +120,49 @@ export default async function ProductoPage({ params }: { params: Params }) {
       </div>
 
       <div className="mt-14 grid gap-8 md:grid-cols-2">
-        <section className="rounded-2xl bg-blanco-crema p-6 shadow-calida">
-          <h2 className="font-display text-2xl font-semibold text-tinta">
-            Su historia
-          </h2>
-          <p className="mt-3 text-cacao">{product.story}</p>
-        </section>
-        <section className="rounded-2xl bg-blanco-crema p-6 shadow-calida">
-          <h2 className="font-display text-2xl font-semibold text-tinta">
-            Ingredientes
-          </h2>
-          <ul className="mt-3 space-y-2">
-            {product.ingredients.map((ingredient) => (
-              <li key={ingredient} className="flex items-center gap-3 text-tinta">
-                <span className="size-2 rounded-full bg-miel" aria-hidden />
-                {ingredient}
-              </li>
-            ))}
-          </ul>
-        </section>
+        {product.story && (
+          <section className="rounded-2xl bg-blanco-crema p-6 shadow-calida">
+            <h2 className="font-display text-2xl font-semibold text-tinta">
+              Su historia
+            </h2>
+            <p className="mt-3 text-cacao">{product.story}</p>
+          </section>
+        )}
+        {product.ingredients.length > 0 && (
+          <section className="rounded-2xl bg-blanco-crema p-6 shadow-calida">
+            <h2 className="font-display text-2xl font-semibold text-tinta">
+              Ingredientes
+            </h2>
+            <ul className="mt-3 space-y-2">
+              {product.ingredients.map((ingredient) => (
+                <li key={ingredient} className="flex items-center gap-3 text-tinta">
+                  <span className="size-2 rounded-full bg-miel" aria-hidden />
+                  {ingredient}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        {product.allergens.length > 0 && (
+          <section className="rounded-2xl bg-blanco-crema p-6 shadow-calida">
+            <h2 className="font-display text-2xl font-semibold text-tinta">
+              Alérgenos
+            </h2>
+            <p className="mt-3 text-sm text-cacao">
+              Elaborado en una cocina casera donde se manipulan estos
+              ingredientes:
+            </p>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {product.allergens.map((allergen) => (
+                <li key={allergen}>
+                  <Badge className="bg-terracota/10 text-terracota">
+                    {allergen}
+                  </Badge>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </div>
   );

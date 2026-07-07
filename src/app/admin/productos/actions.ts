@@ -101,6 +101,8 @@ export async function saveProduct(input: unknown): Promise<ActionResult> {
     story: data.story || null,
     ingredients: splitLines(data.ingredientsText),
     benefits: splitLines(data.benefitsText),
+    allergens: splitLines(data.allergensText),
+    is_quote_only: data.is_quote_only,
     is_active: data.is_active,
   };
 
@@ -128,7 +130,10 @@ export async function saveProduct(input: unknown): Promise<ActionResult> {
     }
     productId = created.id;
 
-    const { error: variantsError } = await supabase
+    // Los solo-cotización no llevan variantes: no hay nada que insertar
+    const { error: variantsError } = data.variants.length === 0
+      ? { error: null }
+      : await supabase
       .from("product_variants")
       .insert(
         data.variants.map((v) => ({
@@ -221,20 +226,29 @@ export async function toggleProductActive(
   const { supabase } = session;
 
   if (parsed.data.isActive) {
-    // Comportamiento documentado: no activar sin presentaciones activas
-    const { data: activeVariant } = await supabase
-      .from("product_variants")
-      .select("id")
-      .eq("product_id", parsed.data.productId)
-      .eq("is_active", true)
-      .limit(1)
+    // Comportamiento documentado: no activar sin presentaciones activas.
+    // Excepción: los solo-cotización no llevan presentaciones.
+    const { data: product } = await supabase
+      .from("products")
+      .select("is_quote_only")
+      .eq("id", parsed.data.productId)
       .maybeSingle();
-    if (!activeVariant) {
-      return {
-        ok: false,
-        message:
-          "Este producto no tiene presentaciones activas. Activa al menos una antes de mostrarlo en la tienda.",
-      };
+    if (!product?.is_quote_only) {
+      const { data: activeVariant } = await supabase
+        .from("product_variants")
+        .select("id")
+        .eq("product_id", parsed.data.productId)
+        .eq("is_active", true)
+        .not("price", "is", null)
+        .limit(1)
+        .maybeSingle();
+      if (!activeVariant) {
+        return {
+          ok: false,
+          message:
+            "Este producto no tiene presentaciones activas con precio. Ponle precio y activa al menos una antes de mostrarlo en la tienda.",
+        };
+      }
     }
   }
 

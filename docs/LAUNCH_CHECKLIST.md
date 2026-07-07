@@ -55,7 +55,7 @@ cuáles arrancan. Todos los nombres visibles van en español.
 
 - [ ] 🔴 **Dominio propio** (actualizar `NEXT_PUBLIC_SITE_URL`, Site URL/Redirects en Supabase, OAuth de Google y docs).
 - [ ] 🔴 **SMTP propio + dominio de envío verificado** (SPF/DKIM) — Anexo 2.
-- [ ] 🔴 **Plantilla "Confirm signup" con TokenHash** aplicada y revalidada (Anexo 2).
+- [ ] 🔴 **Plantillas "Confirm signup" y "Reset password" con TokenHash** aplicadas y revalidadas (Anexo 2 — ambas comparten la misma causa raíz).
 - [ ] 🔴 **Logo definitivo** + favicon + imagen Open Graph reales.
 - [ ] 🔴 **Políticas publicadas** (pedidos, pagos, cancelaciones, entregas, personalizados — sección J).
 - [ ] 🔴 **Alérgenos revisados** en todos los productos publicados.
@@ -298,20 +298,47 @@ snapshots históricos); reutilizar un registro solo si es seguro y no confunde.
 | Imagen OG / favicon | Temporales | — | Reemplazar con el logo real (Etapa 2). |
 | Seed `supabase/seed.sql` | Datos provisionales | — | Solo entornos de desarrollo nuevos; no tocar producción. |
 
-## Anexo 2 — SMTP propio + plantilla de confirmación (Etapa 2 — NO bloquea el uso interno)
+## Anexo 2 — SMTP propio + plantillas de correo con TokenHash (Etapa 2 — NO bloquea el uso interno)
 
-Para el **uso interno**, el correo predeterminado de Supabase alcanza: pocos
-registros por día, y la web ya maneja bien el caso del enlace consumido (mensaje
-claro en `/login` + botón "Reenviar correo de confirmación" con cooldown). Ten en
-cuenta que ese servicio tiene un **límite bajo de correos de autenticación por
-hora** (la cifra exacta puede cambiar: verificar los límites vigentes en la
-documentación/dashboard de Supabase antes del lanzamiento).
+**Afecta a DOS flujos, misma causa raíz.** Las plantillas por defecto de Supabase
+usan `{{ .ConfirmationURL }}`: un enlace de **un solo uso** que se verifica en el
+servidor de Supabase y falla de dos maneras comprobadas en este proyecto:
 
-Antes del **lanzamiento público** es obligatorio:
+- **Prefetch del correo**: un escáner (Gmail lo hizo el 2026-07-04 con un registro:
+  consumió el enlace a los ~25 s del envío) hace GET al enlace antes que el usuario;
+  el clic real llega con el token ya gastado → "enlace no válido o vencido".
+- **PKCE entre navegadores**: el flujo `ConfirmationURL` termina en
+  `/auth/callback?code=…`, y el intercambio necesita la cookie `code_verifier` del
+  **mismo navegador** donde se pidió el correo. Si el enlace se abre en otro
+  navegador/perfil/incógnito, falla igual. El patrón `token_hash` + `verifyOtp` no
+  depende de esa cookie: funciona desde cualquier navegador.
 
-1. Configurar **SMTP propio** (Resend o SES, ya contemplado en `TECH_STACK.md`) en Supabase → Authentication → SMTP.
+Comprobado también en **recuperación de contraseña** (2026-07-07, cuenta admin de
+Nelly, clic inmediato → "enlace no válido o vencido"). **Nota (observación de
+Alonso):** en ese caso el enlace apuntaba al dominio de producción (Render) aunque el
+reset se pidió desde localhost — la variante **determinística** del problema PKCE: la
+cookie `code_verifier` vivía en localhost y el enlace aterrizó en otro origen (cuando
+el `redirect_to` no se resuelve hacia el origen solicitante, GoTrue cae al **Site URL**
+configurado, que apunta a Render). No fue prefetch ni expiración corta. Moraleja:
+probar flujos de correo desde local es poco fiable mientras el Site URL apunte a
+producción; las plantillas TokenHash con `{{ .RedirectTo }}` eliminan también este
+caso, siempre que el origen local figure en la lista de Redirect URLs.
+
+**Mientras tanto (uso interno)**: el correo predeterminado alcanza — pocos registros
+por día, `/login` explica el enlace consumido y ofrece reenvío de confirmación con
+cooldown, y para cuentas admin existe la vía del dashboard: asignar contraseña
+temporal en Authentication → Users, entregarla en persona, y el titular la cambia en
+`/admin/cuenta` (así entró Nelly el 2026-07-07). Ten en cuenta que ese servicio tiene
+un **límite bajo de correos de autenticación por hora** (verificar los límites
+vigentes en la documentación/dashboard de Supabase antes del lanzamiento).
+
+Antes del **lanzamiento público** es obligatorio, en orden:
+
+1. Configurar **SMTP propio** (Resend o SES, ya contemplado en `TECH_STACK.md`) en Supabase → Authentication → SMTP. (Sin SMTP propio, Supabase no permite editar plantillas: "Set up custom SMTP to edit templates".)
 2. **Verificar el dominio de envío** (SPF/DKIM) para que los correos no caigan a spam.
-3. Reemplazar la plantilla **Confirm signup** (Authentication → Emails) por la versión con `TokenHash`, compatible con el flujo SSR (`/auth/callback` ya soporta `token_hash` + `type` con `verifyOtp`):
+3. Reemplazar **AMBAS plantillas** (Authentication → Emails) por las versiones con `TokenHash`, compatibles con el flujo SSR (`/auth/callback` ya soporta `token_hash` + `type` con `verifyOtp` para ambos tipos):
+
+   **Confirm signup:**
    ```html
    <h2>Confirma tu correo</h2>
    <p>¡Hola! Gracias por crear tu cuenta en Naturelly.</p>
@@ -319,8 +346,18 @@ Antes del **lanzamiento público** es obligatorio:
    <p><a href="{{ .RedirectTo }}&amp;token_hash={{ .TokenHash }}&amp;type=email">Confirmar mi correo</a></p>
    <p>Si tú no creaste esta cuenta, puedes ignorar este mensaje.</p>
    ```
-   Se usa `{{ .RedirectTo }}` (no `{{ .SiteURL }}`) para que el enlace conserve el origen desde el que se registró el usuario; es seguro porque el código siempre envía `emailRedirectTo` con `?next=`.
-4. **Revalidar con un correo externo real**: confirmación de registro (debe terminar en `/cuenta` con sesión) y recuperación de contraseña.
+
+   **Reset password:**
+   ```html
+   <h2>Restablece tu contraseña</h2>
+   <p>Pediste cambiar tu contraseña en Naturelly.</p>
+   <p>Usa este enlace para definir una nueva:</p>
+   <p><a href="{{ .RedirectTo }}&amp;token_hash={{ .TokenHash }}&amp;type=recovery">Cambiar mi contraseña</a></p>
+   <p>Si tú no lo pediste, puedes ignorar este mensaje: tu contraseña no cambia.</p>
+   ```
+
+   En ambas se usa `{{ .RedirectTo }}` (no `{{ .SiteURL }}`) para que el enlace conserve el origen desde el que se hizo la solicitud (local o producción); el `&amp;` es seguro porque el código siempre envía el `redirectTo` con query (`?next=/cuenta` en registro, `?next=/actualizar-contrasena` en recuperación).
+4. **Revalidar AMBOS flujos con un correo externo real**: confirmación de registro (debe terminar en `/cuenta` con sesión) y recuperación de contraseña (debe terminar en `/actualizar-contrasena`), idealmente abriendo el enlace en un navegador distinto al que hizo la solicitud para confirmar que el matiz PKCE quedó atrás.
 
 ## Anexo 3 — Cómo se representa el catálogo real (decisiones cerradas)
 

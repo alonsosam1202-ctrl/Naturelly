@@ -325,7 +325,7 @@ export type Database = {
           compare_at_price: number | null
           id: string
           is_active: boolean
-          price: number
+          price: number | null
           product_id: string
           size_label: string
           sku: string
@@ -336,7 +336,7 @@ export type Database = {
           compare_at_price?: number | null
           id?: string
           is_active?: boolean
-          price: number
+          price?: number | null
           product_id: string
           size_label: string
           sku: string
@@ -347,7 +347,7 @@ export type Database = {
           compare_at_price?: number | null
           id?: string
           is_active?: boolean
-          price?: number
+          price?: number | null
           product_id?: string
           size_label?: string
           sku?: string
@@ -366,6 +366,7 @@ export type Database = {
       }
       products: {
         Row: {
+          allergens: string[]
           badge: string | null
           benefits: string[]
           category: string
@@ -374,6 +375,7 @@ export type Database = {
           id: string
           ingredients: string[]
           is_active: boolean
+          is_quote_only: boolean
           name: string
           slug: string
           sort_order: number
@@ -382,6 +384,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          allergens?: string[]
           badge?: string | null
           benefits?: string[]
           category: string
@@ -390,6 +393,7 @@ export type Database = {
           id?: string
           ingredients?: string[]
           is_active?: boolean
+          is_quote_only?: boolean
           name: string
           slug: string
           sort_order?: number
@@ -398,6 +402,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          allergens?: string[]
           badge?: string | null
           benefits?: string[]
           category?: string
@@ -406,6 +411,7 @@ export type Database = {
           id?: string
           ingredients?: string[]
           is_active?: boolean
+          is_quote_only?: boolean
           name?: string
           slug?: string
           sort_order?: number

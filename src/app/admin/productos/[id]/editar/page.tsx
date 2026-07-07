@@ -47,18 +47,21 @@ export default async function AdminEditarProductoPage({
     story: product.story ?? "",
     ingredientsText: (product.ingredients ?? []).join("\n"),
     benefitsText: (product.benefits ?? []).join("\n"),
+    allergensText: (product.allergens ?? []).join("\n"),
+    is_quote_only: product.is_quote_only,
     is_active: product.is_active,
     variants: [...product.product_variants]
       .sort(
         (a, b) =>
           (a.weight_grams ?? 0) - (b.weight_grams ?? 0) ||
-          Number(a.price) - Number(b.price)
+          Number(a.price ?? 0) - Number(b.price ?? 0)
       )
       .map((variant) => ({
         id: variant.id,
         size_label: variant.size_label,
         weight_grams: variant.weight_grams,
-        price: Number(variant.price),
+        // null se conserva: significa "precio pendiente"
+        price: variant.price === null ? null : Number(variant.price),
         compare_at_price:
           variant.compare_at_price === null
             ? null

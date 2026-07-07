@@ -46,7 +46,9 @@ Extiende `auth.users`. Se crea automáticamente con un trigger al registrarse.
 | `story` | `text` | historia/origen (storytelling del detalle) |
 | `ingredients` | `text[]` | lista de ingredientes |
 | `benefits` | `text[]` | beneficios destacados |
-| `category` | `text` | Reales: `'granola' \| 'torta' \| 'personalizado'` (migración `20260704120000`). Legado (solo productos placeholder existentes, no usar en nuevos): `'clasica' \| 'andina' \| 'chocolate' \| 'especial'` |
+| `allergens` | `text[]` | alérgenos declarados (ej. "Gluten", "Huevo", "Frutos secos"); default `'{}'` (migración `20260707090000`) |
+| `is_quote_only` | `boolean` | default `false`. `true` = producto **solo por cotización** (ej. torta de novia): sin variantes ni precio, la página muestra "Cotizar por WhatsApp" en vez del panel de compra; nunca entra al carrito ni a `create_order` (migración `20260707090000`) |
+| `category` | `text` | Reales: `'granola' \| 'torta' \| 'postre' \| 'salado' \| 'cupcake' \| 'personalizado'` (migraciones `20260704120000` y `20260707090000`). Legado (solo productos placeholder existentes, no usar en nuevos): `'clasica' \| 'andina' \| 'chocolate' \| 'especial'` |
 | `badge` | `text` NULL | `'nuevo' \| 'mas_vendido' \| 'edicion_limitada'` |
 | `is_active` | `boolean` | default `true`; soft delete |
 | `sort_order` | `int` | orden en el catálogo |
@@ -59,9 +61,9 @@ Cada producto se vende en presentaciones distintas. **El precio vive aquí, no e
 |---|---|---|
 | `id` | `uuid` PK | |
 | `product_id` | `uuid` FK → products | `on delete cascade` |
-| `size_label` | `text` | Texto libre: `'250 g'`, `'500 g'`, `'Pequeña — 8 porciones'`, `'Mediana — 12 porciones'`, `'Grande — 20 porciones'` |
+| `size_label` | `text` | Texto libre: `'250 g'`, `'500 g'`, `'Mediana — 8-10 porciones'`, `'Grande — 14-16 porciones'`, `'Unidad'`, `'Docena'` |
 | `weight_grams` | `int` NULL | Peso en gramos para granola; `NULL` cuando la presentación se describe por tamaño/porciones (tortas). Nullable desde la migración `20260704120000` |
-| `price` | `numeric(10,2)` | en soles (S/) |
+| `price` | `numeric(10,2)` NULL | en soles (S/). `NULL` = **precio pendiente de definir**: la variante NO puede activarse sin precio (regla del panel + validación Zod en servidor); como `create_order` solo vende variantes activas, un precio NULL jamás llega al checkout. Nullable desde la migración `20260707090000` |
 | `compare_at_price` | `numeric(10,2)` NULL | precio tachado para ofertas |
 | `stock` | `int` | default 0; el checkout valida contra esto |
 | `sku` | `text` UNIQUE | ej. `NAT-AND-250` |
@@ -69,12 +71,14 @@ Cada producto se vende en presentaciones distintas. **El precio vive aquí, no e
 
 **Semántica del `stock` (documentada para Nelly — sin lógica nueva de inventario):**
 - **Granola**: `stock` = unidades listas para vender.
-- **Tortas (por encargo)**: `stock` = **cupos de producción** que Nelly acepta en el periodo actual. `stock = 5` significa "acepto hasta 5 pedidos de esta torta"; `stock = 0` significa "por ahora no acepto más". Nelly lo ajusta desde el panel cuando quiera.
+- **Tortas y postres (por encargo)**: `stock` = **cupos de producción** que Nelly acepta en el periodo actual. `stock = 1` significa "acepto 1 pedido de esta presentación"; `stock = 0` significa "por ahora no acepto más". Nelly/Alonso lo ajustan desde el panel cada mañana.
+- ⚠️ **Los cupos son POR VARIANTE, no compartidos**: la regla real del negocio ("2 tortas diarias entre todos los sabores") NO está modelada — comprar una torta no descuenta el cupo de otra. Mitigación operativa: cupos bajos (1 por variante) + ajuste manual diario + confirmación por WhatsApp antes de preparar. Un "pool de capacidad compartida" queda en backlog (requeriría tabla y cambios en `create_order`).
 - El checkout y `create_order` validan contra ese número exactamente igual en ambos casos (misma transacción, mismo lock); la cancelación repone el cupo. No hay calendarios, reservas ni producción semanal automática.
 
 **Comportamientos del panel admin (documentados):**
 - Los productos y variantes **nunca se eliminan físicamente** (los pedidos históricos los referencian): se desactivan con `is_active` (soft delete). Las variantes existentes tampoco se quitan del formulario, solo se desactivan.
-- Un producto **activo** no puede quedar sin ninguna presentación activa: el panel bloquea guardar/activar en ese caso con un mensaje claro (no hay override — primero se activa una presentación o se desactiva el producto).
+- Un producto **activo** no puede quedar sin ninguna presentación activa, **salvo que sea `is_quote_only`** (los solo-cotización no tienen presentaciones): el panel bloquea guardar/activar en ese caso con un mensaje claro.
+- Una **variante sin precio (`price` NULL) no puede activarse**: el panel bloquea guardar/activar hasta que tenga precio. Así el catálogo público y `create_order` jamás ven precios pendientes.
 - Al eliminar o reemplazar una imagen, la fila de `product_images` se modifica PRIMERO y el archivo del bucket se borra solo tras confirmarse la BD; un archivo huérfano en Storage es tolerable, una fila apuntando a un archivo inexistente no.
 
 ### `product_images`

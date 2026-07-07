@@ -23,6 +23,8 @@ export const PLACEHOLDER_PRODUCTS: CatalogProduct[] = [
     // TODO: confirmar con Nelly la receta exacta
     ingredients: ["Avena", "Miel de abeja"],
     benefits: ["Endulzada solo con miel", "Tostada a mano en tandas pequeñas"],
+    allergens: [],
+    is_quote_only: false,
     category: "clasica",
     badge: null,
     sort_order: 1,
@@ -62,6 +64,8 @@ export const PLACEHOLDER_PRODUCTS: CatalogProduct[] = [
     // TODO: confirmar con Nelly la receta exacta
     ingredients: ["Avena", "Quinua", "Kiwicha", "Aguaymanto", "Miel de abeja"],
     benefits: ["Superalimentos andinos", "Endulzada solo con miel"],
+    allergens: [],
+    is_quote_only: false,
     category: "andina",
     badge: "mas_vendido",
     sort_order: 2,
@@ -101,6 +105,8 @@ export const PLACEHOLDER_PRODUCTS: CatalogProduct[] = [
     // TODO: confirmar con Nelly la receta exacta
     ingredients: ["Avena", "Cacao", "Café", "Miel de abeja"],
     benefits: ["Cacao peruano", "Endulzada solo con miel"],
+    allergens: [],
+    is_quote_only: false,
     category: "chocolate",
     badge: "nuevo",
     sort_order: 3,
