@@ -395,7 +395,7 @@ con categorías nuevas o peso NULL.
 
 ## Anexo 5 — Recomendaciones que no bloquean ninguna etapa
 
-- 🟡 **Plan de hosting**: el plan gratuito de Render duerme el servicio tras inactividad y el primer acceso sufre un arranque frío perceptible (verificar la duración y condiciones vigentes en la documentación de Render antes del lanzamiento); molesto incluso en uso interno — evaluar plan de pago o keep-alive.
+- 🟡 **Plan de hosting** (decisión de Alonso, 2026-07-07 tras evaluar Render/Vercel/Netlify): **seguimos en Render Free** mientras dure el desarrollo activo; subir a **Render Starter (~US$7/mes)** si el arranque frío (30-60 s tras inactividad) molesta antes del lanzamiento. **Netlify Free** queda como candidato para la fase estable de pocos deploys: permite uso comercial y su cold start es ~2 s, pero su modelo de créditos (300/mes compartidos; 15 por deploy a producción; al agotarse, el sitio se PAUSA hasta el ciclo siguiente) penaliza justo el desarrollo activo. **Vercel Hobby descartado** para esto (términos de uso no comerciales). El código es portable a cualquiera de los tres (auditado: sin nada específico del host; solo rotar `NEXT_PUBLIC_SITE_URL`, los 3 fallbacks y Site URL/Redirect URLs de Supabase).
 - 🔵 **Fase 2**: blog/recetas gestionables, FAQ administrable, datos estructurados de producto, analytics, testimonios.
 - 🔵 **Fase 3**: pagos online (Culqi vs Mercado Pago, Yape/Plin), correos transaccionales, páginas legales (T&C, privacidad, libro de reclamaciones — requisito legal para cobrar online en Perú).
 - 🔵 **Mejoras opcionales**: rate limiting en `/api/pedidos`, columna de alérgenos, `compare_at_price`/`badge`/orden en packs, modo "por encargo" sin stock, monitoreo de errores.
