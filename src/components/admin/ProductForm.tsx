@@ -166,7 +166,7 @@ export default function ProductForm({ initial }: ProductFormProps) {
         <label className="flex items-center gap-3 font-bold text-tinta">
           <input
             type="checkbox"
-            className="size-5 accent-[#E6A12D]"
+            className="size-5 accent-oro"
             {...register("is_active")}
           />
           Visible en la tienda
@@ -175,7 +175,7 @@ export default function ProductForm({ initial }: ProductFormProps) {
           <label className="flex items-center gap-3 font-bold text-tinta">
             <input
               type="checkbox"
-              className="size-5 accent-[#E6A12D]"
+              className="size-5 accent-oro"
               {...register("is_quote_only")}
             />
             Solo por cotización (sin precio ni carrito)
@@ -343,7 +343,7 @@ export default function ProductForm({ initial }: ProductFormProps) {
               <label className="flex items-center gap-3 font-bold text-tinta">
                 <input
                   type="checkbox"
-                  className="size-5 accent-[#E6A12D]"
+                  className="size-5 accent-oro"
                   {...register(`variants.${index}.is_active`)}
                 />
                 Presentación activa (se puede comprar)

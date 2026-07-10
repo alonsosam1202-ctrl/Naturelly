@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
 import ProductCard from "@/components/tienda/ProductCard";
 import CustomCakesSection from "@/components/marca/CustomCakesSection";
+import { ButtonLink } from "@/components/ui/Button";
 import { getProducts } from "@/lib/catalog";
 import { CATEGORIES } from "@/lib/constants";
 import type { ProductCategory } from "@/types";
@@ -12,6 +15,12 @@ export const metadata: Metadata = {
   description:
     "Delicias artesanales hechas por Nelly en Arequipa: granola artesanal, torta de zanahoria (carrot cake), torta de chocolate, torta de naranja, postres y cupcakes.",
 };
+
+const SELLOS = [
+  "Hecho a mano",
+  "Pedido hoy, listo mañana",
+  "Entrega en toda Arequipa",
+];
 
 type SearchParams = Promise<{ categoria?: string }>;
 
@@ -27,34 +36,88 @@ export default async function TiendaPage({
   const filtered = isValidCategory
     ? products.filter((p) => p.category === (categoria as ProductCategory))
     : products;
+  const categoryLabel = isValidCategory
+    ? CATEGORIES.find((c) => c.value === categoria)?.label
+    : null;
 
   return (
     <>
-      {/* Cabecera editorial sobre lino */}
-      <div className="bg-blush">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pb-10 pt-12 sm:px-6">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-miel-oscura">
-            Tienda
-          </p>
-          <h1 className="max-w-2xl font-display text-4xl font-semibold text-tinta sm:text-5xl">
-            Elige tu <em className="italic text-miel-oscura">antojo</em>
-          </h1>
-          <p className="max-w-xl text-lg text-cacao">
-            Delicias artesanales hechas a mano en la cocina de Nelly.
-          </p>
+      {/* Hero "Atmósfera" (spec Tinta & Oro): panel con el degradado de
+          tinta + hairline dorado — nunca bloque plano. La foto (asset de
+          Alonso, site-assets) vive DENTRO del panel con hairline crema;
+          reemplazó al video de prueba el 2026-07-10. */}
+      <div className="px-4 pt-6 sm:px-6">
+        <section className="bg-atmosfera hairline-oro relative mx-auto max-w-6xl overflow-hidden rounded-xl">
+          <div className="grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14 lg:p-14">
+            <div className="flex flex-col gap-5">
+              <p className="flex items-center gap-3 text-sm font-bold uppercase tracking-[0.26em] text-oro">
+                Tienda
+                <span className="h-px w-14 bg-oro/50" aria-hidden />
+              </p>
+              <h1 className="font-display text-4xl font-semibold text-crema-clara sm:text-6xl">
+                Elige tu <em className="italic text-oro">antojo</em>
+              </h1>
+              <p className="max-w-xl text-lg text-crema-clara/85">
+                Delicias artesanales hechas a mano en la cocina de Nelly.
+              </p>
 
-          {/* Filtro por categoría OCULTO temporalmente: las categorías
-              actuales de la BD ('clasica'|'andina'|'chocolate'|'especial')
-              son sabores placeholder de granola que aún no existen como
-              productos reales (Nelly tiene UNA receta validada). Se
-              restituye cuando el catálogo real tenga categorías reales
-              (granola / tortas), lo que requiere la migración propuesta en
-              docs/LAUNCH_CHECKLIST.md. El filtrado por ?categoria= sigue
-              funcionando para no romper enlaces. */}
-        </div>
+              <div className="mt-1 flex flex-wrap gap-3">
+                <ButtonLink href="/tienda?categoria=torta">
+                  Ver tortas
+                </ButtonLink>
+                <a
+                  href="#personalizadas"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-crema-clara/45 px-6 py-3 font-bold text-crema-clara transition-colors hover:border-oro hover:text-oro"
+                >
+                  Cotizar una torta personalizada
+                </a>
+              </div>
+
+              {/* Sellos (pills) sobre el degradado — estilo de la spec */}
+              <ul className="mt-3 flex flex-wrap gap-2.5">
+                {SELLOS.map((sello) => (
+                  <li
+                    key={sello}
+                    className="sello-atmosfera rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em]"
+                  >
+                    {sello}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="hairline-crema relative aspect-[4/5] overflow-hidden rounded-xl max-lg:mx-auto max-lg:w-full max-lg:max-w-sm">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/site-assets/images/hero-tienda.png`}
+                alt="Primer plano de delicias de Naturelly: torta de chocolate en capas, tartaleta de frutos rojos, cupcake y postre de chocolate"
+                fill
+                sizes="(max-width: 1024px) 90vw, 45vw"
+                priority
+                className="object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Filtro por categoría OCULTO temporalmente: se restituye con el
+              rediseño de la grilla (secciones por categoría). El filtrado
+              por ?categoria= sigue funcionando (lo usa el CTA "Ver tortas")
+              y abajo hay salida visible para volver al catálogo completo. */}
+        </section>
       </div>
 
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+        {isValidCategory && (
+          <p className="mb-6 flex flex-wrap items-center gap-3 text-piedra">
+            Mostrando: <strong className="text-tinta">{categoryLabel}</strong>
+            <Link
+              href="/tienda"
+              className="font-bold text-oro-texto underline-offset-4 hover:underline"
+            >
+              Ver todo el catálogo
+            </Link>
+          </p>
+        )}
+
         {filtered.length === 0 ? (
           <p className="rounded-3xl bg-blanco-crema p-10 text-center text-cacao shadow-calida">
             Aún no hay productos disponibles por aquí. Vuelve pronto o

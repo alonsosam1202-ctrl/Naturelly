@@ -22,3 +22,6 @@ npm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Originales de assets de marca (ya subidos a Supabase Storage)
+assets-pendientes/

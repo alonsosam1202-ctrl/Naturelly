@@ -44,27 +44,27 @@ export default function RotatingSeal({
         <path
           d="M 60 12 C 86.6 11.7 108.3 33.6 108 60 C 107.7 86.4 86.4 108.3 60 108 C 33.6 107.7 11.7 86.4 12 60 C 12.3 33.6 33.6 11.7 60 12 Z"
           fill="none"
-          stroke="#18212A"
+          stroke="#1B1A17"
           strokeWidth="1.6"
           strokeLinecap="round"
         />
         <text
-          fill="#18212A"
+          fill="#1B1A17"
           fontSize="9"
           fontWeight="700"
           letterSpacing="2.4"
-          fontFamily="var(--font-karla), system-ui, sans-serif"
+          fontFamily="var(--font-instrument), system-ui, sans-serif"
         >
           <textPath href={`#${pathId}-top`} startOffset="50%" textAnchor="middle">
             HECHO POR
           </textPath>
         </text>
         <text
-          fill="#18212A"
+          fill="#1B1A17"
           fontSize="9"
           fontWeight="700"
           letterSpacing="2.4"
-          fontFamily="var(--font-karla), system-ui, sans-serif"
+          fontFamily="var(--font-instrument), system-ui, sans-serif"
         >
           <textPath
             href={`#${pathId}-bottom`}
@@ -75,8 +75,8 @@ export default function RotatingSeal({
           </textPath>
         </text>
         {/* Dos granos que equilibran la composición a los lados */}
-        <circle cx="16.5" cy="60" r="2.1" fill="#FEDB5F" stroke="#18212A" strokeWidth="0.6" />
-        <circle cx="103.5" cy="60" r="2.1" fill="#FEDB5F" stroke="#18212A" strokeWidth="0.6" />
+        <circle cx="16.5" cy="60" r="2.1" fill="#C39A52" stroke="#1B1A17" strokeWidth="0.6" />
+        <circle cx="103.5" cy="60" r="2.1" fill="#C39A52" stroke="#1B1A17" strokeWidth="0.6" />
       </g>
 
       {/* Firma estática: protagonista y siempre legible */}
@@ -84,7 +84,7 @@ export default function RotatingSeal({
         x="60"
         y="69"
         textAnchor="middle"
-        fill="#18212A"
+        fill="#1B1A17"
         fontSize="30"
         style={{ fontFamily: `${script.style.fontFamily}, cursive` }}
       >

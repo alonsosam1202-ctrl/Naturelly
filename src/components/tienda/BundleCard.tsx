@@ -43,8 +43,8 @@ export default function BundleCard({ bundle }: { bundle: CatalogBundle }) {
             />
           ) : (
             <BowlIllustration
-              primary="#E6A12D"
-              secondary="#FEDB5F"
+              primary="#C39A52"
+              secondary="#5F3A26"
               className="h-auto w-2/3"
             />
           )}

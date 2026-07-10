@@ -6,7 +6,72 @@
 
 **Personalidad:** cálida, honesta, orgullosamente peruana, cuidadosa con el detalle. Nunca fría, nunca corporativa, nunca "healthy culposo".
 
-## Dirección de arte — "Naturelly Bright Wellness"
+## Dirección de arte VIGENTE — "Tinta & Oro / Atmósfera" (2026-07-07)
+
+> Paleta y aplicación definitivas elegidas por Alonso (exploración en Claude
+> Design; spec completa en `Naturelly - Spec Tinta & Oro (Atmósfera).md`,
+> fuente de verdad junto con los tokens de `src/app/globals.css`). Sustituye
+> a "Bright Wellness" (abajo, conservada como histórico). Los NOMBRES de
+> token legado se conservan remapeados en globals.css.
+
+**Tipografía:** Fraunces (títulos; la spec pide wght 500 — el ajuste fino de
+pesos queda pendiente del pase completo de rediseño) + **Instrument Sans**
+(UI y cuerpo; reemplaza a Karla). La firma "Nelly" del sello sigue en
+Dancing Script (única excepción).
+
+### Núcleo
+| Rol | Token | Hex |
+|---|---|---|
+| Ancla (degradado, footer, texto principal) | `tinta` | `#1B1A17` |
+| Texto secundario sobre claro | `piedra` (alias legado `cacao`) | `#4C463A` |
+| Fondo general (Marfil) | `crema` | `#FAF7F0` |
+| Superficie de tarjetas | `blanco-crema` | `#FFFFFF` |
+| Bordes/divisores sobre claro (Lino) | `lino` (alias `amarillo-suave`) | `#E4DDCD` |
+| Texto claro sobre Tinta | `crema-clara` | `#F2ECDF` |
+| Tinte editorial suave (derivado) | `blush` | `#F2EDE2` |
+
+### Oro (acento primario)
+| Rol | Token | Hex |
+|---|---|---|
+| CTAs/eyebrows sobre Tinta; fondo botón primario | `oro` (alias `amarillo`/`miel`) | `#C39A52` |
+| Hover del botón oro | `oro-hover` | `#D2AB63` |
+| Oro como TEXTO normal sobre claro (AA 4.7:1) | `oro-texto` (alias `miel-oscura`) | `#8A6A2F` |
+| Oro texto grande (≥24px / ≥18.5px bold) | `oro-grande` | `#A8823E` |
+
+**Regla dura:** `#C39A52` JAMÁS como texto sobre fondos claros (2.4:1).
+Texto sobre botón oro: siempre `tinta`.
+
+### Joyas de categoría (solo dots, tags y detalles — nunca bloques grandes)
+| Categoría | Token | Hex | Nota AA |
+|---|---|---|---|
+| Tortas | `chocolate` | `#5F3A26` | pasa AA como texto |
+| Postres | `esmeralda` (alias `salvia`) | `#2F6353` | pasa AA |
+| Cupcakes | `frambuesa` (alias `berry`) | `#A2496B` | pasa AA |
+| Granola | `ambar` | `#97722E` | solo dots/texto grande; texto normal → `ambar-texto` `#7D5E24` |
+| **RESERVA** (futura 5ª categoría — NO asignar) | `ciruela` | `#55405F` | pasa AA |
+| Salados (PROVISIONAL, la spec no lo define) | `piedra` | `#4C463A` | pasa AA |
+
+### Aplicación "Atmósfera" (utilidades en globals.css)
+- `.bg-atmosfera`: el degradado de tres capas de la spec (luz dorada arriba-
+  derecha + calor chocolate abajo-izquierda + base tinta 160deg). Se usa en
+  el hero de `/tienda` y banners destacados (CTA final de la portada) —
+  **la tinta nunca va plana en bloques grandes**.
+- `.hairline-oro`: borde 1px oro al 35% + `rounded-xl` (12px) en el panel.
+- `.hairline-crema`: borde 1px crema al 18% para fotos/video DENTRO del panel.
+- `.sello-atmosfera`: pills de sellos sobre el degradado (borde oro 40%,
+  fondo oro 8%, texto crema 88%).
+- Footer y cintas delgadas (marquee): tinta plana `#1B1A17` — permitido en
+  dosis pequeñas.
+
+### Qué se conserva del sistema anterior
+Arcos de horno, RotatingSeal (recolorado a tinta+oro), marquee de una línea,
+tono de voz peruano, disciplina AA/reduced-motion, sombras cálidas.
+Pendientes del pase completo de rediseño: favicon y OG definitivos (assets
+de Alonso vía Gemini), ilustración del hero de portada, pesos Fraunces 500.
+
+---
+
+## Dirección de arte HISTÓRICA — "Naturelly Bright Wellness" (2026-07-03 → 2026-07-07, sustituida)
 
 Naturelly se ve **fresca, luminosa, apetecible y comercial**, sin perder lo artesanal. La lógica visual (no el diseño) se inspira en el bright wellness retail: fondos limpios, color protagonista, producto al centro.
 

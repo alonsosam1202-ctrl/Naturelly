@@ -9,32 +9,32 @@
 
 const OAT = (
   <svg viewBox="0 0 24 24" className="size-full">
-    <rect x="3" y="9" width="18" height="7" rx="3.5" fill="#FEDB5F" transform="rotate(-16 12 12)" />
+    <rect x="3" y="9" width="18" height="7" rx="3.5" fill="#C39A52" transform="rotate(-16 12 12)" />
   </svg>
 );
 
 const HONEY_DROP = (
   <svg viewBox="0 0 24 24" className="size-full">
-    <path d="M12 3c3.4 5 5 7.2 5 10a5 5 0 1 1-10 0c0-2.8 1.6-5 5-10Z" fill="#E6A12D" />
+    <path d="M12 3c3.4 5 5 7.2 5 10a5 5 0 1 1-10 0c0-2.8 1.6-5 5-10Z" fill="#97722E" />
   </svg>
 );
 
 const LEAF = (
   <svg viewBox="0 0 24 24" className="size-full">
-    <path d="M5 19C5 9 12 4 20 4c-1 9-6 15-15 15Z" fill="#7CA66A" />
+    <path d="M5 19C5 9 12 4 20 4c-1 9-6 15-15 15Z" fill="#2F6353" />
   </svg>
 );
 
 const BERRY = (
   <svg viewBox="0 0 24 24" className="size-full">
-    <circle cx="12" cy="13" r="8" fill="#E9B6D0" />
-    <circle cx="9.5" cy="10.5" r="2" fill="#FFFBF6" opacity="0.8" />
+    <circle cx="12" cy="13" r="8" fill="#A2496B" />
+    <circle cx="9.5" cy="10.5" r="2" fill="#FAF7F0" opacity="0.8" />
   </svg>
 );
 
 const GRAIN = (
   <svg viewBox="0 0 24 24" className="size-full">
-    <ellipse cx="12" cy="12" rx="5" ry="8" fill="#5A3A28" transform="rotate(24 12 12)" />
+    <ellipse cx="12" cy="12" rx="5" ry="8" fill="#5F3A26" transform="rotate(24 12 12)" />
   </svg>
 );
 

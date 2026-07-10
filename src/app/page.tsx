@@ -54,7 +54,9 @@ export default async function HomePage() {
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((product, index) => (
-            <Reveal key={product.id} delay={index * 120}>
+            // h-full: el grid estira este envoltorio; sin él, la tarjeta
+            // interior queda con su altura natural y las tres se desalinean
+            <Reveal key={product.id} delay={index * 120} className="h-full">
               <ProductCard product={product} />
             </Reveal>
           ))}
@@ -91,23 +93,25 @@ export default async function HomePage() {
         </ol>
       </section>
 
-      {/* CTA final: bloque amarillo Naturelly, el color protagonista.
-          Sin ingredientes flotantes: el único grupo vive en el hero. */}
-      <section className="relative overflow-hidden bg-amarillo">
-        <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-16 text-center sm:px-6 md:py-20">
-          <Reveal replay className="flex flex-col items-center gap-6">
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-tinta/70">
-              Hecho a mano
-            </p>
-            <h2 className="max-w-2xl font-display text-3xl font-semibold text-tinta sm:text-5xl">
-              ¿Antojo de algo <em className="italic">hecho en casa</em>?
-            </h2>
-            <p className="max-w-xl text-lg text-tinta/80">
-              Granola recién tostada o una torta para compartir. Haz tu pedido
-              hoy y coordinamos la entrega al toque.
-            </p>
-            <ButtonLink href="/tienda">Ver la tienda</ButtonLink>
-          </Reveal>
+      {/* CTA final: banner destacado con la aplicación "Atmósfera" de la
+          spec Tinta & Oro (degradado + hairline dorado, nunca bloque plano). */}
+      <section className="px-4 pb-16 sm:px-6 md:pb-20">
+        <div className="bg-atmosfera hairline-oro relative mx-auto max-w-6xl overflow-hidden rounded-xl">
+          <div className="relative flex flex-col items-center gap-6 px-6 py-16 text-center md:py-20">
+            <Reveal replay className="flex flex-col items-center gap-6">
+              <p className="text-sm font-bold uppercase tracking-[0.26em] text-oro">
+                Hecho a mano
+              </p>
+              <h2 className="max-w-2xl font-display text-3xl font-semibold text-crema-clara sm:text-5xl">
+                ¿Antojo de algo <em className="italic text-oro">hecho en casa</em>?
+              </h2>
+              <p className="max-w-xl text-lg text-crema-clara/85">
+                Granola recién tostada o una torta para compartir. Haz tu pedido
+                hoy y coordinamos la entrega al toque.
+              </p>
+              <ButtonLink href="/tienda">Ver la tienda</ButtonLink>
+            </Reveal>
+          </div>
         </div>
       </section>
     </>

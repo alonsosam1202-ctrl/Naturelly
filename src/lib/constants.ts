@@ -20,10 +20,18 @@ export const CATEGORIES: { value: ProductCategory; label: string }[] = [
 ];
 
 /**
- * Acento visual de cada sabor (BRAND_GUIDE.md — "Acentos por sabor",
- * dirección Bright Wellness). primary/secondary son hex para SVG e
- * ilustraciones; `archClass` es el fondo pastel fuerte del arco. Al llegar
- * fotos reales, el arco se mantiene como escenografía del sabor.
+ * Acento visual por categoría — joyas de "Tinta & Oro" (spec 2026-07-07):
+ * SOLO dots, tags y detalles; nunca bloques grandes. primary/secondary son
+ * hex para SVG e ilustraciones; `archClass` es un tinte suave del arco
+ * (visible solo si un producto no tiene foto).
+ *
+ * Notas de la spec:
+ * - Ciruela #55405F queda como JOYA DE RESERVA para una futura 5ª
+ *   categoría: NO se asigna a ninguna existente.
+ * - La spec no define color para "salado": se usa Piedra #4C463A como
+ *   PROVISIONAL (neutro AA) hasta decidirlo con Alonso.
+ * - Ámbar #97722E solo en dots/texto grande; como texto normal usar
+ *   --color-ambar-texto (#7D5E24).
  */
 export const FLAVOR_ACCENTS: Record<
   ProductCategory,
@@ -36,74 +44,77 @@ export const FLAVOR_ACCENTS: Record<
   }
 > = {
   granola: {
-    primary: "#E6A12D",
-    secondary: "#FEDB5F",
-    archClass: "bg-amarillo/70",
-    badgeClass: "bg-miel text-tinta",
-    gradientClass: "from-amarillo to-miel",
+    primary: "#97722E",
+    secondary: "#C39A52",
+    archClass: "bg-ambar/10",
+    badgeClass: "bg-ambar text-crema-clara",
+    gradientClass: "from-ambar to-oro",
   },
   torta: {
-    primary: "#E9B6D0",
-    secondary: "#FEDB5F",
-    archClass: "bg-berry/50",
-    badgeClass: "bg-berry text-tinta",
-    gradientClass: "from-berry to-amarillo",
+    primary: "#5F3A26",
+    secondary: "#C39A52",
+    archClass: "bg-chocolate/10",
+    badgeClass: "bg-chocolate text-crema-clara",
+    gradientClass: "from-chocolate to-oro",
   },
   postre: {
-    primary: "#E8C7F0",
-    secondary: "#FEDB5F",
-    archClass: "bg-lavanda/50",
-    badgeClass: "bg-lavanda text-tinta",
-    gradientClass: "from-lavanda to-amarillo",
+    primary: "#2F6353",
+    secondary: "#C39A52",
+    archClass: "bg-esmeralda/10",
+    badgeClass: "bg-esmeralda text-crema-clara",
+    gradientClass: "from-esmeralda to-oro",
   },
   salado: {
-    primary: "#7CA66A",
-    secondary: "#E6A12D",
-    archClass: "bg-salvia/30",
-    badgeClass: "bg-salvia text-blanco-crema",
-    gradientClass: "from-salvia to-miel",
+    // PROVISIONAL: la spec no asigna joya a salados (ciruela es reserva)
+    primary: "#4C463A",
+    secondary: "#C39A52",
+    archClass: "bg-piedra/10",
+    badgeClass: "bg-piedra text-crema-clara",
+    gradientClass: "from-piedra to-oro",
   },
   cupcake: {
-    primary: "#FEDB5F",
-    secondary: "#E9B6D0",
-    archClass: "bg-amarillo/70",
-    badgeClass: "bg-amarillo text-tinta",
-    gradientClass: "from-amarillo to-berry",
+    primary: "#A2496B",
+    secondary: "#C39A52",
+    archClass: "bg-frambuesa/10",
+    badgeClass: "bg-frambuesa text-crema-clara",
+    gradientClass: "from-frambuesa to-oro",
   },
   personalizado: {
-    primary: "#E8C7F0",
-    secondary: "#E6A12D",
-    archClass: "bg-lavanda/50",
-    badgeClass: "bg-lavanda text-tinta",
-    gradientClass: "from-lavanda to-berry",
+    primary: "#C39A52",
+    secondary: "#5F3A26",
+    archClass: "bg-oro/10",
+    badgeClass: "bg-oro text-tinta",
+    gradientClass: "from-oro to-chocolate",
   },
+  // ── Legado (sin productos tras la limpieza; pendiente de retirar con
+  //    migración propia). Tonos neutros de la paleta vigente. ──
   clasica: {
-    primary: "#E6A12D",
-    secondary: "#FEDB5F",
-    archClass: "bg-amarillo/70",
-    badgeClass: "bg-miel text-tinta",
-    gradientClass: "from-amarillo to-miel",
+    primary: "#97722E",
+    secondary: "#C39A52",
+    archClass: "bg-ambar/10",
+    badgeClass: "bg-ambar text-crema-clara",
+    gradientClass: "from-ambar to-oro",
   },
   andina: {
-    primary: "#7CA66A",
-    secondary: "#FEDB5F",
-    archClass: "bg-salvia/30",
-    badgeClass: "bg-salvia text-blanco-crema",
-    gradientClass: "from-salvia to-amarillo",
+    primary: "#2F6353",
+    secondary: "#C39A52",
+    archClass: "bg-esmeralda/10",
+    badgeClass: "bg-esmeralda text-crema-clara",
+    gradientClass: "from-esmeralda to-oro",
   },
   chocolate: {
-    primary: "#5A3A28",
-    secondary: "#E6A12D",
-    archClass: "bg-lavanda/50",
-    badgeClass: "bg-tinta text-amarillo",
-    gradientClass: "from-lavanda to-miel",
+    primary: "#5F3A26",
+    secondary: "#C39A52",
+    archClass: "bg-chocolate/10",
+    badgeClass: "bg-chocolate text-crema-clara",
+    gradientClass: "from-chocolate to-oro",
   },
   especial: {
-    primary: "#E9B6D0",
-    secondary: "#E6A12D",
-    archClass: "bg-berry/50",
-    badgeClass: "bg-berry text-tinta",
-    gradientClass: "from-berry to-lavanda",
+    primary: "#A2496B",
+    secondary: "#C39A52",
+    archClass: "bg-frambuesa/10",
+    badgeClass: "bg-frambuesa text-crema-clara",
+    gradientClass: "from-frambuesa to-oro",
   },
 };
 

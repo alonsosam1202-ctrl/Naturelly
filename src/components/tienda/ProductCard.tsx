@@ -24,7 +24,7 @@ export default function ProductCard({ product }: { product: CatalogProduct }) {
   return (
     <Link
       href={`/producto/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-3xl bg-blanco-crema shadow-calida ring-1 ring-tinta/5 transition-all duration-300 hover:-translate-y-1.5 hover:rotate-[0.4deg] hover:shadow-calida-lg"
+      className="group flex h-full flex-col overflow-hidden rounded-3xl bg-blanco-crema shadow-calida ring-1 ring-tinta/5 transition-all duration-300 hover:-translate-y-1.5 hover:rotate-[0.4deg] hover:shadow-calida-lg"
     >
       <div className="relative px-4 pt-4">
         {/* Arco de horno con el fondo pleno-pastel del sabor */}

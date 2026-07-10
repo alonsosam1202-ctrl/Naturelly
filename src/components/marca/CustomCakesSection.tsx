@@ -16,7 +16,10 @@ export default function CustomCakesSection() {
   if (!getWhatsAppNumber()) return null;
 
   return (
-    <section className="mt-14 overflow-hidden rounded-3xl bg-blush">
+    <section
+      id="personalizadas"
+      className="mt-14 scroll-mt-24 overflow-hidden rounded-3xl bg-blush"
+    >
       <div className="flex flex-col gap-4 p-8 text-center sm:p-10">
         <p className="text-sm font-bold uppercase tracking-[0.2em] text-miel-oscura">
           Tortas personalizadas

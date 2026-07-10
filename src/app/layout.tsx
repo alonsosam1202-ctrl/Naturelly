@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Karla } from "next/font/google";
+import { Fraunces, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -11,9 +11,10 @@ const fraunces = Fraunces({
   axes: ["SOFT", "WONK"],
 });
 
-const karla = Karla({
+// Cuerpo/UI de la dirección "Tinta & Oro" (antes Karla)
+const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
-  variable: "--font-karla",
+  variable: "--font-instrument",
 });
 
 const SITE_URL =
@@ -53,7 +54,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es-PE" className={`${fraunces.variable} ${karla.variable}`}>
+    <html lang="es-PE" className={`${fraunces.variable} ${instrumentSans.variable}`}>
       <body className="flex min-h-dvh flex-col">
         <Header />
         <main className="flex-1">{children}</main>

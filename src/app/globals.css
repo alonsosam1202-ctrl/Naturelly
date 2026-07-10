@@ -3,40 +3,55 @@
 /* Fuentes cargadas con next/font en layout.tsx */
 @theme inline {
   --font-display: var(--font-fraunces), Georgia, serif;
-  --font-sans: var(--font-karla), system-ui, sans-serif;
+  --font-sans: var(--font-instrument), system-ui, sans-serif;
 }
 
-/* Tokens de BRAND_GUIDE.md — Dirección "Naturelly Bright Wellness".
-   Fondos limpios y luminosos, amarillo Naturelly como color protagonista,
-   negro tinta para el contraste fuerte y pasteles (blush, berry, lavanda)
-   para secciones editoriales. El cacao queda SOLO como detalle/texto
-   secundario, nunca como bloque dominante. */
+/* Tokens — Dirección "TINTA & ORO / Atmósfera" (2026-07-07).
+   Fuente de verdad: "Naturelly - Spec Tinta & Oro (Atmósfera).md" y
+   BRAND_GUIDE.md. Marfil como fondo, tinta grafito como ancla (en bloques
+   grandes SIEMPRE como degradado .bg-atmosfera, nunca plana salvo footer y
+   cintas delgadas), oro como acento primario y joyas de categoría en dosis
+   pequeñas. Los NOMBRES de token legado se conservan remapeados para no
+   tocar 70+ archivos; los nuevos conviven con ellos. */
 @theme {
   /* Base clara */
-  --color-crema: #fffbf6;
-  --color-blush: #fff1f4;
-  --color-blanco-crema: #fffdf9;
+  --color-crema: #faf7f0; /* Marfil — fondo general */
+  --color-blush: #f2ede2; /* Tinte lino suave (derivado) — secciones editoriales */
+  --color-blanco-crema: #ffffff; /* Superficie de tarjetas */
+  --color-lino: #e4ddcd; /* Bordes y divisores sobre claro */
+  --color-crema-clara: #f2ecdf; /* Texto/elementos claros sobre Tinta */
 
-  /* Protagonista */
-  --color-amarillo: #fedb5f;
-  --color-amarillo-suave: #ffe9a8;
+  /* Oro — acento primario. REGLA AA: #C39A52 jamás como texto sobre claro
+     (2.4:1); usar oro-texto (normal) u oro-grande (>=24px / >=18.5px bold). */
+  --color-oro: #c39a52;
+  --color-oro-hover: #d2ab63;
+  --color-oro-texto: #8a6a2f;
+  --color-oro-grande: #a8823e;
+  /* Alias legado del protagonista anterior (amarillo/miel -> oro) */
+  --color-amarillo: #c39a52;
+  --color-amarillo-suave: #e4ddcd; /* antes panel suave; hoy = lino */
+  --color-miel: #c39a52;
+  --color-miel-oscura: #8a6a2f;
 
-  /* Contraste */
-  --color-tinta: #18212a;
+  /* Ancla y textos */
+  --color-tinta: #1b1a17; /* ancla, footer, texto principal sobre claro */
+  --color-piedra: #4c463a; /* texto secundario sobre Marfil */
+  --color-cacao: #4c463a; /* alias legado -> Piedra (texto secundario) */
 
-  /* Acentos decorativos (fondos, arcos, ilustraciones) */
-  --color-miel: #e6a12d;
-  --color-salvia: #7ca66a;
-  --color-berry: #e9b6d0;
-  --color-lavanda: #e8c7f0;
-
-  /* Variantes oscuras para TEXTO y botones: cumplen contraste AA (4.5:1)
-     sobre los fondos claros de la marca. Los decorativos no cambian. */
-  --color-miel-oscura: #9c6410;
-  --color-salvia-oscura: #3e6b35;
-
-  /* Detalle cálido (nunca bloque dominante) */
-  --color-cacao: #5a3a28;
+  /* Joyas de categoría — solo dots, tags y detalles; nunca bloques grandes */
+  --color-chocolate: #5f3a26; /* Tortas (pasa AA como texto) */
+  --color-esmeralda: #2f6353; /* Postres (pasa AA) */
+  --color-frambuesa: #a2496b; /* Cupcakes (pasa AA) */
+  --color-ambar: #97722e; /* Granola — SOLO dots/texto grande (4.1:1) */
+  --color-ambar-texto: #7d5e24; /* Granola como texto normal (5.6:1 AA) */
+  /* RESERVA para una futura 5ª categoría (decisión 2026-07-07):
+     NO asignar a ninguna categoría existente. */
+  --color-ciruela: #55405f;
+  /* Alias legado de acentos (salvia/berry -> joyas actuales) */
+  --color-salvia: #2f6353;
+  --color-salvia-oscura: #2f6353;
+  --color-berry: #a2496b;
+  --color-lavanda: #e4ddcd; /* antes pastel lavanda; hoy tinte lino */
 
   /* Solo errores, urgencia y estado cancelado (AA con texto blanco y
      como texto sobre fondos claros) */
@@ -45,8 +60,8 @@
   /* Reservado exclusivamente para acciones de WhatsApp (tono oscuro AA) */
   --color-whatsapp: #2e7d3f;
 
-  --shadow-calida: 0 4px 24px rgba(24, 33, 42, 0.07);
-  --shadow-calida-lg: 0 14px 40px rgba(24, 33, 42, 0.12);
+  --shadow-calida: 0 4px 24px rgba(27, 26, 23, 0.07);
+  --shadow-calida-lg: 0 14px 40px rgba(27, 26, 23, 0.12);
 
   /* Animaciones livianas (solo transform/opacity, ver BRAND_GUIDE.md) */
   --animate-marquee: marquee 32s linear infinite;
@@ -122,6 +137,32 @@
   }
 }
 
+/* Aplicación "Atmósfera" (spec, CSS literal): el bloque ancla del hero y
+   banners destacados. Tres capas: luz dorada arriba-derecha, calor
+   chocolate abajo-izquierda y base de tinta en diagonal. Siempre con el
+   hairline dorado y radio de 12px (rounded-xl). */
+@layer utilities {
+  .bg-atmosfera {
+    background:
+      radial-gradient(120% 150% at 88% 0%, rgba(195, 154, 82, 0.22), transparent 46%),
+      radial-gradient(90% 120% at 0% 100%, rgba(95, 58, 38, 0.35), transparent 55%),
+      linear-gradient(160deg, #2b2721 0%, #1b1a17 55%, #151412 100%);
+  }
+  .hairline-oro {
+    border: 1px solid rgba(195, 154, 82, 0.35);
+  }
+  /* Para fotos/video DENTRO del bloque atmósfera */
+  .hairline-crema {
+    border: 1px solid rgba(242, 236, 223, 0.18);
+  }
+  /* Sellos (pills) sobre el degradado */
+  .sello-atmosfera {
+    border: 1px solid rgba(195, 154, 82, 0.4);
+    background: rgba(195, 154, 82, 0.08);
+    color: rgba(242, 236, 223, 0.88);
+  }
+}
+
 @layer base {
   body {
     background-color: var(--color-crema);
@@ -131,13 +172,13 @@
   }
 
   ::selection {
-    background-color: var(--color-amarillo);
+    background-color: var(--color-oro);
     color: var(--color-tinta);
   }
 
   /* Accesibilidad: foco visible en color de marca (variante AA) */
   :focus-visible {
-    outline: 2px solid var(--color-miel-oscura);
+    outline: 2px solid var(--color-oro-texto);
     outline-offset: 2px;
   }
 

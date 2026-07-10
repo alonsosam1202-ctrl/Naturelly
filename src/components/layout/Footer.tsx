@@ -9,13 +9,14 @@ const FOOTER_LINKS = [
 ];
 
 /**
- * Footer Bright Wellness: amarillo Naturelly con tinta — claro, moderno y
- * comercial (nada de bloques oscuros).
+ * Footer "Tinta & Oro": tinta plana (la spec la permite en footer y cintas
+ * delgadas; el degradado Atmósfera se reserva para hero/banners), texto
+ * crema y acentos oro.
  */
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="bg-amarillo text-tinta">
+    <footer className="bg-tinta text-crema-clara">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-3">
         <div className="flex flex-col gap-3">
           <p className="font-display text-2xl font-semibold">Naturelly</p>
@@ -26,7 +27,7 @@ export default function Footer() {
         </div>
 
         <nav className="flex flex-col gap-2" aria-label="Enlaces del pie">
-          <p className="mb-1 text-sm font-bold uppercase tracking-[0.2em]">
+          <p className="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-oro">
             Explora
           </p>
           {FOOTER_LINKS.map((link) => (
@@ -41,14 +42,14 @@ export default function Footer() {
         </nav>
 
         <div className="flex flex-col gap-2">
-          <p className="mb-1 text-sm font-bold uppercase tracking-[0.2em]">
+          <p className="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-oro">
             Pedidos
           </p>
           <p>Haz tu pedido desde la web y lo confirmamos juntos por WhatsApp.</p>
           <p>Arequipa, Perú</p>
         </div>
       </div>
-      <div className="border-t border-tinta/15 px-4 py-5 text-center text-sm">
+      <div className="border-t border-crema-clara/15 px-4 py-5 text-center text-sm text-crema-clara/80">
         © {year} Naturelly. Hecho a mano en Arequipa, Perú.
       </div>
     </footer>

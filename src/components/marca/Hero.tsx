@@ -1,7 +1,14 @@
+import Image from "next/image";
 import { ButtonLink } from "@/components/ui/Button";
-import BowlIllustration from "./BowlIllustration";
 import RotatingSeal from "./RotatingSeal";
 import FloatingIngredients from "./FloatingIngredients";
+
+// Foto de vitrina (asset de Alonso, bucket site-assets). Mientras la imagen
+// esté en iteración vive como .jpg optimizado con cache-control no-cache:
+// se puede reemplazar en Storage (mismo nombre) y verse al instante con un
+// hard refresh, sin tocar código. Al declararla FINAL, re-subir con
+// `cache-control: max-age=86400` para que el navegador sí la cachee.
+const HERO_IMG = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/site-assets/images/hero-portada.jpg`;
 
 const TRUST_POINTS = [
   "Hecho a mano",
@@ -9,10 +16,11 @@ const TRUST_POINTS = [
   "Hecho en Arequipa",
 ];
 
-/** Chips flotantes con moderación: dos, no una nube. */
+/** Chips flotantes con moderación: dos, no una nube. Posiciones originales;
+ *  textos que no dependen de la foto exacta del hero. */
 const FLOATING_CHIPS = [
-  { label: "Granola artesanal", className: "left-0 top-12 -rotate-6", delay: "0s" },
-  { label: "Torta de zanahoria", className: "-right-2 bottom-16 rotate-3", delay: "2s" },
+  { label: "Tortas y postres", className: "left-0 top-12 -rotate-6", delay: "0s" },
+  { label: "Granola Premium", className: "-right-2 bottom-16 rotate-3", delay: "2s" },
 ];
 
 export default function Hero() {
@@ -54,12 +62,18 @@ export default function Hero() {
         </div>
 
         <div className="relative mx-auto w-full max-w-sm pt-6 md:max-w-md">
-          {/* Arco amarillo Naturelly: protagonista, limpio y comercial */}
-          <div
-            className="absolute inset-x-3 bottom-1 top-0 rounded-t-full bg-amarillo"
-            aria-hidden
-          />
-          <BowlIllustration className="relative h-auto w-full drop-shadow-sm" />
+          {/* La foto vive DENTRO del arco de horno (forma firma) con
+              hairline dorado — aplicación Tinta & Oro */}
+          <div className="hairline-oro relative aspect-[4/5] overflow-hidden rounded-t-full rounded-b-2xl shadow-calida-lg">
+            <Image
+              src={HERO_IMG}
+              alt="Vitrina de Naturelly: torta de chocolate, cupcakes, cheesecake y granola"
+              fill
+              sizes="(max-width: 768px) 90vw, 40vw"
+              priority
+              className="object-cover"
+            />
+          </div>
 
           {FLOATING_CHIPS.map((chip) => (
             <span

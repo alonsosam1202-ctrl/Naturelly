@@ -225,6 +225,7 @@ $$;
 |---|---|---|
 | `product-images` | Lectura pública, escritura solo admin | Fotos de productos y bundles |
 | `recipe-images` | Lectura pública, escritura solo admin | Portadas de recetas (fase 2) |
+| `site-assets` | Lectura pública, escritura solo admin | Archivos estáticos del sitio que no son de producto (imágenes de marca en `images/` — hero de portada y tienda, /nosotros, 404 — y logos en `logos/`), servidos por URL pública sin pasar por deploys (migración `20260707200000`) |
 
 ## Datos semilla (seed de desarrollo)
 

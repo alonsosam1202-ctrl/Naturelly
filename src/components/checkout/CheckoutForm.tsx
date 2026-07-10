@@ -116,7 +116,7 @@ export default function CheckoutForm({
             <input
               type="radio"
               value="delivery"
-              className="mr-2 accent-[#E6A12D]"
+              className="mr-2 accent-oro"
               {...register("deliveryMethod")}
             />
             <span className="font-bold text-tinta">Delivery</span>
@@ -134,7 +134,7 @@ export default function CheckoutForm({
             <input
               type="radio"
               value="recojo"
-              className="mr-2 accent-[#E6A12D]"
+              className="mr-2 accent-oro"
               {...register("deliveryMethod")}
             />
             <span className="font-bold text-tinta">Recojo</span>
