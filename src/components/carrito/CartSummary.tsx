@@ -30,6 +30,13 @@ export default function CartSummary() {
           {formatPrice(subtotal)}
         </span>
       </div>
+      {/* Regla real del negocio: todo se prepara por encargo (hallazgo C1
+          de la auditoría — antes solo vivía en el FAQ) */}
+      <p className="rounded-xl bg-blush px-3 py-2.5 text-sm text-piedra">
+        Preparamos por encargo: la entrega o el recojo son{" "}
+        <strong className="text-tinta">a partir del día siguiente</strong> de
+        tu pedido.
+      </p>
     </div>
   );
 }

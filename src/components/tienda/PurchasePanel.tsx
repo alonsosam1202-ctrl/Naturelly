@@ -13,7 +13,13 @@ import type { CatalogProduct } from "@/types";
  * QuantityStepper de ARCHITECTURE.md integrados en un panel).
  */
 export default function PurchasePanel({ product }: { product: CatalogProduct }) {
-  const [selectedId, setSelectedId] = useState(product.variants[0]?.id ?? "");
+  // Preselecciona la primera presentación CON disponibilidad: si la Mediana
+  // está agotada pero la Grande no, el panel no debe abrir en la agotada
+  const [selectedId, setSelectedId] = useState(
+    product.variants.find((v) => v.stock > 0)?.id ??
+      product.variants[0]?.id ??
+      ""
+  );
   const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore((state) => state.addItem);
 
@@ -50,24 +56,36 @@ export default function PurchasePanel({ product }: { product: CatalogProduct }) 
       <fieldset>
         <legend className="mb-2 font-bold text-tinta">Presentación</legend>
         <div className="flex flex-wrap gap-2">
-          {product.variants.map((option) => (
-            <button
-              key={option.id}
-              type="button"
-              onClick={() => {
-                setSelectedId(option.id);
-                setQuantity(1);
-              }}
-              aria-pressed={option.id === selectedId}
-              className={`rounded-full border-2 px-5 py-2.5 font-bold transition-colors ${
-                option.id === selectedId
-                  ? "border-miel bg-miel text-tinta"
-                  : "border-amarillo-suave bg-blanco-crema text-tinta hover:border-miel"
-              }`}
-            >
-              {option.size_label}
-            </button>
-          ))}
+          {product.variants.map((option) => {
+            const optionOut = option.stock < 1;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => {
+                  setSelectedId(option.id);
+                  setQuantity(1);
+                }}
+                aria-pressed={option.id === selectedId}
+                className={`rounded-full border-2 px-5 py-2.5 font-bold transition-colors ${
+                  option.id === selectedId
+                    ? optionOut
+                      ? "border-piedra bg-blush text-piedra"
+                      : "border-miel bg-miel text-tinta"
+                    : optionOut
+                      ? "border-lino bg-blush text-piedra hover:border-piedra"
+                      : "border-amarillo-suave bg-blanco-crema text-tinta hover:border-miel"
+                }`}
+              >
+                {option.size_label}
+                {optionOut && (
+                  <span className="ml-1.5 text-xs font-bold uppercase tracking-wide">
+                    · agotado
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </fieldset>
 
@@ -92,6 +110,14 @@ export default function PurchasePanel({ product }: { product: CatalogProduct }) 
       {!outOfStock && variant.stock <= 5 && (
         <p className="text-sm font-bold text-terracota">
           ¡Quedan solo {variant.stock} de esta tanda!
+        </p>
+      )}
+
+      {outOfStock && (
+        <p className="rounded-2xl bg-blush px-4 py-3 text-sm text-piedra">
+          La disponibilidad de hoy ya se llenó para esta presentación —
+          normalmente se renueva cada mañana. Si la necesitas para una fecha
+          especial, escríbenos por WhatsApp.
         </p>
       )}
     </div>

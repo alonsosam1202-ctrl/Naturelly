@@ -85,8 +85,13 @@ export async function getProducts(): Promise<CatalogProduct[]> {
     .order("sort_order");
 
   if (error) {
+    // Lanzar en vez de devolver []: un fallo de Supabase NO debe verse como
+    // "catálogo vacío" (y peor, cachearse 60 s por ISR o quedar en el
+    // snapshot del build). Al lanzar: en runtime lo captura error.tsx con un
+    // mensaje honesto; en revalidación ISR, Next conserva la última versión
+    // buena; y en build, el build falla en vez de publicar una tienda vacía.
     console.error("Error cargando productos:", error.message);
-    return [];
+    throw new Error(`No se pudo cargar el catálogo: ${error.message}`);
   }
   return (data as unknown as ProductRow[]).map(mapProduct);
 }
@@ -107,8 +112,9 @@ export async function getProductBySlug(
     .maybeSingle();
 
   if (error) {
+    // null queda reservado para "no existe" (404); un fallo de BD lanza
     console.error("Error cargando producto:", error.message);
-    return null;
+    throw new Error(`No se pudo cargar el producto: ${error.message}`);
   }
   return data ? mapProduct(data as unknown as ProductRow) : null;
 }
@@ -143,8 +149,9 @@ export async function getBundles(): Promise<CatalogBundle[]> {
     .eq("is_active", true);
 
   if (error) {
+    // Mismo criterio que getProducts: nunca fingir "no hay packs"
     console.error("Error cargando packs:", error.message);
-    return [];
+    throw new Error(`No se pudieron cargar los packs: ${error.message}`);
   }
   return (data as unknown as BundleRow[]).map((row) => ({
     id: row.id,

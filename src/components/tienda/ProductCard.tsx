@@ -20,6 +20,12 @@ export default function ProductCard({ product }: { product: CatalogProduct }) {
       ? Math.min(...product.variants.map((variant) => variant.price))
       : null;
   const sizes = product.variants.map((variant) => variant.size_label).join(" · ");
+  // Agotado = todas las presentaciones sin cupo/stock (los solo-cotización
+  // no aplican). Se comunica con texto, no solo deshabilitando botones.
+  const agotado =
+    !product.is_quote_only &&
+    product.variants.length > 0 &&
+    product.variants.every((variant) => variant.stock < 1);
 
   return (
     <Link
@@ -48,13 +54,20 @@ export default function ProductCard({ product }: { product: CatalogProduct }) {
             />
           )}
         </div>
-        {/* Sticker del sabor, apenas rotado */}
-        {product.badge && (
-          <Badge
-            className={`absolute left-6 top-8 -rotate-3 shadow-calida ${accent.badgeClass}`}
-          >
-            {PRODUCT_BADGE_LABELS[product.badge] ?? product.badge}
+        {/* Sticker: "Agotado hoy" tiene prioridad sobre la etiqueta promo
+            (promocionar algo que no se puede comprar confunde) */}
+        {agotado ? (
+          <Badge className="absolute left-6 top-8 -rotate-3 bg-tinta/85 text-crema-clara shadow-calida">
+            Agotado hoy
           </Badge>
+        ) : (
+          product.badge && (
+            <Badge
+              className={`absolute left-6 top-8 -rotate-3 shadow-calida ${accent.badgeClass}`}
+            >
+              {PRODUCT_BADGE_LABELS[product.badge] ?? product.badge}
+            </Badge>
+          )
         )}
       </div>
 
@@ -83,6 +96,11 @@ export default function ProductCard({ product }: { product: CatalogProduct }) {
                   </span>
                 </p>
               )
+            )}
+            {agotado && (
+              <p className="mt-0.5 text-sm font-bold text-piedra">
+                Sin cupos por hoy — mañana se renuevan
+              </p>
             )}
           </div>
           <span

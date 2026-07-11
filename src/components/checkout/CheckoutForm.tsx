@@ -83,6 +83,14 @@ export default function CheckoutForm({
       className="flex flex-col gap-5"
       noValidate
     >
+      {/* Aviso de entrega VISIBLE antes de llenar nada (hallazgo C1 de la
+          auditoría): que nadie complete el pedido creyendo que llega hoy */}
+      <p className="rounded-2xl border border-oro/40 bg-oro/10 px-4 py-3 text-sm text-tinta">
+        <strong>Entrega a partir de mañana:</strong> tus delicias se preparan
+        por encargo, así que la entrega o el recojo se coordinan por WhatsApp
+        para el día siguiente en adelante. El costo del delivery va aparte.
+      </p>
+
       <Input
         label="Tu nombre"
         placeholder="¿Cómo te llamas?"
@@ -96,7 +104,7 @@ export default function CheckoutForm({
         inputMode="numeric"
         placeholder="9XXXXXXXX"
         autoComplete="tel"
-        hint="Te escribiremos por WhatsApp a este número para confirmar."
+        hint="Al terminar, TÚ envías tu pedido por WhatsApp desde este número — así se confirma."
         error={errors.customerPhone?.message}
         {...register("customerPhone")}
       />
@@ -188,7 +196,7 @@ export default function CheckoutForm({
 
       <Textarea
         label="Notas para tu pedido (opcional)"
-        placeholder="Por ejemplo: entregar después de las 3 pm"
+        placeholder="Ej. dedicatoria para la torta, sin pasas, una referencia de tu dirección…"
         error={errors.notes?.message}
         {...register("notes")}
       />

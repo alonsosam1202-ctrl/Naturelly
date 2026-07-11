@@ -57,15 +57,27 @@ export default async function PedidoConfirmadoPage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
+      {/* Jerarquía (hallazgo C2 de la auditoría): la ACCIÓN pendiente va
+          primero — sin el mensaje de WhatsApp, el pedido no se confirma.
+          El "check" celebratorio pasa a segundo plano. */}
       <div className="flex flex-col items-center gap-3 text-center">
-        <CheckCircle2 className="size-14 text-salvia-oscura" aria-hidden />
-        <h1 className="font-display text-3xl font-semibold text-tinta sm:text-4xl">
-          ¡Tu pedido quedó registrado!
-        </h1>
-        <p className="text-cacao">
-          Guarda tu código:{" "}
-          <span className="font-bold text-tinta">{order.code}</span>
+        <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-salvia-oscura">
+          <CheckCircle2 className="size-5" aria-hidden />
+          Pedido {order.code} registrado
         </p>
+        <h1 className="font-display text-3xl font-semibold text-tinta sm:text-4xl">
+          Falta 1 paso: envíalo por WhatsApp
+        </h1>
+        <p className="max-w-md text-cacao">
+          Tu pedido quedó guardado, pero Nelly recién lo confirma cuando le
+          llega tu mensaje. Toca el botón y envía el resumen que ya te
+          dejamos listo.
+        </p>
+        <WhatsAppButton
+          message={message}
+          label="Enviar mi pedido por WhatsApp"
+          className="w-full sm:w-auto"
+        />
         <Badge className={status.className}>{status.label}</Badge>
       </div>
 
@@ -96,17 +108,26 @@ export default async function PedidoConfirmadoPage({
           {order.delivery_method === "delivery"
             ? `Delivery: ${order.delivery_address ?? ""}${
                 order.delivery_district ? `, ${order.delivery_district}` : ""
-              }`
+              }. El costo del envío se coordina por WhatsApp y va aparte.`
             : "Recojo: coordinamos el punto por WhatsApp."}
+        </p>
+        <p className="mt-2 text-sm text-cacao">
+          Guarda tu código{" "}
+          <span className="font-bold text-tinta">{order.code}</span> para
+          consultar por tu pedido.
         </p>
       </div>
 
       <div className="mt-8 flex flex-col items-center gap-4 text-center">
-        <p className="max-w-md text-cacao">
-          Último paso: envíanos el mensaje por WhatsApp para confirmar tu
-          pedido y coordinar la entrega y el pago con Nelly.
+        <p className="max-w-md text-sm text-piedra">
+          ¿Aún no enviaste el mensaje? Tu pedido quedará esperando hasta que
+          Nelly lo reciba.
         </p>
-        <WhatsAppButton message={message} className="w-full sm:w-auto" />
+        <WhatsAppButton
+          message={message}
+          label="Enviar mi pedido por WhatsApp"
+          className="w-full sm:w-auto"
+        />
         <ButtonLink href="/tienda" variant="secondary">
           Volver a la tienda
         </ButtonLink>
